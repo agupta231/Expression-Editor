@@ -22,14 +22,28 @@ public class SimpleExpressionParser implements ExpressionParser {
 			// If we couldn't parse the string, then raise an error
 			throw new ExpressionParseException("Cannot parse expression: " + str);
 		}
-
 		// Flatten the expression before returning
 		expression.flatten();
 		return expression;
 	}
 	
 	protected Expression parseExpression (String str) {
-		if(str.length() == 1 && (str.equals("X") || Character.isLowerCase(str.charAt(0)) || Character.isDigit(str.charAt(0)))){
+		int indexOfOpenParen = str.indexOf('(');
+		int indexOfCloseParen = str.indexOf(')');
+		int indexOfPlus = str.indexOf('+');
+		int indexOfStar = str.indexOf('*');
+
+		if(indexOfOpenParen == 0 && indexOfCloseParen == str.length() - 1){
+			ParentheticalExpression expression = new ParentheticalExpression();
+			Expression childExpression = parseExpression(str.substring(indexOfOpenParen + 1, indexOfCloseParen));
+			if(childExpression != null){
+				expression.addSubexpression(childExpression);
+				return expression;
+			}
+			childExpression.setParent(expression);
+		}
+
+		if((str.length() == 1 && Character.isLowerCase(str.charAt(0))) || stringIsDigit(str)){
 			LiteralExpression expression = new LiteralExpression();
 			expression.setLiteral(str);
 			return expression;
@@ -37,17 +51,12 @@ public class SimpleExpressionParser implements ExpressionParser {
 			return null;
 		}
 
-		int indexOfPlus = str.indexOf('+');
 
-		System.out.println(str);
-		System.out.println(indexOfPlus);
-
-		if(indexOfPlus > 0){
+		if(indexOfPlus > 0 && (indexOfOpenParen == -1 || indexOfOpenParen > indexOfPlus)){
 			AdditiveExpression expression = new AdditiveExpression();
 
-			Expression childExpression1 = parseExpression(str.substring(indexOfPlus));
+			Expression childExpression1 = parseExpression(str.substring(0, indexOfPlus));
 			Expression childExpression2 = parseExpression(str.substring(indexOfPlus + 1, str.length()));
-
 			if(childExpression1 == null || childExpression2 == null){
 				return null;
 			}
@@ -60,11 +69,10 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 			return expression;
 		}
-		int indexOfStar = str.indexOf('*');
-		if(indexOfStar > 0){
-			MultiplicativeExpression expression = new MultiplicativeExpression();
 
-			Expression childExpression1 = parseExpression(str.substring(indexOfStar));
+		if(indexOfStar > 0 && (indexOfOpenParen == -1 || indexOfOpenParen > indexOfStar)){
+			MultiplicativeExpression expression = new MultiplicativeExpression();
+			Expression childExpression1 = parseExpression(str.substring(0, indexOfStar));
 			Expression childExpression2 = parseExpression(str.substring(indexOfStar + 1, str.length()));
 
 			if(childExpression1 == null || childExpression2 == null){
@@ -79,18 +87,15 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 			return expression;
 		}
-		int indexOfOpenParen = str.indexOf('(');
-		int indexOfCloseParen = str.indexOf(')');
-		if(indexOfOpenParen > 0 && indexOfCloseParen > 0){
-			ParentheticalExpression expression = new ParentheticalExpression();
-			Expression childExpression = parseExpression(str.substring(indexOfOpenParen) + str.substring(indexOfCloseParen));
-			if(childExpression != null){
-				expression.addSubexpression(childExpression);
-				return expression;
-			}
-			childExpression.setParent(expression);
-
-		}
 		return null;
+	}
+
+	private boolean stringIsDigit(String str) {
+		for (int i = 0; i < str.length(); i++) {
+			if (!Character.isDigit(str.charAt(i))) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
