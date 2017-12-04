@@ -17,6 +17,9 @@ public class SimpleExpressionParser implements ExpressionParser {
 	public Expression parse (String str, boolean withJavaFXControls) throws ExpressionParseException {
 		// Remove spaces -- this simplifies the parsing logic
 		str = str.replaceAll(" ", "");
+
+		System.out.println(str);
+
 		Expression expression = parseExpression(str);
 		if (expression == null) {
 			// If we couldn't parse the string, then raise an error
@@ -32,19 +35,29 @@ public class SimpleExpressionParser implements ExpressionParser {
 			return null;
 		}
 
-		int indexOfOpenParen = str.indexOf('(');
-		int indexOfCloseParen = str.indexOf(')');
-		int indexOfPlus = str.indexOf('+');
-		int indexOfStar = str.indexOf('*');
+		System.out.print("Current String: ");
+		System.out.println(str);
 
-		if(indexOfOpenParen == 0 && indexOfCloseParen == str.length() - 1){
+
+//		int indexOfOpenParen = str.indexOf('(');
+//		int indexOfCloseParen = str.indexOf(')');
+
+//		if(indexOfOpenParen == 0 && indexOfCloseParen == str.length() - 1){
+//		if(indexOfOpenParen == 0 && str.charAt(str.length() - 1) == ')'){
+		if(str.charAt(0) == '(' && str.charAt(str.length() - 1) == ')') {
 			ParentheticalExpression expression = new ParentheticalExpression();
-			Expression childExpression = parseExpression(str.substring(indexOfOpenParen + 1, indexOfCloseParen));
+
+//			Expression childExpression = parseExpression(str.substring(indexOfOpenParen + 1, indexOfCloseParen));
+			Expression childExpression = parseExpression(str.substring(1, str.length() - 1));
+
 			if(childExpression != null){
 				expression.addSubexpression(childExpression);
+				childExpression.setParent(expression);
 				return expression;
 			}
-			childExpression.setParent(expression);
+			else {
+				return null;
+			}
 		}
 
 		if((str.length() == 1 && Character.isLowerCase(str.charAt(0))) || stringIsDigit(str)){
@@ -55,41 +68,56 @@ public class SimpleExpressionParser implements ExpressionParser {
 			return null;
 		}
 
+		int indexOfOpenParen = str.indexOf('(');
 
-		if(indexOfPlus > 0 && (indexOfOpenParen == -1 || indexOfOpenParen > indexOfPlus)){
-			AdditiveExpression expression = new AdditiveExpression();
 
-			Expression childExpression1 = parseExpression(str.substring(0, indexOfPlus));
-			Expression childExpression2 = parseExpression(str.substring(indexOfPlus + 1, str.length()));
-			if(childExpression1 == null || childExpression2 == null){
-				return null;
+		for(int indexOfPlus = str.indexOf('+'); indexOfPlus >= 0; indexOfPlus = str.indexOf('+', indexOfPlus + 1)) {
+//		if(indexOfPlus > 0 && (indexOfOpenParen == -1 || indexOfOpenParen > indexOfPlus)) {
+			if (indexOfPlus > 0 && areParenthesisBalanced(str, indexOfPlus)) {
+//		if(indexOfPlus > 0){
+				System.out.println("Add me, daddy");
+
+				AdditiveExpression expression = new AdditiveExpression();
+
+				Expression childExpression1 = parseExpression(str.substring(0, indexOfPlus));
+				Expression childExpression2 = parseExpression(str.substring(indexOfPlus + 1, str.length()));
+
+				if (childExpression1 == null || childExpression2 == null) {
+					return null;
+				}
+
+				childExpression1.setParent(expression);
+				childExpression2.setParent(expression);
+
+				expression.addSubexpression(childExpression1);
+				expression.addSubexpression(childExpression2);
+
+				return expression;
 			}
-
-			childExpression1.setParent(expression);
-			childExpression2.setParent(expression);
-
-			expression.addSubexpression(childExpression1);
-			expression.addSubexpression(childExpression2);
-
-			return expression;
 		}
 
-		if(indexOfStar > 0 && (indexOfOpenParen == -1 || indexOfOpenParen > indexOfStar)){
-			MultiplicativeExpression expression = new MultiplicativeExpression();
-			Expression childExpression1 = parseExpression(str.substring(0, indexOfStar));
-			Expression childExpression2 = parseExpression(str.substring(indexOfStar + 1, str.length()));
+		for(int indexOfStar = str.indexOf('*'); indexOfStar >= 0; indexOfStar = str.indexOf('*', indexOfStar + 1)) {
+//		if(indexOfStar > 0 && (indexOfOpenParen == -1 || indexOfOpenParen > indexOfStar)){
+			if (indexOfStar > 0 && areParenthesisBalanced(str, indexOfStar)) {
+//		if(indexOfStar > 0){
+				System.out.println("Multiply me, daddy");
 
-			if(childExpression1 == null || childExpression2 == null){
-				return null;
+				MultiplicativeExpression expression = new MultiplicativeExpression();
+				Expression childExpression1 = parseExpression(str.substring(0, indexOfStar));
+				Expression childExpression2 = parseExpression(str.substring(indexOfStar + 1, str.length()));
+
+				if (childExpression1 == null || childExpression2 == null) {
+					return null;
+				}
+
+				childExpression1.setParent(expression);
+				childExpression2.setParent(expression);
+
+				expression.addSubexpression(childExpression1);
+				expression.addSubexpression(childExpression2);
+
+				return expression;
 			}
-
-			childExpression1.setParent(expression);
-			childExpression2.setParent(expression);
-
-			expression.addSubexpression(childExpression1);
-			expression.addSubexpression(childExpression2);
-
-			return expression;
 		}
 		return null;
 	}
@@ -101,5 +129,21 @@ public class SimpleExpressionParser implements ExpressionParser {
 			}
 		}
 		return true;
+	}
+
+	private boolean areParenthesisBalanced (String str, int index) {
+		int openParen = 0;
+		int closedParen = 0;
+
+		for(int i = 0; i < index; i++) {
+			if(str.charAt(i) == '(') {
+				openParen++;
+			}
+			if(str.charAt(i) == ')') {
+				closedParen++;
+			}
+		}
+
+		return openParen == closedParen;
 	}
 }
