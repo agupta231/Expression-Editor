@@ -13,10 +13,14 @@ public abstract class CollapsibleExpression extends AbstractCompoundExpression {
                 CollapsibleExpression tempExp = (CollapsibleExpression)e;
                 for(Expression exp: tempExp.getChildren())
                 {
-                    this.addSubexpression(exp);
+                    children.add(exp);
                 }
             }
+            else{
+                children.add(e);
+            }
         }
+        this.setChildren(children);
     }
 
 }
