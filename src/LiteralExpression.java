@@ -23,6 +23,10 @@ public class LiteralExpression implements Expression {
         return copy;
     }
 
+    public void setLiteral(String str){
+        this.literal = str;
+    }
+
     //does nothing, but is needed because higher functions may call it.
     public void flatten(){
     }

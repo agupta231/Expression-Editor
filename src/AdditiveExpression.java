@@ -1,4 +1,5 @@
 public class AdditiveExpression extends CollapsibleExpression{
+
     public Expression deepCopy(){
         AdditiveExpression copy = new AdditiveExpression();
         copy.setParent((CompoundExpression)this.getParent().deepCopy());

@@ -2,8 +2,8 @@
  * Starter code to implement an ExpressionParser. Your parser methods should use the following grammar:
  * E := A | X
  * A := A+M | M
- * M := M*M | X
- * X := (E) | L
+ * M := M*M| X
+  * X := (E)  | L
  * L := [0-9]+ | [a-z]
  */
 public class SimpleExpressionParser implements ExpressionParser {
@@ -29,9 +29,52 @@ public class SimpleExpressionParser implements ExpressionParser {
 	}
 	
 	protected Expression parseExpression (String str) {
-		Expression expression;
-		
-		// TODO implement me
+		int indexOfPlus = str.indexOf('+');
+		if(indexOfPlus > 0){
+			AdditiveExpression expression = new AdditiveExpression();
+			Expression childExpression1 = parseExpression(str.substring(indexOfPlus));
+			childExpression1.setParent(expression);
+			Expression childExpression2 = parseExpression(str.substring(indexOfPlus + 1, str.length()));
+			childExpression2.setParent(expression);
+			if(childExpression1 != null && childExpression2 != null){
+				expression.addSubexpression(childExpression1);
+				expression.addSubexpression(childExpression2);
+				return expression;
+			}
+			return null;
+		}
+		int indexOfStar = str.indexOf('*');
+		if(indexOfStar > 0){
+			MultiplicativeExpression expression = new MultiplicativeExpression();
+			Expression childExpression1 = parseExpression(str.substring(indexOfStar));
+			childExpression1.setParent(expression);
+			Expression childExpression2 = parseExpression(str.substring(indexOfStar + 1, str.length()));
+			childExpression2.setParent(expression);
+			if(childExpression1 != null && childExpression2 != null){
+				expression.addSubexpression(childExpression1);
+				expression.addSubexpression(childExpression2);
+				return expression;
+			}
+			return  null;
+		}
+		int indexOfOpenParen = str.indexOf('(');
+		int indexOfCloseParen = str.indexOf(')');
+		if(indexOfOpenParen > 0 && indexOfCloseParen > 0){
+			ParentheticalExpression expression = new ParentheticalExpression();
+			Expression childExpression = parseExpression(str.substring(indexOfOpenParen) + str.substring(indexOfCloseParen));
+			childExpression.setParent(expression);
+			if(childExpression != null){
+				expression.addSubexpression(childExpression);
+				return expression;
+			}
+			return null;
+		}
+
+		if(str.length() == 1 && (Character.isLowerCase(str.charAt(0)) || Character.isDigit(str.charAt(0)))){
+			LiteralExpression expression = new LiteralExpression();
+			expression.setLiteral(str);
+			return expression;
+		}
 		return null;
 	}
 }
