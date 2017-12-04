@@ -18,8 +18,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 		// Remove spaces -- this simplifies the parsing logic
 		str = str.replaceAll(" ", "");
 
-		System.out.println(str);
-
 		Expression expression = parseExpression(str);
 		if (expression == null) {
 			// If we couldn't parse the string, then raise an error
@@ -34,10 +32,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 		if(str.length() == 0) {
 			return null;
 		}
-
-		System.out.print("Current String: ");
-		System.out.println(str);
-
 
 //		int indexOfOpenParen = str.indexOf('(');
 //		int indexOfCloseParen = str.indexOf(')');
