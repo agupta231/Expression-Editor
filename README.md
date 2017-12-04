@@ -1,4 +1,4 @@
-# Expression-Editor
+# Expression Editor
 CS210x Project 5
 
 ## Important Features
