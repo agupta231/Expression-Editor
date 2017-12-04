@@ -11,7 +11,7 @@ public class MultiplicativeExpression extends CollapsibleExpression{
 
     //TODO move more of converttoSTring to abstract level.
     public String convertToString(int indentLevel){
-        return new String(new char[indentLevel]).replace("\0", "/t") + "*\n"
+        return new String(new char[indentLevel]).replace("\0", "\t") + "*\n"
                 + super.convertToString(indentLevel);
     }
 

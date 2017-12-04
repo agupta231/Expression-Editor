@@ -31,7 +31,7 @@ public abstract class AbstractCompoundExpression implements CompoundExpression{
     public String convertToString(int indentLevel){
         String conversion = "";
         for(Expression e: this.getChildren()){
-            conversion += "/n" + e.convertToString(indentLevel+1);
+            conversion +=  e.convertToString(indentLevel+1);
         }
         return conversion;
     }
