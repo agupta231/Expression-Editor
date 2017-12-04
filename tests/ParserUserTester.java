@@ -1,7 +1,6 @@
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import java.util.*;
 import java.io.*;
 
 public class ParserUserTester {
@@ -47,7 +46,7 @@ public class ParserUserTester {
 
     @Test
     public void extremeFlattening() throws ExpressionParseException {
-        final String expresstionStr = "((420 + 69 + x) * x * 21 * 32) + 4 + 2 + 1 + 0";
+        final String expresstionStr = "((420 + 69 + x) * x * 21 * 32) + 4 + 2 + 1";
         final String parseTreeStr = "+\n" +
                                     "\t()\n" +
                                     "\t\t*\n" +
@@ -61,9 +60,28 @@ public class ParserUserTester {
                                     "\t\t\t32\n" +
                                     "\t4\n" +
                                     "\t2\n" +
-                                    "\t1\n" +
-                                    "\t0\n";
+                                    "\t1\n";
 
         assertEquals(parseTreeStr, _parser.parse(expresstionStr, false).convertToString(0));
+    }
+
+    @Test
+    public void parenAtStartAndEndButNotSameExpression() throws ExpressionParseException {
+        final String expressionStr = "(420 + (32 + x)) + (911 + 69 + x)";
+        final String parseTreeStr =
+                        "+\n" +
+                        "\t()\n" +
+                        "\t\t420\n" +
+                        "\t\t()\n" +
+                        "\t\t\t+\n" +
+                        "\t\t\t\t32\n" +
+                        "\t\t\t\tx\n" +
+                        "\t()\n" +
+                        "\t\t+\n" +
+                        "\t\t\t911\n" +
+                        "\t\t\t69\n" +
+                        "\t\t\tx\n";
+
+        assertEquals(parseTreeStr, _parser.parse(expressionStr, false).convertToString(0));
     }
 }
