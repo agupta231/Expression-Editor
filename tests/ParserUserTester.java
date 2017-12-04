@@ -8,20 +8,8 @@ public class ParserUserTester {
     private ExpressionParser _parser;
 
     @Before
-    /**
-     * Instantiates the actors and movies graphs
-     */
     public void setUp () throws IOException {
         _parser = new SimpleExpressionParser();
-    }
-
-    @Test
-    /**
-     * Just verifies that the SimpleExpressionParser could be instantiated without crashing.
-     */
-    public void finishedLoading () {
-        assertTrue(true);
-        // Yay! We didn't crash
     }
 
     @Test
@@ -43,5 +31,39 @@ public class ParserUserTester {
         final String expressionStr = "420 * x";
         final String parseTreeStr = "·\n\t420\n\tx\n";
         assertEquals(parseTreeStr, _parser.parse(expressionStr, false).convertToString(0).replace('*', '·'));
+    }
+
+    @Test(expected = ExpressionParseException.class)
+    public void multiplicationImpliedOperator () throws ExpressionParseException {
+        final String expressionStr = "(420x + 69) * 42069 * (32)";
+        _parser.parse(expressionStr, false);
+    }
+
+    @Test(expected = ExpressionParseException.class)
+    public void mulitiplication2Variables() throws ExpressionParseException {
+        final String expressionStr = "(69 + 420) * (15 + (123 + ab))";
+        _parser.parse(expressionStr, false);
+    }
+
+    @Test
+    public void extremeFlattening() throws ExpressionParseException {
+        final String expresstionStr = "((420 + 69 + x) * x * 21 * 32) + 4 + 2 + 1 + 0";
+        final String parseTreeStr = "+\n" +
+                                    "\t()\n" +
+                                    "\t\t*\n" +
+                                    "\t\t\t()\n" +
+                                    "\t\t\t\t+\n" +
+                                    "\t\t\t\t\t420\n" +
+                                    "\t\t\t\t\t69\n" +
+                                    "\t\t\t\t\tx\n" +
+                                    "\t\t\tx\n" +
+                                    "\t\t\t21\n" +
+                                    "\t\t\t32\n" +
+                                    "\t4\n" +
+                                    "\t2\n" +
+                                    "\t1\n" +
+                                    "\t0\n";
+
+        assertEquals(parseTreeStr, _parser.parse(expresstionStr, false).convertToString(0));
     }
 }
