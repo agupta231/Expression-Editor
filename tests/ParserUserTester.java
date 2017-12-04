@@ -71,11 +71,12 @@ public class ParserUserTester {
         final String parseTreeStr =
                         "+\n" +
                         "\t()\n" +
-                        "\t\t420\n" +
-                        "\t\t()\n" +
-                        "\t\t\t+\n" +
-                        "\t\t\t\t32\n" +
-                        "\t\t\t\tx\n" +
+                        "\t\t+\n" +
+                        "\t\t\t420\n" +
+                        "\t\t\t()\n" +
+                        "\t\t\t\t+\n" +
+                        "\t\t\t\t\t32\n" +
+                        "\t\t\t\t\tx\n" +
                         "\t()\n" +
                         "\t\t+\n" +
                         "\t\t\t911\n" +

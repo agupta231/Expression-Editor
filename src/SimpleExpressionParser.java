@@ -38,21 +38,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 //		if(indexOfOpenParen == 0 && indexOfCloseParen == str.length() - 1){
 //		if(indexOfOpenParen == 0 && str.charAt(str.length() - 1) == ')'){
-		if(str.charAt(0) == '(' && str.charAt(str.length() - 1) == ')') {
-			ParentheticalExpression expression = new ParentheticalExpression();
-
-//			Expression childExpression = parseExpression(str.substring(indexOfOpenParen + 1, indexOfCloseParen));
-			Expression childExpression = parseExpression(str.substring(1, str.length() - 1));
-
-			if(childExpression != null){
-				expression.addSubexpression(childExpression);
-				childExpression.setParent(expression);
-				return expression;
-			}
-			else {
-				return null;
-			}
-		}
 
 //		if((str.length() == 1 && Character.isLowerCase(str.charAt(0))) || stringIsDigit(str)){
 //			LiteralExpression expression = new LiteralExpression();
@@ -120,6 +105,22 @@ public class SimpleExpressionParser implements ExpressionParser {
 			return expression;
 		} else if(str.length() == 1){
 			return null;
+		}
+
+		if(str.charAt(0) == '(' && str.charAt(str.length() - 1) == ')') {
+			ParentheticalExpression expression = new ParentheticalExpression();
+
+//			Expression childExpression = parseExpression(str.substring(indexOfOpenParen + 1, indexOfCloseParen));
+			Expression childExpression = parseExpression(str.substring(1, str.length() - 1));
+
+			if(childExpression != null){
+				expression.addSubexpression(childExpression);
+				childExpression.setParent(expression);
+				return expression;
+			}
+			else {
+				return null;
+			}
 		}
 
 		return null;
