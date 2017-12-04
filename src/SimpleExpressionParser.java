@@ -60,13 +60,13 @@ public class SimpleExpressionParser implements ExpressionParser {
 			}
 		}
 
-		if((str.length() == 1 && Character.isLowerCase(str.charAt(0))) || stringIsDigit(str)){
-			LiteralExpression expression = new LiteralExpression();
-			expression.setLiteral(str);
-			return expression;
-		}else if(str.length() == 1){
-			return null;
-		}
+//		if((str.length() == 1 && Character.isLowerCase(str.charAt(0))) || stringIsDigit(str)){
+//			LiteralExpression expression = new LiteralExpression();
+//			expression.setLiteral(str);
+//			return expression;
+//		} else if(str.length() == 1){
+//			return null;
+//		}
 
 		int indexOfOpenParen = str.indexOf('(');
 
@@ -119,6 +119,15 @@ public class SimpleExpressionParser implements ExpressionParser {
 				return expression;
 			}
 		}
+
+		if((str.length() == 1 && Character.isLowerCase(str.charAt(0))) || stringIsDigit(str)){
+			LiteralExpression expression = new LiteralExpression();
+			expression.setLiteral(str);
+			return expression;
+		} else if(str.length() == 1){
+			return null;
+		}
+
 		return null;
 	}
 
