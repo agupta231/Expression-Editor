@@ -3,7 +3,7 @@
  * E := A | X
  * A := A+M | M
  * M := M*M| X
-  * X := (E)  | L
+ * X := (E)  | L
  * L := [0-9]+ | [a-z]
  */
 public class SimpleExpressionParser implements ExpressionParser {
@@ -28,6 +28,10 @@ public class SimpleExpressionParser implements ExpressionParser {
 	}
 	
 	protected Expression parseExpression (String str) {
+		if(str.length() == 0) {
+			return null;
+		}
+
 		int indexOfOpenParen = str.indexOf('(');
 		int indexOfCloseParen = str.indexOf(')');
 		int indexOfPlus = str.indexOf('+');
