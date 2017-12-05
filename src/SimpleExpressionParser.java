@@ -33,29 +33,8 @@ public class SimpleExpressionParser implements ExpressionParser {
 			return null;
 		}
 
-//		int indexOfOpenParen = str.indexOf('(');
-//		int indexOfCloseParen = str.indexOf(')');
-
-//		if(indexOfOpenParen == 0 && indexOfCloseParen == str.length() - 1){
-//		if(indexOfOpenParen == 0 && str.charAt(str.length() - 1) == ')'){
-
-//		if((str.length() == 1 && Character.isLowerCase(str.charAt(0))) || stringIsDigit(str)){
-//			LiteralExpression expression = new LiteralExpression();
-//			expression.setLiteral(str);
-//			return expression;
-//		} else if(str.length() == 1){
-//			return null;
-//		}
-
-		int indexOfOpenParen = str.indexOf('(');
-
-
 		for(int indexOfPlus = str.indexOf('+'); indexOfPlus >= 0; indexOfPlus = str.indexOf('+', indexOfPlus + 1)) {
-//		if(indexOfPlus > 0 && (indexOfOpenParen == -1 || indexOfOpenParen > indexOfPlus)) {
 			if (indexOfPlus > 0 && areParenthesisBalanced(str, indexOfPlus)) {
-//		if(indexOfPlus > 0){
-				System.out.println("Add me, daddy");
-
 				AdditiveExpression expression = new AdditiveExpression();
 
 				Expression childExpression1 = parseExpression(str.substring(0, indexOfPlus));
@@ -76,11 +55,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 		}
 
 		for(int indexOfStar = str.indexOf('*'); indexOfStar >= 0; indexOfStar = str.indexOf('*', indexOfStar + 1)) {
-//		if(indexOfStar > 0 && (indexOfOpenParen == -1 || indexOfOpenParen > indexOfStar)){
 			if (indexOfStar > 0 && areParenthesisBalanced(str, indexOfStar)) {
-//		if(indexOfStar > 0){
-				System.out.println("Multiply me, daddy");
-
 				MultiplicativeExpression expression = new MultiplicativeExpression();
 				Expression childExpression1 = parseExpression(str.substring(0, indexOfStar));
 				Expression childExpression2 = parseExpression(str.substring(indexOfStar + 1, str.length()));
@@ -103,14 +78,12 @@ public class SimpleExpressionParser implements ExpressionParser {
 			LiteralExpression expression = new LiteralExpression();
 			expression.setLiteral(str);
 			return expression;
-		} else if(str.length() == 1){
+		} else if(str.length() == 1) {
 			return null;
 		}
 
 		if(str.charAt(0) == '(' && str.charAt(str.length() - 1) == ')') {
 			ParentheticalExpression expression = new ParentheticalExpression();
-
-//			Expression childExpression = parseExpression(str.substring(indexOfOpenParen + 1, indexOfCloseParen));
 			Expression childExpression = parseExpression(str.substring(1, str.length() - 1));
 
 			if(childExpression != null){
