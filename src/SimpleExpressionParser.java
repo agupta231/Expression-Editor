@@ -7,9 +7,9 @@
  * L := [0-9]+ | [a-z]
  */
 public class SimpleExpressionParser implements ExpressionParser {
-	/*
+	/**
 	 * Attempts to create an expression tree -- flattened as much as possible -- from the specified String.
-         * Throws a ExpressionParseException if the specified string cannot be parsed.
+     * Throws a {@link ExpressionParseException} if the specified string cannot be parsed.
 	 * @param str the string to parse into an expression tree
 	 * @param withJavaFXControls you can just ignore this variable for R1
 	 * @return the Expression object representing the parsed expression tree
@@ -28,6 +28,11 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return expression;
 	}
 	
+	/**
+	 * Attemps to create an expression from a given String.
+	 * @param str the string to parse
+	 * @return the Expression representing the parsed expression.
+	 */
 	protected Expression parseExpression (String str) {
 		if(str.length() == 0) {
 			return null;
@@ -99,6 +104,11 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return null;
 	}
 
+	/**
+	 * Helper function to determine if a string is a digit
+	 * @param str is the string which the user wants to determine is a digit or not
+	 * @return true if the string is a digit, fase otherweise
+	 */
 	private boolean stringIsDigit(String str) {
 		for (int i = 0; i < str.length(); i++) {
 			if (!Character.isDigit(str.charAt(i))) {
@@ -108,6 +118,15 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return true;
 	}
 
+	/**
+	 * Helper function which will determine if all of the parentheses to a point in
+	 * a string are balanced. This function helps determine which "level" a certain
+	 * opertor is within the expression.
+	 * @param str is the expression
+	 * @param index is the index of the char in the string that you want to check if
+	 *              the paraenthesis are balanced.
+	 * @return true if the parenthesis are balanced, false otherswise.
+	 */
 	private boolean areParenthesisBalanced (String str, int index) {
 		int openParen = 0;
 		int closedParen = 0;
