@@ -28,12 +28,22 @@ public abstract class AbstractCompoundExpression implements CompoundExpression{
         return parent;
     }
 
-    public String convertToString(int indentLevel){
-        String conversion = "";
+
+    //TODO make this a StringBuffer
+    public String convertToString(int indentLevel, String name){
+        String conversion = new String(new char[indentLevel]).replace("\0", "\t") + name + "\n";
         for(Expression e: this.getChildren()){
             conversion +=  e.convertToString(indentLevel+1);
         }
         return conversion;
+    }
+
+    public AbstractCompoundExpression deepCopy(AbstractCompoundExpression copy){
+        copy.setParent((CompoundExpression)this.getParent().deepCopy());
+        for(Expression c: this.getChildren()){
+            copy.addSubexpression(c.deepCopy());
+        }
+        return copy;
     }
 
 }

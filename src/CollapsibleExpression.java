@@ -21,4 +21,5 @@ public abstract class CollapsibleExpression extends AbstractCompoundExpression {
         this.setChildren(children);
     }
 
+
 }
