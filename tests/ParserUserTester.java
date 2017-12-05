@@ -85,4 +85,17 @@ public class ParserUserTester {
 
         assertEquals(parseTreeStr, _parser.parse(expressionStr, false).convertToString(0));
     }
+
+    @Test
+    public void testPEMDAS() throws ExpressionParseException {
+        final String expressionString = "2 * x + x";
+        final String parseTreeStr =
+                "+\n" +
+                "\t*\n" +
+                "\t\t2\n" +
+                "\t\tx\n" +
+                "\tx\n";
+
+        assertEquals(parseTreeStr, _parser.parse(expressionString, false).convertToString(0));
+    }
 }
