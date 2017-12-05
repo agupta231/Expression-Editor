@@ -5,7 +5,9 @@ public class LiteralExpression implements Expression {
 
 
     public String convertToString(int indentLevel){
-        return new String(new char[indentLevel]).replace("\0", "\t")+ literal + "\n";
+        StringBuffer sb = new StringBuffer();
+        Expression.indent(sb,indentLevel);
+        return sb.append(literal + "\n").toString();
     }
 
     public void setParent(CompoundExpression parent){

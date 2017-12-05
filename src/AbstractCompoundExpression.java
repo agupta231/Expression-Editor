@@ -31,11 +31,14 @@ public abstract class AbstractCompoundExpression implements CompoundExpression{
 
     //TODO make this a StringBuffer
     public String convertToString(int indentLevel, String name){
-        String conversion = new String(new char[indentLevel]).replace("\0", "\t") + name + "\n";
+
+        StringBuffer sb = new StringBuffer();
+        Expression.indent(sb,indentLevel);
+        sb.append(name + "\n");
         for(Expression e: this.getChildren()){
-            conversion +=  e.convertToString(indentLevel+1);
+            sb.append(e.convertToString(indentLevel+1));
         }
-        return conversion;
+        return sb.toString();
     }
 
     public AbstractCompoundExpression deepCopy(AbstractCompoundExpression copy){
