@@ -4,7 +4,7 @@ public class MultiplicativeExpression extends CollapsibleExpression{
         return super.deepCopy(copy);
     }
     public String convertToString(int indentLevel){
-        return super.convertToString(indentLevel,"·");
+        return super.convertToString(indentLevel,"*");
     }
 
 }
