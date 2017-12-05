@@ -87,7 +87,7 @@ public class ParserUserTester {
     }
 
     @Test
-    public void testPEMDAS() throws ExpressionParseException {
+    public void testPEMDAS1() throws ExpressionParseException {
         final String expressionString = "2 * x + x";
         final String parseTreeStr =
                 "+\n" +
@@ -95,6 +95,18 @@ public class ParserUserTester {
                 "\t\t2\n" +
                 "\t\tx\n" +
                 "\tx\n";
+
+        assertEquals(parseTreeStr, _parser.parse(expressionString, false).convertToString(0));
+    }
+    @Test
+    public void testPEMDAS2() throws ExpressionParseException {
+        final String expressionString = "2 + x * x";
+        final String parseTreeStr =
+                "+\n" +
+                        "\t2\n" +
+                        "\t*\n" +
+                        "\t\tx\n" +
+                        "\t\tx\n";
 
         assertEquals(parseTreeStr, _parser.parse(expressionString, false).convertToString(0));
     }
