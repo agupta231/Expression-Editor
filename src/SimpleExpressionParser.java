@@ -59,7 +59,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 			}
 		}
 
-		if((str.length() == 1 && Character.isLowerCase(str.charAt(0))) || stringIsDigit(str)){
+		if((str.length() == 1 && Character.isLowerCase(str.charAt(0))) || stringIsDigit(str)) {
 			LiteralExpression expression = new LiteralExpression();
 			expression.setLiteral(str);
 			return expression;
