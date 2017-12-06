@@ -11,15 +11,16 @@ public class AdditiveExpression extends CollapsibleExpression{
         AdditiveExpression copy = new AdditiveExpression();
         return super.deepCopy(copy);
     }
-	
+
 	/**
 	 * Will generate a String representation for the the addition
-	 * operator, with the appropiate number of tabs to properly 
+	 * operator, with the appropiate number of tabs to properly
 	 * represent it's position in the expression.
 	 * @param indentLevel how many "levels" down the operator is
-	 * @return a String representating the addition operator.
+	 * @return a String representing the addition operator.
 	 */
     public String convertToString(int indentLevel){
         return super.convertToString(indentLevel,"+");
     }
+
 }
