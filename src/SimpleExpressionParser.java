@@ -45,17 +45,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 				Expression childExpression1 = parseExpression(str.substring(0, indexOfPlus));
 				Expression childExpression2 = parseExpression(str.substring(indexOfPlus + 1, str.length()));
 
-				if (childExpression1 == null || childExpression2 == null) {
-					return null;
-				}
-
-				childExpression1.setParent(expression);
-				childExpression2.setParent(expression);
-
-				expression.addSubexpression(childExpression1);
-				expression.addSubexpression(childExpression2);
-
-				return expression;
+				return linkExpression(expression, childExpression1, childExpression2);
 			}
 		}
 
@@ -65,17 +55,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 				Expression childExpression1 = parseExpression(str.substring(0, indexOfStar));
 				Expression childExpression2 = parseExpression(str.substring(indexOfStar + 1, str.length()));
 
-				if (childExpression1 == null || childExpression2 == null) {
-					return null;
-				}
-
-				childExpression1.setParent(expression);
-				childExpression2.setParent(expression);
-
-				expression.addSubexpression(childExpression1);
-				expression.addSubexpression(childExpression2);
-
-				return expression;
+				return linkExpression(expression, childExpression1, childExpression2);
 			}
 		}
 
@@ -102,6 +82,22 @@ public class SimpleExpressionParser implements ExpressionParser {
 		}
 
 		return null;
+	}
+
+	private Expression linkExpression(CompoundExpression expression,
+									  Expression childExpression1,
+									  Expression childExpression2) {
+		if (childExpression1 == null || childExpression2 == null) {
+			return null;
+		}
+
+		childExpression1.setParent(expression);
+		childExpression2.setParent(expression);
+
+		expression.addSubexpression(childExpression1);
+		expression.addSubexpression(childExpression2);
+
+		return expression;
 	}
 
 	/**
