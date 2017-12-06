@@ -84,6 +84,13 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return null;
 	}
 
+	 /**
+	  * Helper function to link an expression to its child expressions
+	  * @param expression parent expression
+	  * @param childExpression1 first child expression
+	  * @param childExpression2 second child expression
+	  * @return null if expression can't be parsed, returns the expression otherwise.
+	  */
 	private Expression linkExpression(CompoundExpression expression,
 									  Expression childExpression1,
 									  Expression childExpression2) {
