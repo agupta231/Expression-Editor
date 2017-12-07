@@ -78,29 +78,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return null;
 	}
 
-	 /**
-	  * Helper function to link an expression to its child expressions
-	  * @param expression parent expression
-	  * @param childExpression1 first child expression
-	  * @param childExpression2 second child expression
-	  * @return null if expression can't be parsed, returns the expression otherwise.
-	  */
-	private Expression linkExpression(CompoundExpression expression,
-									  Expression childExpression1,
-									  Expression childExpression2) {
-		if (childExpression1 == null || childExpression2 == null) {
-			return null;
-		}
-
-		childExpression1.setParent(expression);
-		childExpression2.setParent(expression);
-
-		expression.addSubexpression(childExpression1);
-		expression.addSubexpression(childExpression2);
-
-		return expression;
-	}
-
 	/**
 	 * Helper function to determine if a string is a digit
 	 * @param str is the string which the user wants to determine is a digit or not
@@ -141,17 +118,26 @@ public class SimpleExpressionParser implements ExpressionParser {
 	}
 
 	 /**
-	  * //TODO ankur write this
-	  * @param str
-	  * @param indexOfCollapsibleExpression
-	  * @param expression
-	  * @return
+	  * Helper function to parse and link the children expressions in a string representing an expression.
+	  * @param str string representing expression
+	  * @param indexOfCollapsibleExpression Index of the string where the operator is
+	  * @param expression parent expression
+	  * @return null if expression can't be parsed, returns the expression otherwise.
 	  */
-	private Expression parseCollapsable(String str, int indexOfCollapsibleExpression,CollapsibleExpression expression)
-	{
+	private Expression parseCollapsable (String str, int indexOfCollapsibleExpression, CollapsibleExpression expression) {
 		Expression childExpression1 = parseExpression(str.substring(0, indexOfCollapsibleExpression));
 		Expression childExpression2 = parseExpression(str.substring(indexOfCollapsibleExpression + 1, str.length()));
 
-		return linkExpression(expression, childExpression1, childExpression2);
+		if (childExpression1 == null || childExpression2 == null) {
+			return null;
+		}
+
+		childExpression1.setParent(expression);
+		childExpression2.setParent(expression);
+
+		expression.addSubexpression(childExpression1);
+		expression.addSubexpression(childExpression2);
+
+		return expression;
 	}
 }
