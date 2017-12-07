@@ -120,6 +120,6 @@ public class ParserUserTester {
         Expression deepcopy =  e.deepCopy();
         System.out.println((e.convertToString(0)));
         System.out.println(deepcopy.convertToString(0));
-        assertEquals(deepcopy.toString(),original.toString());
+        assertEquals(deepcopy.convertToString(0),original.convertToString(0));
     }
 }

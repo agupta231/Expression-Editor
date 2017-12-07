@@ -37,7 +37,6 @@ public class LiteralExpression implements Expression {
      */
     public LiteralExpression deepCopy(){
         LiteralExpression copy = new LiteralExpression();
-        copy.parent = (CompoundExpression) parent.deepCopy();
         copy.literal = this.literal;
         return copy;
     }

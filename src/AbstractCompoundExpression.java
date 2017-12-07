@@ -79,8 +79,6 @@ public abstract class AbstractCompoundExpression implements CompoundExpression{
      * @return a deep copy of the expression
      */
     public AbstractCompoundExpression deepCopy(AbstractCompoundExpression copy){
-        System.out.println(this.convertToString(0));
-        copy.setParent(this.getParent().deepCopy());
         for(Expression c: this.getChildren()){
             copy.addSubexpression(c.deepCopy());
         }
