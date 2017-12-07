@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 
 public abstract class AbstractCompoundExpression implements CompoundExpression{
-    private CompoundExpression parent;
+    private CompoundExpression parent = null;
     private LinkedList<Expression> children = new LinkedList<Expression>();
 
     /**
@@ -79,7 +79,8 @@ public abstract class AbstractCompoundExpression implements CompoundExpression{
      * @return a deep copy of the expression
      */
     public AbstractCompoundExpression deepCopy(AbstractCompoundExpression copy){
-        copy.setParent((CompoundExpression)this.getParent().deepCopy());
+        System.out.println(this.convertToString(0));
+        copy.setParent(this.getParent().deepCopy());
         for(Expression c: this.getChildren()){
             copy.addSubexpression(c.deepCopy());
         }
