@@ -41,21 +41,14 @@ public class SimpleExpressionParser implements ExpressionParser {
 		for(int indexOfPlus = str.indexOf('+'); indexOfPlus >= 0; indexOfPlus = str.indexOf('+', indexOfPlus + 1)) {
 			if (indexOfPlus > 0 && areParenthesisBalanced(str, indexOfPlus)) {
 				AdditiveExpression expression = new AdditiveExpression();
-
-				Expression childExpression1 = parseExpression(str.substring(0, indexOfPlus));
-				Expression childExpression2 = parseExpression(str.substring(indexOfPlus + 1, str.length()));
-
-				return linkExpression(expression, childExpression1, childExpression2);
+				return parseCollapsable(str,indexOfPlus,expression);
 			}
 		}
 
 		for(int indexOfStar = str.indexOf('*'); indexOfStar >= 0; indexOfStar = str.indexOf('*', indexOfStar + 1)) {
 			if (indexOfStar > 0 && areParenthesisBalanced(str, indexOfStar)) {
 				MultiplicativeExpression expression = new MultiplicativeExpression();
-				Expression childExpression1 = parseExpression(str.substring(0, indexOfStar));
-				Expression childExpression2 = parseExpression(str.substring(indexOfStar + 1, str.length()));
-
-				return linkExpression(expression, childExpression1, childExpression2);
+				return parseCollapsable(str,indexOfStar,expression);
 			}
 		}
 
@@ -144,5 +137,20 @@ public class SimpleExpressionParser implements ExpressionParser {
 		}
 
 		return openParen == closedParen;
+	}
+
+	 /**
+	  * //TODO ankur write this
+	  * @param str
+	  * @param indexOfCollapsibleExpression
+	  * @param expression
+	  * @return
+	  */
+	private Expression parseCollapsable(String str, int indexOfCollapsibleExpression,CollapsibleExpression expression)
+	{
+		Expression childExpression1 = parseExpression(str.substring(0, indexOfCollapsibleExpression));
+		Expression childExpression2 = parseExpression(str.substring(indexOfCollapsibleExpression + 1, str.length()));
+
+		return linkExpression(expression, childExpression1, childExpression2);
 	}
 }
