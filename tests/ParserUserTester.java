@@ -115,11 +115,7 @@ public class ParserUserTester {
         final String expressionString = "2 + x * 3";
         AbstractCompoundExpression e = (AbstractCompoundExpression)_parser.parse(expressionString,false);
         AbstractCompoundExpression original = (AbstractCompoundExpression)_parser.parse(expressionString,false);
-
-
         Expression deepcopy =  e.deepCopy();
-        System.out.println((e.convertToString(0)));
-        System.out.println(deepcopy.convertToString(0));
         assertEquals(deepcopy.convertToString(0),original.convertToString(0));
     }
 }
