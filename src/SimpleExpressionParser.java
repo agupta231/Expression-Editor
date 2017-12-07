@@ -38,6 +38,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 			return null;
 		}
 
+		//TODO in part 2 make this a lambda function (not required for part 1)
 		for(int indexOfPlus = str.indexOf('+'); indexOfPlus >= 0; indexOfPlus = str.indexOf('+', indexOfPlus + 1)) {
 			if (indexOfPlus > 0 && areParenthesisBalanced(str, indexOfPlus)) {
 				AdditiveExpression expression = new AdditiveExpression();
