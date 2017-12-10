@@ -1,3 +1,7 @@
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+
 /**
  * Child of expression that represents a multiplicative operator.
  */
@@ -11,6 +15,17 @@ public class MultiplicativeExpression extends CollapsibleExpression{
     public Expression deepCopy(){
         MultiplicativeExpression copy = new MultiplicativeExpression();
         return super.deepCopy(copy);
+    }
+
+    @Override
+    public Node getNode() {
+        final HBox hbox = new HBox();
+        hbox.getChildren().add(this.getChildren().get(0).getNode());
+        for(int i =  1; i < this.getChildren().size(); i++){
+            hbox.getChildren().add(new Label("*"));
+            hbox.getChildren().add(this.getChildren().get(i).getNode());
+        }
+        return hbox;
     }
 
     /**

@@ -1,3 +1,7 @@
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+
 /**
  * Child of expression that represents an parenthetical operator.
  */
@@ -12,6 +16,14 @@ public class ParentheticalExpression extends AbstractCompoundExpression {
     public Expression deepCopy(){
         ParentheticalExpression copy = new ParentheticalExpression();
         return super.deepCopy(copy);
+    }
+
+    public Node getNode() {
+        final HBox hbox = new HBox();
+        hbox.getChildren().add(new Label("("));
+        hbox.getChildren().add(this.getChildren().get(0).getNode());
+        hbox.getChildren().add(new Label(")"));
+        return hbox;
     }
 
     /**

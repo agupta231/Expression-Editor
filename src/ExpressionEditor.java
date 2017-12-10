@@ -6,15 +6,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
-import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class ExpressionEditor extends Application {
@@ -28,9 +26,12 @@ public class ExpressionEditor extends Application {
 	private static class MouseEventHandler implements EventHandler<MouseEvent> {
 		MouseEventHandler (Pane pane_, CompoundExpression rootExpression_) {
 		}
-
+		public static final Border RED_BORDER = new Border(
+				new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)
+		);
 		public void handle (MouseEvent event) {
 			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+
 			} else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
 			} else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
 			}
@@ -95,7 +96,7 @@ public class ExpressionEditor extends Application {
 
 		// Reset the color to black whenever the user presses a key
 		textField.setOnKeyPressed(e -> textField.setStyle("-fx-text-fill: black"));
-		
+
 		final BorderPane root = new BorderPane();
 		root.setTop(queryPane);
 		root.setCenter(expressionPane);

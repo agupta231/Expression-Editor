@@ -1,3 +1,8 @@
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+
+
 public class LiteralExpression implements Expression {
 
     private CompoundExpression parent;
@@ -39,6 +44,13 @@ public class LiteralExpression implements Expression {
         LiteralExpression copy = new LiteralExpression();
         copy.literal = this.literal;
         return copy;
+    }
+
+    @Override
+    public Node getNode() {
+        final HBox hbox = new HBox();
+        hbox.getChildren().add(new Label(this.literal));
+        return hbox;
     }
 
     /**
