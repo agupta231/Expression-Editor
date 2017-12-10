@@ -48,7 +48,7 @@ public class DragAndDropExercise extends Application {
         primaryStage.setTitle("EventDrivenProgram");
 
         final Pane root = new Pane();
-        final Label label = new Label("Drag me!");
+        final Label label = new Label("Drag me Daddy");
         root.getChildren().add(label);
 
         final MouseEventHandler handler = new MouseEventHandler(label);
