@@ -28,49 +28,59 @@ public class ExpressionEditor extends Application {
 	 */
 	private static class MouseEventHandler implements EventHandler<MouseEvent> {
 		CompoundExpression rootExpression_;
-		CompoundExpression currentFocus_;
+		Node currentFocus_;
 		Pane currentPane;
 
 		MouseEventHandler (Pane pane_, CompoundExpression rootExpression_) {
 			this.rootExpression_ = rootExpression_;
-			this.currentFocus_ = this.rootExpression_;
+			this.currentFocus_ = this.rootExpression_.getNode();
 			this.currentPane = pane_;
 		}
 
 		public void handle (MouseEvent event) {
-				if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                    System.out.println("");
-                    System.out.println("");
-                    System.out.println("");
-                    System.out.println("");
+			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+				System.out.println("");
+				System.out.println("");
+				System.out.println("");
+				System.out.println("");
 
-                    ObservableList<Node> HChildren = ((HBox) currentFocus_.getNode()).getChildren();
-                    for(int i = 0; i < HChildren.size(); i++){
-                        final Node currentNode = HChildren.get(i);
+				ObservableList<Node> HChildren = ((HBox) currentFocus_).getChildren();
+				for(int i = 0; i < HChildren.size(); i++){
+					final Node currentNode = HChildren.get(i);
 
-                        if(currentNode instanceof HBox) {
-                            double xLocationMin = currentNode.getLayoutX();
-                            double yLocationMin = currentNode.getLayoutY();
+					if(currentNode instanceof HBox) {
+						double xLocationMin = currentNode.getLayoutX();
+						double yLocationMin = currentNode.getLayoutY();
 
-                            Point2D realPoint = currentNode.localToScene(xLocationMin, yLocationMin);
+						Point2D realPoint = currentNode.localToScene(xLocationMin, yLocationMin);
 
-                            double height = currentNode.getLayoutBounds().getHeight();
-							double width = currentNode.getLayoutBounds().getWidth();
+						double height = currentNode.getLayoutBounds().getHeight();
+						double width = currentNode.getLayoutBounds().getWidth();
 
-							System.out.println("----------------");
-                            System.out.println("Y CLICK: " + event.getSceneY() + " CORD: " + realPoint.getY() + " HEIGHT: " + height);
-                            System.out.println("X CLICK: " + event.getSceneX() + " CORD: " + realPoint.getX() + " WIDTH: " + width);
+						System.out.println("----------------");
+						System.out.println("Y CLICK: " + event.getSceneY() + " CORD: " + realPoint.getY() + " HEIGHT: " + height);
+						System.out.println("X CLICK: " + event.getSceneX() + " CORD: " + realPoint.getX() + " WIDTH: " + width);
 
-                            if (event.getSceneY() > realPoint.getY() && event.getSceneY() < realPoint.getY() + height) {
-                                if (event.getSceneX() > realPoint.getX() && event.getSceneX() < realPoint.getX() + width) {
-                                    System.out.println("CLICKED!");
-                                    ((HBox) currentNode).setBorder(currentFocus_.RED_BORDER);
-                                    return;
-                                }
-                            }
-                        }
-                    }
-			} else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+						if (event.getSceneY() > realPoint.getY() && event.getSceneY() < realPoint.getY() + height) {
+							if (event.getSceneX() > realPoint.getX() && event.getSceneX() < realPoint.getX() + width) {
+								System.out.println("CLICKED!");
+
+								Node previousFocus = currentFocus_;
+								currentFocus_= currentNode;
+
+								((HBox) previousFocus).setBorder(Expression.NO_BORDER);
+								((HBox) currentNode).setBorder(Expression.RED_BORDER);
+
+								return;
+							}
+						}
+					}
+				}
+
+				((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
+				currentFocus_ = rootExpression_.getNode();
+			}
+			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
 
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
