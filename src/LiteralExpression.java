@@ -7,7 +7,7 @@ public class LiteralExpression implements Expression, Focusable {
 
     private CompoundExpression parent;
     private String literal;
-    boolean focused;
+    private boolean focused;
     private Node node;
 
     /**
@@ -53,7 +53,7 @@ public class LiteralExpression implements Expression, Focusable {
         if(node == null) {
             final HBox hbox = new HBox();
             hbox.getChildren().add(new Label(this.literal));
-            if (this.focused) {
+            if (this.getFocused()) {
                 hbox.setBorder(RED_BORDER);
             }
             node = hbox;

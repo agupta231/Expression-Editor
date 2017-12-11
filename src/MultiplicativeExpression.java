@@ -7,7 +7,7 @@ import javafx.scene.layout.HBox;
  */
 public class MultiplicativeExpression extends CollapsibleExpression implements Focusable{
 
-    boolean focused;
+    private boolean focused;
     private Node node;
 
     /**
@@ -29,7 +29,7 @@ public class MultiplicativeExpression extends CollapsibleExpression implements F
                 hbox.getChildren().add(new Label("*"));
                 hbox.getChildren().add(this.getChildren().get(i).getNode());
             }
-            if (this.focused) {
+            if (this.getFocused()) {
                 hbox.setBorder(RED_BORDER);
             }
             node = hbox;

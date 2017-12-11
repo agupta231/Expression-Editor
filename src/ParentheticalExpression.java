@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 
 public class ParentheticalExpression extends AbstractCompoundExpression implements Focusable{
 
-    boolean focused;
+    private boolean focused;
     private Node node;
 
     /**
@@ -27,7 +27,7 @@ public class ParentheticalExpression extends AbstractCompoundExpression implemen
             hbox.getChildren().add(new Label("("));
             hbox.getChildren().add(this.getChildren().get(0).getNode());
             hbox.getChildren().add(new Label(")"));
-            if (this.focused) {
+            if (this.getFocused()) {
                 hbox.setBorder(RED_BORDER);
             }
             node = hbox;

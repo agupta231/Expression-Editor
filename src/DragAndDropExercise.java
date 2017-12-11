@@ -26,7 +26,6 @@ public class DragAndDropExercise extends Application {
             final double sceneY = event.getSceneY();
 
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                // IMPLEMENT ME
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
                 _label.setTranslateX(_label.getTranslateX() + (sceneX - _lastX));
                 _label.setTranslateY(_label.getTranslateY() + (sceneY - _lastY));
@@ -48,7 +47,7 @@ public class DragAndDropExercise extends Application {
         primaryStage.setTitle("EventDrivenProgram");
 
         final Pane root = new Pane();
-        final Label label = new Label("Drag me Daddy");
+        final Label label = new Label("Drag me, Daddy");
         root.getChildren().add(label);
 
         final MouseEventHandler handler = new MouseEventHandler(label);
