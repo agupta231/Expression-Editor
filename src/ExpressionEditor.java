@@ -1,5 +1,7 @@
 import javafx.application.Application;
 import java.util.*;
+
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
 import javafx.event.ActionEvent;
@@ -14,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.geometry.Bounds;
 
 public class ExpressionEditor extends Application {
 	public static void main (String[] args) {
@@ -24,16 +27,30 @@ public class ExpressionEditor extends Application {
 	 * Mouse event handler for the entire pane that constitutes the ExpressionEditor
 	 */
 	private static class MouseEventHandler implements EventHandler<MouseEvent> {
-		MouseEventHandler (Pane pane_, CompoundExpression rootExpression_) {
-		}
-		public static final Border RED_BORDER = new Border(
-				new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)
-		);
-		public void handle (MouseEvent event) {
-			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+		CompoundExpression rootExpression_;
+		CompoundExpression currentFocus_;
 
+		MouseEventHandler (Pane pane_, CompoundExpression rootExpression_) {
+			this.rootExpression_ = rootExpression_;
+			this.currentFocus_ = this.rootExpression_;
+		}
+
+		public void handle (MouseEvent event) {
+				if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+				ObservableList<Node> HChildren = ((HBox) currentFocus_.getNode()).getChildren();
+				for(int i = 0; i < HChildren.size() - 1; i++){
+					//double xLocationMin = HChildren.get(i);
+					//Bounds b = HChildren.get(i).getLayoutX();
+					System.out.println("--------------");
+					//System.out.println(xLocationMin);
+					System.out.println("X: " + event.getSceneX() + "Y: " + event.getSceneX());
+					System.out.println(HChildren.get(i).contains(event.getSceneX(), event.getSceneY()));
+					//if(xLocationMin )
+				}
 			} else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+
 			} else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
+
 			}
 		}
 	}

@@ -6,7 +6,10 @@ import javafx.scene.layout.HBox;
  * Child of expression that represents an parenthetical operator.
  */
 
-public class ParentheticalExpression extends AbstractCompoundExpression {
+public class ParentheticalExpression extends AbstractCompoundExpression implements Focusable{
+
+    boolean focused;
+    private Node node;
 
     /**
      * Will return a copy of the Additive expression to use
@@ -19,11 +22,18 @@ public class ParentheticalExpression extends AbstractCompoundExpression {
     }
 
     public Node getNode() {
-        final HBox hbox = new HBox();
-        hbox.getChildren().add(new Label("("));
-        hbox.getChildren().add(this.getChildren().get(0).getNode());
-        hbox.getChildren().add(new Label(")"));
-        return hbox;
+        if(node == null) {
+            final HBox hbox = new HBox();
+            hbox.getChildren().add(new Label("("));
+            hbox.getChildren().add(this.getChildren().get(0).getNode());
+            hbox.getChildren().add(new Label(")"));
+            if (this.focused) {
+                hbox.setBorder(RED_BORDER);
+            }
+            node = hbox;
+            return hbox;
+        }
+        return node;
     }
 
     /**
@@ -42,5 +52,15 @@ public class ParentheticalExpression extends AbstractCompoundExpression {
      */
     public void flatten(){
         flattenChildren();
+    }
+
+    @Override
+    public boolean getFocused() {
+        return this.focused;
+    }
+
+    @Override
+    public void setFocused(boolean s) {
+        this.focused = s;
     }
 }

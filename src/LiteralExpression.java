@@ -3,10 +3,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 
-public class LiteralExpression implements Expression {
+public class LiteralExpression implements Expression, Focusable {
 
     private CompoundExpression parent;
     private String literal;
+    boolean focused;
+    private Node node;
 
     /**
      * Converts the expression to string
@@ -48,9 +50,16 @@ public class LiteralExpression implements Expression {
 
     @Override
     public Node getNode() {
-        final HBox hbox = new HBox();
-        hbox.getChildren().add(new Label(this.literal));
-        return hbox;
+        if(node == null) {
+            final HBox hbox = new HBox();
+            hbox.getChildren().add(new Label(this.literal));
+            if (this.focused) {
+                hbox.setBorder(RED_BORDER);
+            }
+            node = hbox;
+            return hbox;
+        }
+        return node;
     }
 
     /**
@@ -66,5 +75,15 @@ public class LiteralExpression implements Expression {
      * Does nothing, but higher functions may call it sometimes
      */
     public void flatten(){
+    }
+
+    @Override
+    public boolean getFocused() {
+        return this.focused;
+    }
+
+    @Override
+    public void setFocused(boolean s) {
+        this.focused = s;
     }
 }

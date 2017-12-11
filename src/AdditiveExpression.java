@@ -5,7 +5,10 @@ import javafx.scene.layout.HBox;
 /**
  * Child of expression that represents an addition operator.
  */
-public class AdditiveExpression extends CollapsibleExpression{
+public class AdditiveExpression extends CollapsibleExpression implements Focusable{
+
+    boolean focused;
+	private Node node;
 
 	/**
 	 * Will return a copy of the Additive expression to use
@@ -18,13 +21,20 @@ public class AdditiveExpression extends CollapsibleExpression{
 	}
 
 	public Node getNode() {
-		final HBox hbox = new HBox();
-		hbox.getChildren().add(this.getChildren().get(0).getNode());
-		for(int i =  1; i < this.getChildren().size(); i++){
-			hbox.getChildren().add(new Label("+"));
-			hbox.getChildren().add(this.getChildren().get(i).getNode());
+		if(node == null) {
+			final HBox hbox = new HBox();
+			hbox.getChildren().add(this.getChildren().get(0).getNode());
+			for (int i = 1; i < this.getChildren().size(); i++) {
+				hbox.getChildren().add(new Label("+"));
+				hbox.getChildren().add(this.getChildren().get(i).getNode());
+			}
+			if (this.focused) {
+				hbox.setBorder(RED_BORDER);
+			}
+			node = hbox;
+			return hbox;
 		}
-		return hbox;
+		return node;
 	}
 
 
@@ -39,4 +49,13 @@ public class AdditiveExpression extends CollapsibleExpression{
 		return super.convertToString(indentLevel,"+");
 	}
 
+    @Override
+    public boolean getFocused() {
+        return this.focused;
+    }
+
+    @Override
+    public void setFocused(boolean s) {
+        this.focused = s;
+    }
 }

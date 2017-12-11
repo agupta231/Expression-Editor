@@ -1,8 +1,6 @@
 import java.util.LinkedList;
 
 public abstract class CollapsibleExpression extends AbstractCompoundExpression {
-
-
     /**
      * Flattens the expression in order to make it easier for the GUI to parse.
      */
@@ -24,5 +22,6 @@ public abstract class CollapsibleExpression extends AbstractCompoundExpression {
         }
         this.setChildren(children);
     }
+
 
 }

@@ -1,4 +1,7 @@
- /**
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+
+/**
  * Starter code to implement an ExpressionParser. Your parser methods should use the following grammar:
  * E := A | X
  * A := A+M | M
@@ -7,6 +10,9 @@
  * L := [0-9]+ | [a-z]
  */
 public class SimpleExpressionParser implements ExpressionParser {
+
+	private boolean FX;
+
 	/**
 	 * Attempts to create an expression tree -- flattened as much as possible -- from the specified String.
      * Throws a {@link ExpressionParseException} if the specified string cannot be parsed.
@@ -15,6 +21,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @return the Expression object representing the parsed expression tree
 	 */
 	public Expression parse (String str, boolean withJavaFXControls) throws ExpressionParseException {
+		FX = withJavaFXControls;
 		// Remove spaces -- this simplifies the parsing logic
 		str = str.replaceAll(" ", "");
 
@@ -137,7 +144,18 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 		expression.addSubexpression(childExpression1);
 		expression.addSubexpression(childExpression2);
+		/*
+		if(FX){
+			if(str.charAt(indexOfCollapsibleExpression) == '+'){
 
+			}
+			final HBox hbox = new HBox();
+			hbox.getChildren().add(childExpression1.getNode());
+			hbox.getChildren().add(new Label(str.charAt(indexOfCollapsibleExpression) + ""));
+			hbox.getChildren().add(childExpression2.getNode());
+			((AdditiveExpression) expression).setNode(hbox);
+		}
+		*/
 		return expression;
 	}
 }
