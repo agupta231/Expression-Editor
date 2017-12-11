@@ -37,23 +37,32 @@ public class ExpressionEditor extends Application {
 
 		public void handle (MouseEvent event) {
 				if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-				ObservableList<Node> HChildren = ((HBox) currentFocus_.getNode()).getChildren();
-				for(int i = 0; i < HChildren.size(); i++){
-					final Node currentNode = HChildren.get(i);
-					double xLocationMin = currentNode.getLayoutX();
-					double yLocationMin = currentNode.getLayoutY();
-					Point2D realPoint = currentNode.localToScene(xLocationMin, yLocationMin);
-					Double width = currentNode.getLayoutBounds().getWidth();
-					Double height = currentNode.getLayoutBounds().getHeight();
+                    System.out.println("");
+                    System.out.println("");
+                    System.out.println("");
+                    System.out.println("");
 
-					if(event.getSceneY() > realPoint.getY() && event.getSceneY() < realPoint.getY() + height){
-						if(event.getSceneX() > realPoint.getX() && event.getSceneX() < realPoint.getX() + width){
-							((HBox) currentNode).setBorder(currentFocus_.RED_BORDER);
-							return;
-						}
-					}
-				}
-
+                    ObservableList<Node> HChildren = ((HBox) currentFocus_.getNode()).getChildren();
+                    for(int i = 0; i < HChildren.size(); i++){
+                        final Node currentNode = HChildren.get(i);
+                        if(currentNode instanceof HBox) {
+                            double xLocationMin = currentNode.getLayoutX();
+                            double yLocationMin = currentNode.getLayoutY();
+                            Point2D realPoint = currentNode.localToScene(xLocationMin, yLocationMin);
+                            double width = currentNode.getLayoutBounds().getWidth();
+                            Double height = currentNode.getLayoutBounds().getHeight();
+                            System.out.println("----------------");
+                            System.out.println("Y CLICK: " + event.getSceneY() + " CORD: " + realPoint.getY() + " HEIGHT: " + height);
+                            System.out.println("X CLICK: " + event.getSceneX() + " CORD: " + realPoint.getX() + " WIDTH: " + width);
+                            if (event.getSceneY() > realPoint.getY() && event.getSceneY() < realPoint.getY() + height) {
+                                if (event.getSceneX() > realPoint.getX() && event.getSceneX() < realPoint.getX() + width) {
+                                    System.out.println("CLICKED!");
+                                    ((HBox) currentNode).setBorder(currentFocus_.RED_BORDER);
+                                    return;
+                                }
+                            }
+                        }
+                    }
 			} else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
 
 			} else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
