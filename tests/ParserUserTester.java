@@ -110,12 +110,18 @@ public class ParserUserTester {
 
         assertEquals(parseTreeStr, _parser.parse(expressionString, false).convertToString(0));
     }
+
+    //TODO: add, more tests? I can't think of any more
     @Test
     public void testDeepCopy() throws ExpressionParseException {
         final String expressionString = "2 + x * 3";
-        AbstractCompoundExpression e = (AbstractCompoundExpression)_parser.parse(expressionString,false);
+        final String modifiedExpressionString = "3 + x * 3";
+        AbstractCompoundExpression toBeCopied = (AbstractCompoundExpression)_parser.parse(expressionString,false);
+        AbstractCompoundExpression modifier = (AbstractCompoundExpression)_parser.parse(modifiedExpressionString,false);
         AbstractCompoundExpression original = (AbstractCompoundExpression)_parser.parse(expressionString,false);
-        Expression deepcopy =  e.deepCopy();
+
+        Expression deepcopy =  toBeCopied.deepCopy();
+        toBeCopied.setChildren(modifier.getChildren());
         assertEquals(deepcopy.convertToString(0),original.convertToString(0));
     }
 }

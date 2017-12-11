@@ -82,6 +82,10 @@ public abstract class AbstractCompoundExpression implements CompoundExpression{
         for(Expression c: this.getChildren()){
             copy.addSubexpression(c.deepCopy());
         }
+        for(Expression c: copy.getChildren())
+        {
+            c.setParent(copy);
+        }
         return copy;
     }
 
