@@ -111,7 +111,6 @@ public class ParserUserTester {
         assertEquals(parseTreeStr, _parser.parse(expressionString, false).convertToString(0));
     }
 
-    //TODO: add, more tests? I can't think of any more
     @Test
     public void testDeepCopy() throws ExpressionParseException {
         final String expressionString = "2 + x * 3";

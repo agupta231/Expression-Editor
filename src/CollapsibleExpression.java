@@ -1,3 +1,4 @@
+import javafx.scene.Node;
 import java.util.LinkedList;
 
 public abstract class CollapsibleExpression extends AbstractCompoundExpression {
@@ -22,6 +23,4 @@ public abstract class CollapsibleExpression extends AbstractCompoundExpression {
         }
         this.setChildren(children);
     }
-
-
 }

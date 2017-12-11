@@ -33,6 +33,7 @@ public class ParentheticalExpression extends AbstractCompoundExpression implemen
             node = hbox;
             return hbox;
         }
+
         return node;
     }
 
