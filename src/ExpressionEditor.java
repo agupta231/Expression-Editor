@@ -47,15 +47,20 @@ public class ExpressionEditor extends Application {
                     ObservableList<Node> HChildren = ((HBox) currentFocus_.getNode()).getChildren();
                     for(int i = 0; i < HChildren.size(); i++){
                         final Node currentNode = HChildren.get(i);
+
                         if(currentNode instanceof HBox) {
                             double xLocationMin = currentNode.getLayoutX();
                             double yLocationMin = currentNode.getLayoutY();
+
                             Point2D realPoint = currentNode.localToScene(xLocationMin, yLocationMin);
-                            double width = currentNode.getLayoutBounds().getWidth();
-                            Double height = currentNode.getLayoutBounds().getHeight();
-                            System.out.println("----------------");
+
+                            double height = currentNode.getLayoutBounds().getHeight();
+							double width = currentNode.getLayoutBounds().getWidth();
+
+							System.out.println("----------------");
                             System.out.println("Y CLICK: " + event.getSceneY() + " CORD: " + realPoint.getY() + " HEIGHT: " + height);
                             System.out.println("X CLICK: " + event.getSceneX() + " CORD: " + realPoint.getX() + " WIDTH: " + width);
+
                             if (event.getSceneY() > realPoint.getY() && event.getSceneY() < realPoint.getY() + height) {
                                 if (event.getSceneX() > realPoint.getX() && event.getSceneX() < realPoint.getX() + width) {
                                     System.out.println("CLICKED!");
@@ -114,8 +119,8 @@ public class ExpressionEditor extends Application {
 					expressionPane.getChildren().clear();
 					expressionPane.getChildren().add(expression.getNode());
 
-					expression.getNode().setLayoutX(WINDOW_WIDTH/4);
-					expression.getNode().setLayoutY(WINDOW_HEIGHT/2);
+					expression.getNode().setLayoutX(WINDOW_WIDTH / 2);
+					expression.getNode().setLayoutY(WINDOW_HEIGHT / 2);
 
 					// If the parsed expression is a CompoundExpression, then register some callbacks
 					if (expression instanceof CompoundExpression) {
