@@ -38,15 +38,22 @@ public class ExpressionEditor extends Application {
 		public void handle (MouseEvent event) {
 				if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
 				ObservableList<Node> HChildren = ((HBox) currentFocus_.getNode()).getChildren();
-				for(int i = 0; i < HChildren.size() - 1; i++){
-					//double xLocationMin = HChildren.get(i);
-					//Bounds b = HChildren.get(i).getLayoutX();
-					System.out.println("--------------");
-					//System.out.println(xLocationMin);
-					System.out.println("X: " + event.getSceneX() + "Y: " + event.getSceneX());
-					System.out.println(HChildren.get(i).contains(event.getSceneX(), event.getSceneY()));
-					//if(xLocationMin )
+				for(int i = 0; i < HChildren.size(); i++){
+					final Node currentNode = HChildren.get(i);
+					double xLocationMin = currentNode.getLayoutX();
+					double yLocationMin = currentNode.getLayoutY();
+					Point2D realPoint = currentNode.localToScene(xLocationMin, yLocationMin);
+					Double width = currentNode.getLayoutBounds().getWidth();
+					Double height = currentNode.getLayoutBounds().getHeight();
+
+					if(event.getSceneY() > realPoint.getY() && event.getSceneY() < realPoint.getY() + height){
+						if(event.getSceneX() > realPoint.getX() && event.getSceneX() < realPoint.getX() + width){
+							((HBox) currentNode).setBorder(currentFocus_.RED_BORDER);
+							return;
+						}
+					}
 				}
+
 			} else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
 
 			} else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
