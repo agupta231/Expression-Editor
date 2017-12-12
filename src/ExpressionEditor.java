@@ -29,6 +29,7 @@ public class ExpressionEditor extends Application {
 	private static class MouseEventHandler implements EventHandler<MouseEvent> {
 		CompoundExpression rootExpression_;
 		Node currentFocus_;
+		Node previousFocus;
 		Pane currentPane;
 		double _lastX, _lastY;
 		boolean firstClick = true;
@@ -58,7 +59,7 @@ public class ExpressionEditor extends Application {
 
 						if (currentNode.contains(relativeClick.getX(), relativeClick.getY())) {
 							if(firstClick) {
-								Node previousFocus = currentFocus_;
+								previousFocus = currentFocus_;
 								currentFocus_ = currentNode;
 								if(currentFocus_ instanceof Label){
 									break;
