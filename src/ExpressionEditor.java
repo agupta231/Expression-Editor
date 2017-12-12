@@ -39,31 +39,19 @@ public class ExpressionEditor extends Application {
 
 		public void handle (MouseEvent event) {
 			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-				System.out.println("");
-				System.out.println("");
-				System.out.println("");
-				System.out.println("");
 
 				ObservableList<Node> HChildren = ((HBox) currentFocus_).getChildren();
+
 				for(int i = 0; i < HChildren.size(); i++){
 					final Node currentNode = HChildren.get(i);
 
 					if(currentNode instanceof HBox) {
-						double xLocationMin = currentNode.getLayoutX();
-						double yLocationMin = currentNode.getLayoutY();
+						double clickedX = event.getSceneX();
+						double clickedY = event.getSceneY();
 
-						Point2D realPoint = currentNode.localToScene(xLocationMin, yLocationMin);
+						Point2D relativeClick = currentNode.sceneToLocal(clickedX, clickedY);
 
-						double height = currentNode.getLayoutBounds().getHeight();
-						double width = currentNode.getLayoutBounds().getWidth();
-
-						System.out.println("----------------");
-						System.out.println("Y CLICK: " + event.getSceneY() + " CORD: " + realPoint.getY() + " HEIGHT: " + height);
-						System.out.println("X CLICK: " + event.getSceneX() + " CORD: " + realPoint.getX() + " WIDTH: " + width);
-
-						if (event.getSceneY() > realPoint.getY() && event.getSceneY() < realPoint.getY() + height) {
-							if (event.getSceneX() > realPoint.getX() && event.getSceneX() < realPoint.getX() + width) {
-								System.out.println("CLICKED!");
+						if (currentNode.contains(relativeClick.getX(), relativeClick.getY())) {
 
 								Node previousFocus = currentFocus_;
 								currentFocus_= currentNode;
@@ -72,7 +60,6 @@ public class ExpressionEditor extends Application {
 								((HBox) currentNode).setBorder(Expression.RED_BORDER);
 
 								return;
-							}
 						}
 					}
 				}
