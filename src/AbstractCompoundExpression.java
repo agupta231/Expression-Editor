@@ -53,6 +53,7 @@ public abstract class AbstractCompoundExpression implements CompoundExpression{
      * @param child An expression
      */
     public void addSubexpression(Expression child){
+        child.setParent(this);
         this.children.add(child);
     }
 
@@ -83,6 +84,7 @@ public abstract class AbstractCompoundExpression implements CompoundExpression{
     public AbstractCompoundExpression deepCopy(AbstractCompoundExpression copy){
         for(Expression c: this.getChildren()){
             copy.addSubexpression(c.deepCopy());
+            System.out.println("C:" + c);
         }
         for(Expression c: copy.getChildren())
         {
@@ -91,8 +93,21 @@ public abstract class AbstractCompoundExpression implements CompoundExpression{
         return copy;
     }
 
-    public static LinkedList<Expression> generateAllPossibleTrees(Expression focused) {
-        final CompoundExpression parent = focused.getParent();
+    public static LinkedList<Expression> generateAllPossibleTrees(Expression parent, String selected) {
+
+        System.out.println("Daddy start");
+        System.out.println(parent.convertToString(0));
+        System.out.println("Daddy end");
+
+        Expression focused = null;
+
+        for(Expression child : ((AbstractCompoundExpression) parent).getChildren()) {
+            if (child.convertToString(0).equals(selected)) {
+                focused = child;
+                break;
+            }
+        }
+
         final LinkedList<Expression> children = ((AbstractCompoundExpression) parent).getChildren();
         final int childrenSize = children.size();
 

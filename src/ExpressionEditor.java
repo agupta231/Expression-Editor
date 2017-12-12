@@ -105,8 +105,13 @@ public class ExpressionEditor extends Application {
 					Expression focusedExpression = nodeMap.get(currentFocus_);
 
 					System.out.println("Possible Combinations: ");
+					System.out.println(((AbstractCompoundExpression) focusedExpression.getParent()));
 
-					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(focusedExpression.deepCopy())) {
+					System.out.println("Ankur's dick");
+					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
+							focusedExpression.getParent().deepCopy(),
+							focusedExpression.convertToString(0))) {
+
 						System.out.println(e.convertToString(0));
 					}
 				}
@@ -154,8 +159,6 @@ public class ExpressionEditor extends Application {
 					final Expression expression = expressionParser.parse(textField.getText(), true);
 					System.out.println(expression.convertToString(0));
 
-					nodeMap = generateMap(expression);
-
 					expressionPane.getChildren().clear();
 					expressionPane.getChildren().add(expression.getNode());
 
@@ -172,6 +175,9 @@ public class ExpressionEditor extends Application {
 						expressionPane.setOnMouseDragged(eventHandler);
 						expressionPane.setOnMouseReleased(eventHandler);
 					}
+
+					expression.flatten();
+					nodeMap = generateMap(expression);
 				} catch (ExpressionParseException epe) {
 					// If we can't parse the expression, then mark it in red
 					textField.setStyle("-fx-text-fill: red");
@@ -196,6 +202,12 @@ public class ExpressionEditor extends Application {
 		HashSet<Expression> vistedExpressions = new HashSet<>();
 		HashMap<Node, Expression> map = new HashMap<>();
 
+		//TODO add case for literal expression
+		//for(Expression c: ((AbstractCompoundExpression)e).getChildren()){
+		//	map.put(c.getNode(),c);
+		//}
+
+
 		map.put(e.getNode(), e);
 		vistedExpressions.add(e);
 
@@ -217,6 +229,22 @@ public class ExpressionEditor extends Application {
 						expressionsToVisit.add(child);
 					}
 				}
+			}
+		}
+
+		for (Node key : map.keySet()) {
+			try {
+				System.out.println();
+				System.out.println("Start");
+				System.out.println(map.get(key).convertToString(0));
+				System.out.println(map.get(key));
+				System.out.println(map.get(key).getParent().convertToString(0));
+				System.out.println(map.get(key).getParent());
+				System.out.println(key);
+				System.out.println("ENd");
+				System.out.println();
+			} catch(Exception E) {
+
 			}
 		}
 
