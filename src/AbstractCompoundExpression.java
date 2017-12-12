@@ -1,3 +1,5 @@
+import org.junit.runner.Computer;
+
 import java.util.LinkedList;
 
 public abstract class AbstractCompoundExpression implements CompoundExpression{
@@ -89,4 +91,48 @@ public abstract class AbstractCompoundExpression implements CompoundExpression{
         return copy;
     }
 
+    public static LinkedList<Expression> generateAllPossibleTrees(Expression focused) {
+        final CompoundExpression parent = focused.getParent();
+        final LinkedList<Expression> children = ((AbstractCompoundExpression) parent).getChildren();
+        final int childrenSize = children.size();
+
+        int nodeIndex = -1;
+
+        for(int i = 0; i < childrenSize; i++) {
+            if (children.get(i) == focused) {
+                nodeIndex = i;
+                break;
+            }
+        }
+
+        if (nodeIndex == -1) {
+            return new LinkedList<>();
+        }
+
+        children.remove(nodeIndex);
+
+        LinkedList<Expression> possibleTrees = new LinkedList<>();
+
+        for (int i = 0; i < childrenSize; i++) {
+            AbstractCompoundExpression tempParent = (AbstractCompoundExpression) parent.deepCopy();
+            LinkedList<Expression> orderedChildren = new LinkedList<>();
+
+            for (int j = 0; j < children.size(); j++) {
+                if (j == i) {
+                    orderedChildren.add(focused);
+                }
+
+                orderedChildren.add(children.get(j));
+            }
+
+            if(i == childrenSize - 1) {
+                orderedChildren.add(focused);
+            }
+
+            tempParent.setChildren(orderedChildren);
+            possibleTrees.add(tempParent);
+        }
+
+        return possibleTrees;
+    }
 }

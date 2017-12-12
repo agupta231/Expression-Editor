@@ -1,3 +1,4 @@
+import com.sun.security.auth.module.SolarisSystem;
 import javafx.application.Application;
 import java.util.*;
 
@@ -17,8 +18,11 @@ import javafx.event.EventHandler;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Bounds;
+import org.junit.runner.Computer;
 
 public class ExpressionEditor extends Application {
+	public static HashMap<Node, Expression> nodeMap = new HashMap<>();
+
 	public static void main (String[] args) {
 		launch(args);
 	}
@@ -31,6 +35,7 @@ public class ExpressionEditor extends Application {
 		Node currentFocus_;
 		Node previousFocus;
 		Pane currentPane;
+
 		double _lastX, _lastY;
 		boolean firstClick = true;
 
@@ -90,6 +95,21 @@ public class ExpressionEditor extends Application {
 				currentFocus_.setTranslateX(0);
 				currentFocus_.setTranslateY(0);
 				firstClick = !firstClick;
+
+				System.out.println();
+				System.out.println(nodeMap.get(currentFocus_));
+				System.out.println(rootExpression_);
+
+				if(nodeMap.get(currentFocus_) != rootExpression_) {
+					System.out.println("here");
+					Expression focusedExpression = nodeMap.get(currentFocus_);
+
+					System.out.println("Possible Combinations: ");
+
+					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(focusedExpression.deepCopy())) {
+						System.out.println(e.convertToString(0));
+					}
+				}
 			}
 			_lastX = sceneX;
 			_lastY = sceneY;
@@ -134,6 +154,8 @@ public class ExpressionEditor extends Application {
 					final Expression expression = expressionParser.parse(textField.getText(), true);
 					System.out.println(expression.convertToString(0));
 
+					nodeMap = generateMap(expression);
+
 					expressionPane.getChildren().clear();
 					expressionPane.getChildren().add(expression.getNode());
 
@@ -167,5 +189,37 @@ public class ExpressionEditor extends Application {
 
 		primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
 		primaryStage.show();
+	}
+
+	private HashMap<Node, Expression> generateMap (Expression e) {
+		Stack<Expression> expressionsToVisit = new Stack<>();
+		HashSet<Expression> vistedExpressions = new HashSet<>();
+		HashMap<Node, Expression> map = new HashMap<>();
+
+		map.put(e.getNode(), e);
+		vistedExpressions.add(e);
+
+		if (!(e instanceof AbstractCompoundExpression)) {
+			return map;
+		}
+
+		expressionsToVisit.addAll(((AbstractCompoundExpression) e).getChildren());
+
+		while (!expressionsToVisit.empty()) {
+			Expression currentExpression = expressionsToVisit.pop();
+
+			map.put(currentExpression.getNode(), currentExpression);
+			vistedExpressions.add(currentExpression);
+
+			if (currentExpression instanceof AbstractCompoundExpression) {
+				for (Expression child : ((AbstractCompoundExpression) currentExpression).getChildren()) {
+					if (!vistedExpressions.contains(child)) {
+						expressionsToVisit.add(child);
+					}
+				}
+			}
+		}
+
+		return map;
 	}
 }

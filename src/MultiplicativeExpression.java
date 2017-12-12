@@ -34,7 +34,6 @@ public class MultiplicativeExpression extends CollapsibleExpression implements F
 
                 hbox.getChildren().add(text);
                 hbox.getChildren().add(this.getChildren().get(i).getNode());
-                System.out.println(this.getChildren().get(i).convertToString(0));
             }
 
             if (this.getFocused()) {

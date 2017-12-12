@@ -6,19 +6,19 @@ interface Expression {
 	/**
 	 * Border for showing a focused expression
 	 */
-	public static final Border RED_BORDER = new Border(
+	Border RED_BORDER = new Border(
 	  new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)
 	);
 
 	/**
 	 * Border for showing a non-focused expression
 	 */
-	public static final Border NO_BORDER = null;
+	Border NO_BORDER = null;
 
 	/**
 	 * Color used for a "ghosted" expression
 	 */
-	public static final Color GHOST_COLOR = Color.LIGHTGREY;
+	Color GHOST_COLOR = Color.LIGHTGREY;
 
 	/**
 	 * Returns the expression's parent.
