@@ -2,7 +2,7 @@ import org.junit.runner.Computer;
 
 import java.util.LinkedList;
 
-public abstract class AbstractCompoundExpression implements CompoundExpression{
+public abstract class AbstractCompoundExpression implements CompoundExpression, CopyAble{
     private CompoundExpression parent = null;
     private LinkedList<Expression> children = new LinkedList<Expression>();
 
@@ -82,9 +82,9 @@ public abstract class AbstractCompoundExpression implements CompoundExpression{
      * @return a deep copy of the expression
      */
     public AbstractCompoundExpression deepCopy(AbstractCompoundExpression copy){
+
         for(Expression c: this.getChildren()){
-            copy.addSubexpression(c.deepCopy());
-            System.out.println("C:" + c);
+            copy.addSubexpression(c);
         }
         for(Expression c: copy.getChildren())
         {
@@ -93,11 +93,25 @@ public abstract class AbstractCompoundExpression implements CompoundExpression{
         return copy;
     }
 
-    public static LinkedList<Expression> generateAllPossibleTrees(Expression parent, String selected) {
+    @Override
+    public Expression trueCopy() {
+        if(this.getParent() == null)
+        {
+            return this.deepCopy();
+        }
+        //TODO make this one line
+        System.out.println(this.getParent());
 
-        System.out.println("Daddy start");
-        System.out.println(parent.convertToString(0));
-        System.out.println("Daddy end");
+        AbstractCompoundExpression parent =  ((AbstractCompoundExpression)this.getParent());
+        AbstractCompoundExpression copy = (AbstractCompoundExpression) parent.trueCopy();
+        for(Expression e:copy.getChildren()){
+            if(e.convertToString(0) == this.convertToString(0));
+            return e;
+        }
+        return null;
+
+    }
+    public static LinkedList<Expression> generateAllPossibleTrees(Expression parent, String selected) {
 
         Expression focused = null;
 
@@ -129,7 +143,7 @@ public abstract class AbstractCompoundExpression implements CompoundExpression{
         LinkedList<Expression> possibleTrees = new LinkedList<>();
 
         for (int i = 0; i < childrenSize; i++) {
-            AbstractCompoundExpression tempParent = (AbstractCompoundExpression) parent.deepCopy();
+            AbstractCompoundExpression tempParent = (AbstractCompoundExpression) ((AbstractCompoundExpression) parent).trueCopy();
             LinkedList<Expression> orderedChildren = new LinkedList<>();
 
             for (int j = 0; j < children.size(); j++) {

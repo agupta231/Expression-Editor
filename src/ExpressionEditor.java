@@ -1,4 +1,3 @@
-import com.sun.security.auth.module.SolarisSystem;
 import javafx.application.Application;
 import java.util.*;
 
@@ -96,20 +95,19 @@ public class ExpressionEditor extends Application {
 				currentFocus_.setTranslateY(0);
 				firstClick = !firstClick;
 
-				System.out.println();
-				System.out.println(nodeMap.get(currentFocus_));
-				System.out.println(rootExpression_);
 
-				if(nodeMap.get(currentFocus_) != rootExpression_) {
-					System.out.println("here");
-					Expression focusedExpression = nodeMap.get(currentFocus_);
-
+				Expression focusedExpression = nodeMap.get(currentFocus_);
+//				System.out.println(nodeMap.get(currentFocus_).convertToString(5));
+//				System.out.println("balls");
+//				System.out.println(rootExpression_.convertToString(5));
+				if(nodeMap.get(currentFocus_).convertToString(0) != rootExpression_.convertToString(0)) {
+				//if(focusedExpression.getParent()!=null){
 					System.out.println("Possible Combinations: ");
-					System.out.println(((AbstractCompoundExpression) focusedExpression.getParent()));
-
+					System.out.println(focusedExpression.convertToString(0));
 					System.out.println("Ankur's dick");
+					System.out.println(focusedExpression.getParent());
 					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
-							focusedExpression.getParent().deepCopy(),
+							((AbstractCompoundExpression) focusedExpression.getParent()).trueCopy(),
 							focusedExpression.convertToString(0))) {
 
 						System.out.println(e.convertToString(0));
@@ -198,29 +196,22 @@ public class ExpressionEditor extends Application {
 	}
 
 	private HashMap<Node, Expression> generateMap (Expression e) {
+
 		Stack<Expression> expressionsToVisit = new Stack<>();
 		HashSet<Expression> vistedExpressions = new HashSet<>();
 		HashMap<Node, Expression> map = new HashMap<>();
-
-		//TODO add case for literal expression
-		//for(Expression c: ((AbstractCompoundExpression)e).getChildren()){
-		//	map.put(c.getNode(),c);
-		//}
-
-
-		map.put(e.getNode(), e);
+		map.put(e.getNode(), ((CopyAble)e).trueCopy());
 		vistedExpressions.add(e);
-
-		if (!(e instanceof AbstractCompoundExpression)) {
+		if (!(e instanceof CompoundExpression)) {
 			return map;
 		}
-
-		expressionsToVisit.addAll(((AbstractCompoundExpression) e).getChildren());
-
+		for(Expression exp:((AbstractCompoundExpression)e).getChildren()){
+			expressionsToVisit.add(exp);
+		}
 		while (!expressionsToVisit.empty()) {
 			Expression currentExpression = expressionsToVisit.pop();
 
-			map.put(currentExpression.getNode(), currentExpression);
+			map.put(currentExpression.getNode(), ((CopyAble)currentExpression).trueCopy());
 			vistedExpressions.add(currentExpression);
 
 			if (currentExpression instanceof AbstractCompoundExpression) {
@@ -231,23 +222,6 @@ public class ExpressionEditor extends Application {
 				}
 			}
 		}
-
-		for (Node key : map.keySet()) {
-			try {
-				System.out.println();
-				System.out.println("Start");
-				System.out.println(map.get(key).convertToString(0));
-				System.out.println(map.get(key));
-				System.out.println(map.get(key).getParent().convertToString(0));
-				System.out.println(map.get(key).getParent());
-				System.out.println(key);
-				System.out.println("ENd");
-				System.out.println();
-			} catch(Exception E) {
-
-			}
-		}
-
 		return map;
 	}
 }

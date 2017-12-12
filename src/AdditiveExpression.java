@@ -14,12 +14,15 @@ public class AdditiveExpression extends CollapsibleExpression implements Focusab
 	/**
 	 * Will return a copy of the Additive expression to use
 	 * for the GUI.
-	 * @return an copy of the {@link AdditiveExpression}
+	 * @return a copy of the {@link AdditiveExpression}
 	 */
 	public Expression deepCopy() {
 		AdditiveExpression copy = new AdditiveExpression();
 		return super.deepCopy(copy);
 	}
+
+
+
 
 	public Node getNode() {
 		if(node == null) {
@@ -31,7 +34,6 @@ public class AdditiveExpression extends CollapsibleExpression implements Focusab
 
 				hbox.getChildren().add(text);
 				hbox.getChildren().add(this.getChildren().get(i).getNode());
-				System.out.println(this.getChildren().get(i).convertToString(0));
 			}
 			if (this.getFocused()) {
 				hbox.setBorder(RED_BORDER);

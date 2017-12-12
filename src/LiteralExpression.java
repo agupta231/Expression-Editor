@@ -4,7 +4,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 
 
-public class LiteralExpression implements Expression, Focusable {
+public class LiteralExpression implements Expression, Focusable, CopyAble{
 
     private CompoundExpression parent;
     private String literal;
@@ -48,6 +48,22 @@ public class LiteralExpression implements Expression, Focusable {
         copy.literal = this.literal;
         return copy;
     }
+    public Expression trueCopy(){
+        if(this.getParent()!=null){
+            AbstractCompoundExpression parent =  ((AbstractCompoundExpression)this.getParent());
+            AbstractCompoundExpression copy = (AbstractCompoundExpression) parent.trueCopy();
+            for(Expression e:copy.getChildren()){
+                if(e.convertToString(0) == this.convertToString(0))
+                    return e;
+            }
+            return null;
+        }
+        else {
+            return this.deepCopy();
+        }
+    }
+
+
 
     @Override
     public Node getNode() {
