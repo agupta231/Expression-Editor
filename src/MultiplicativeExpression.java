@@ -1,6 +1,7 @@
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 
 /**
  * Child of expression that represents a multiplicative operator.
@@ -28,7 +29,10 @@ public class MultiplicativeExpression extends CollapsibleExpression implements F
             hbox.getChildren().add(this.getChildren().get(0).getNode());
 
             for (int i = 1; i < this.getChildren().size(); i++) {
-                hbox.getChildren().add(new Label("*"));
+                Label text = new Label("*");
+                text.setFont(Font.font("Comic Sans MS", 36));
+
+                hbox.getChildren().add(text);
                 hbox.getChildren().add(this.getChildren().get(i).getNode());
                 System.out.println(this.getChildren().get(i).convertToString(0));
             }
