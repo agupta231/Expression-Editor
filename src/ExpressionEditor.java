@@ -52,6 +52,10 @@ public class ExpressionEditor extends Application {
 					return;
 				}
 
+				if(currentFocus_ == rootExpression_.getNode()){
+					firstClick = true;
+				}
+
 				for (int i = 0; i < HChildren.size(); i++) {
 					final Node currentNode = HChildren.get(i);
 					if (currentNode instanceof HBox) {

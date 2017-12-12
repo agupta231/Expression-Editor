@@ -1,6 +1,7 @@
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 
 
 public class LiteralExpression implements Expression, Focusable {
@@ -52,10 +53,10 @@ public class LiteralExpression implements Expression, Focusable {
     public Node getNode() {
         if(node == null) {
             final HBox hbox = new HBox();
-            hbox.getChildren().add(new Label(this.literal));
-            if (this.getFocused()) {
-                hbox.setBorder(RED_BORDER);
-            }
+            Label text = new Label(this.literal);
+            text.setFont(Font.font("Comic Sans MS", 36));
+
+            hbox.getChildren().add(text);
             node = hbox;
             return hbox;
         }
