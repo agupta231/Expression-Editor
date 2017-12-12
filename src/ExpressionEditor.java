@@ -30,6 +30,8 @@ public class ExpressionEditor extends Application {
 		CompoundExpression rootExpression_;
 		Node currentFocus_;
 		Pane currentPane;
+		double _lastX, _lastY;
+		boolean firstClick = true;
 
 		MouseEventHandler (Pane pane_, CompoundExpression rootExpression_) {
 			this.rootExpression_ = rootExpression_;
@@ -38,41 +40,55 @@ public class ExpressionEditor extends Application {
 		}
 
 		public void handle (MouseEvent event) {
+			final double sceneX = event.getSceneX();
+			final double sceneY = event.getSceneY();
+
 			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
 
 				ObservableList<Node> HChildren = ((HBox) currentFocus_).getChildren();
 
-				for(int i = 0; i < HChildren.size(); i++){
+				if(HChildren.size() == 1 && !firstClick){
+					return;
+				}
+
+				for (int i = 0; i < HChildren.size(); i++) {
 					final Node currentNode = HChildren.get(i);
-
-					if(currentNode instanceof HBox) {
-						double clickedX = event.getSceneX();
-						double clickedY = event.getSceneY();
-
-						Point2D relativeClick = currentNode.sceneToLocal(clickedX, clickedY);
+					if (currentNode instanceof HBox) {
+						Point2D relativeClick = currentNode.sceneToLocal(sceneX, sceneY);
 
 						if (currentNode.contains(relativeClick.getX(), relativeClick.getY())) {
-
+							if(firstClick) {
 								Node previousFocus = currentFocus_;
-								currentFocus_= currentNode;
-
+								currentFocus_ = currentNode;
+								if(currentFocus_ instanceof Label){
+									break;
+								}
 								((HBox) previousFocus).setBorder(Expression.NO_BORDER);
 								((HBox) currentNode).setBorder(Expression.RED_BORDER);
-
-								return;
+							}
+							return;
 						}
 					}
 				}
-
 				((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
 				currentFocus_ = rootExpression_.getNode();
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-
+				if(currentFocus_ != rootExpression_.getNode()) {
+					currentFocus_.setTranslateX(currentFocus_.getTranslateX() + (sceneX - _lastX));
+					currentFocus_.setTranslateY(currentFocus_.getTranslateY() + (sceneY - _lastY));
+				}
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
-
+				currentFocus_.setLayoutX(currentFocus_.getLayoutX() + currentFocus_.getTranslateX());
+				currentFocus_.setLayoutY(currentFocus_.getLayoutY() + currentFocus_.getTranslateY());
+				currentFocus_.setTranslateX(0);
+				currentFocus_.setTranslateY(0);
+				firstClick = !firstClick;
 			}
+			_lastX = sceneX;
+			_lastY = sceneY;
+
 		}
 	}
 
