@@ -114,7 +114,6 @@ public class ExpressionEditor extends Application {
                 }
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-
 			    int minDistance = Integer.MAX_VALUE;
 			    for(int i = 0; i < distances.size(); i++){
 					int localX = (int) expressions.get(0).getNode().sceneToLocal(sceneX, sceneY).getX();
@@ -171,6 +170,8 @@ public class ExpressionEditor extends Application {
 				expressionPane.getChildren().add(hb);
 				expressionPane.getChildren().add(copyFocus_);
 
+				recolor(currentFocus_, Expression.GHOST_COLOR);
+
 				hb.setLayoutX(WINDOW_WIDTH / 2);
 				hb.setLayoutY(WINDOW_HEIGHT / 2);
 
@@ -180,6 +181,8 @@ public class ExpressionEditor extends Application {
 				}
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
+			    recolor(currentFocus_, Color.BLACK);
+
 				copyFocus_ = new HBox();
 				//On release update the root expression to be the closes expression to the mouse.
 				addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression)expressions.get(closesExpression)).getChildren().get(0));
@@ -480,4 +483,15 @@ public class ExpressionEditor extends Application {
 
 		return text;
 	}
+
+    public static void recolor(Node n, Color newColor) {
+        if (n instanceof Label) {
+            ((Label) n).setTextFill(newColor);
+        }
+        else {
+            for (Node child : ((HBox) n).getChildren()) {
+                recolor(child, newColor);
+            }
+        }
+    }
 }
