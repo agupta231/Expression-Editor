@@ -36,8 +36,8 @@ public class ExpressionEditor extends Application {
 		Node currentFocus_;
 		Node previousFocus;
 		Pane currentPane;
-        ArrayList<Integer> distances;
-        ArrayList<Expression> expressions;
+        ArrayList<Integer> distances = new ArrayList<Integer>();
+        ArrayList<Expression> expressions = new ArrayList<Expression>();
         int closesExpression;
 
 		double _lastX, _lastY;
@@ -65,6 +65,8 @@ public class ExpressionEditor extends Application {
 					firstClick = true;
 				}
 
+				boolean found = false;
+
 				for (int i = 0; i < HChildren.size(); i++) {
 					final Node currentNode = HChildren.get(i);
 					if (currentNode instanceof HBox) {
@@ -80,19 +82,22 @@ public class ExpressionEditor extends Application {
 								((HBox) previousFocus).setBorder(Expression.NO_BORDER);
 								((HBox) currentNode).setBorder(Expression.RED_BORDER);
 							}
-							return;
+							found = true;
 						}
 					}
 				}
-				((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
-				currentFocus_ = rootExpression_.getNode();
+				if(!found) {
+					((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
+					currentFocus_ = rootExpression_.getNode();
+				}
 
                 Expression focusedExpression = nodeMap.get(currentFocus_);
                 if(!nodeMap.get(currentFocus_).convertToString(0).equals(rootExpression_.convertToString(0))) {
                     //if(focusedExpression.getParent()!=null){
                     distances = new ArrayList<>();
                     expressions = new ArrayList<>();
-                    for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
+
+					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
                             ((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
                             focusedExpression.convertToString(0))) {
                         LinkedList<Expression> chillin = ((AbstractCompoundExpression)e).getChildren();
@@ -104,16 +109,19 @@ public class ExpressionEditor extends Application {
                             }
                             totalWidth += chillin.get(i).getNode().getLayoutBounds().getWidth();
                         }
+                        System.out.println(totalWidth);
                         distances.add(totalWidth);
                         expressions.add(e);
                     }
                 }
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-			    int maxDistance = -1;
+			    int minDistance = Integer.MAX_VALUE;
 			    for(int i = 0; i < distances.size(); i++){
-                    if(Math.abs(sceneX-distances.get(i)) > maxDistance){
-                        maxDistance = (int) Math.abs(sceneX-distances.get(i));
+					int localX = (int) expressions.get(0).getNode().sceneToLocal(sceneX, sceneY).getX();
+					System.out.println(i + ": " + Math.abs(localX-distances.get(i)));
+					if(Math.abs(localX-distances.get(i)) < minDistance){
+						minDistance = (int) Math.abs(localX-distances.get(i));
                         closesExpression = i;
                     }
                 }
@@ -125,9 +133,19 @@ public class ExpressionEditor extends Application {
 			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
 				currentFocus_.setLayoutX(currentFocus_.getLayoutX() + currentFocus_.getTranslateX());
 				currentFocus_.setLayoutY(currentFocus_.getLayoutY() + currentFocus_.getTranslateY());
+
 				currentFocus_.setTranslateX(0);
 				currentFocus_.setTranslateY(0);
+
 				rootExpression_ = (CompoundExpression) expressions.get(closesExpression);
+				System.out.println(rootExpression_.convertToString(0));
+				expressionPane.getChildren().clear();
+				expressionPane.getChildren().add(rootExpression_.getNode());
+
+				rootExpression_.getNode().setLayoutX(WINDOW_WIDTH / 2);
+				rootExpression_.getNode().setLayoutY(WINDOW_HEIGHT / 2);
+
+
 				firstClick = !firstClick;
 			}
 			_lastX = sceneX;
@@ -151,6 +169,9 @@ public class ExpressionEditor extends Application {
 	 */
 	private final ExpressionParser expressionParser = new SimpleExpressionParser();
 
+
+	private static final Pane expressionPane = new Pane();
+
 	@Override
 	public void start (Stage primaryStage) {
 		primaryStage.setTitle("Expression Editor");
@@ -161,8 +182,6 @@ public class ExpressionEditor extends Application {
 		final Button button = new Button("Parse");
 
 		queryPane.getChildren().add(textField);
-
-		final Pane expressionPane = new Pane();
 
 		// Add the callback to handle when the Parse button is pressed	
 		button.setOnMouseClicked(new EventHandler<MouseEvent>() {
