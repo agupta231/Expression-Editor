@@ -178,6 +178,14 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
 
     public static LinkedList<Expression> generateAllPossibleTrees(Expression parent, String selected) {
         Expression focused = null;
+        System.out.println("Selected");
+        System.out.println(selected);
+
+        System.out.println("Dem Chillin tho - 2:");
+
+        for (Expression e : ((AbstractCompoundExpression) parent).getChildren()) {
+            System.out.println(((CopyAble)e).convertToStringFlat());
+        }
 
         for(Expression child : ((AbstractCompoundExpression) parent).getChildren()) {
             if (child.convertToString(0).equals(selected)) {
@@ -187,7 +195,13 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         }
 
         final LinkedList<Expression> children = ((AbstractCompoundExpression) parent).getChildren();
-        final LinkedList<Expression> backupChildren = ((AbstractCompoundExpression) parent).getChildren();
+
+        System.out.println("Dem Chillin tho - 1:");
+
+        for (Expression e : children) {
+            System.out.println(((CopyAble)e).convertToStringFlat());
+        }
+
         final int childrenSize = children.size();
 
         int nodeIndex = -1;
@@ -212,6 +226,12 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         Expression selectedChild = children.get(nodeIndex);
         children.remove(nodeIndex);
 
+        System.out.println("Dem Chillin tho:");
+
+        for (Expression e : children) {
+            System.out.println(((CopyAble)e).convertToStringFlat());
+        }
+
         LinkedList<Expression> possibleTrees = new LinkedList<>();
 
         for (int i = 0; i < childrenSize; i++) {
@@ -235,8 +255,14 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
             ((HBox) tempParent.getNode()).getChildren().clear();
 
             System.out.println("Black men are only good for free labor");
-            System.out.println(tempParent.convertToString(0));
+            System.out.println(((AbstractCompoundExpression) tempParent).convertToStringFlat());
             System.out.println(((AbstractCompoundExpression) tempRoot).convertToStringFlat());
+
+            System.out.println();
+            System.out.println("GROOOOOOT");
+            System.out.println(((AbstractCompoundExpression) tempRoot).convertToStringFlat());
+            System.out.println("GROOOOOOT");
+            System.out.println();
 
             possibleTrees.add(tempRoot);
 
