@@ -110,6 +110,14 @@ public class ExpressionEditor extends Application {
                             focusedExpression.convertToString(0))) {
 
 						getWidthOfNode(e, this.currentFocus_);
+                        int minDistance = Integer.MAX_VALUE;
+                        for(int i = 0; i < distances.size(); i++){
+                            int localX = (int) expressions.get(0).getNode().sceneToLocal(sceneX, sceneY).getX();
+                            if(Math.abs(localX-distances.get(i)) < minDistance){
+                                minDistance = Math.abs(localX-distances.get(i));
+                                closesExpression = i;
+                            }
+                        }
                     }
                 }
 			}
@@ -241,7 +249,6 @@ public class ExpressionEditor extends Application {
 		}
 
 		private HBox fixFocus(Expression e){
-			System.out.println(e);
 			HBox hb = new HBox();
 
 			int type = 0;
@@ -269,7 +276,6 @@ public class ExpressionEditor extends Application {
 						HBox t = fixFocus(chillin.get(i));
 						hb.getChildren().add(t);
 					} else {
-						System.out.println(chillin.get(i));
 						hb.getChildren().add(chillin.get(i).getNode());
 					}
 				}else{
@@ -344,28 +350,10 @@ public class ExpressionEditor extends Application {
 				}
 				totalWidth += ll.get(i).getNode().getLayoutBounds().getWidth();
 			}
-			if((totalWidth - currentX) == 0){
-				closesExpression = distances.size();
-			}
 			distances.add(totalWidth);
 			expressions.add(e);
 		}
-
-		private void makeGray(Expression e){
-
-			if(e instanceof LiteralExpression){
-				((Label) e.getNode()).setTextFill(rootExpression_.GHOST_COLOR);
-			}
-			LinkedList<Expression> ll = ((AbstractCompoundExpression)e).getChildren();
-			for(int i = 0; i < ll.size(); i++){
-				if(ll.get(i).getNode() instanceof Label){
-					((Label)ll.get(i)).setTextFill(rootExpression_.GHOST_COLOR);
-				}else{
-					makeGray(ll.get(i));
-				}
-			}
-		}
-	}
+    }
 
 	/**
 	 * Size of the GUI
