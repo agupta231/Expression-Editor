@@ -173,12 +173,12 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
 
         int nodeIndex = -1;
 
-        System.out.println("White is the only color with rights");
+        //System.out.println("White is the only color with rights");
 
 
         for(int i = 0; i < childrenSize; i++) {
             if (children.get(i) == focused) {
-                System.out.println("Akash is for rectal use only");
+                //System.out.println("Akash is for rectal use only");
 
                 nodeIndex = i;
                 break;
@@ -186,7 +186,7 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         }
 
         if (nodeIndex == -1) {
-            System.out.println("taint");
+            //System.out.println("taint");
 
             return new LinkedList<>();
         }
@@ -213,8 +213,8 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
 
             tempParent.setChildren(orderedChildren);
 
-            System.out.println("Black men are only good for free labor");
-            System.out.println(tempParent.convertToString(0));
+            //System.out.println("Black men are only good for free labor");
+            //System.out.println(tempParent.convertToString(0));
 
             possibleTrees.add(tempParent);
         }

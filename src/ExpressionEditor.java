@@ -56,7 +56,6 @@ public class ExpressionEditor extends Application {
 			final double sceneY = event.getSceneY();
 
 			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-
 				ObservableList<Node> HChildren = ((HBox) currentFocus_).getChildren();
 
 				if(HChildren.size() == 1 && !firstClick){
@@ -68,6 +67,8 @@ public class ExpressionEditor extends Application {
 				}
 
 				boolean found = false;
+				System.out.println("FUCK CS");
+				System.out.println(HChildren);
 
 				for (int i = 0; i < HChildren.size(); i++) {
 					final Node currentNode = HChildren.get(i);
@@ -129,12 +130,13 @@ public class ExpressionEditor extends Application {
 
 				rootExpression_ = (CompoundExpression) expressions.get(closesExpression);
 				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
+				HBox hb = new HBox();
+
 				//type values
 				//1: Additive
 				//2: Multiplative
 				//3: Parenthetical
 				int type = 0;
-				HBox hb = new HBox();
 				if(rootExpression_ instanceof AdditiveExpression){
 					type = 1;
 				}else if(rootExpression_ instanceof MultiplicativeExpression){
@@ -144,6 +146,9 @@ public class ExpressionEditor extends Application {
 				}
 
 				for(int i = 0; i < chillin.size(); i++){
+					if(type == 1 && hb.getChildren().size() != 0){
+						hb.getChildren().add(newLabel("+"));
+					}
 					hb.getChildren().add(chillin.get(i).getNode());
 				}
 				expressionPane.getChildren().clear();
@@ -164,7 +169,25 @@ public class ExpressionEditor extends Application {
 				rootExpression_ = (CompoundExpression) expressions.get(closesExpression);
 				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
 				HBox hb = new HBox();
+
+				//type values
+				//1: Additive
+				//2: Multiplative
+				//3: Parenthetical
+				int type = 0;
+				if(rootExpression_ instanceof AdditiveExpression){
+					type = 1;
+				}else if(rootExpression_ instanceof MultiplicativeExpression){
+					type = 2;
+				}else if(rootExpression_ instanceof  ParentheticalExpression){
+					type = 3;
+				}
 				for(int i = 0; i < chillin.size(); i++){
+					if(type == 1 && hb.getChildren().size() != 0){
+						hb.getChildren().add(newLabel("+"));
+					}else if(type == 2 && hb.getChildren().size() != 0){
+						hb.getChildren().add(newLabel("*"));
+					}
 					hb.getChildren().add(chillin.get(i).getNode());
 				}
 				expressionPane.getChildren().clear();
@@ -209,6 +232,7 @@ public class ExpressionEditor extends Application {
 			for(int i = 0; i < ll.size(); i++){
 				ll.get(i).getNode().getLayoutBounds().getWidth();
 				if(ll.get(i).getNode().equals(this.currentFocus_)){
+					totalWidth += ll.get(i).getNode().getLayoutBounds().getWidth()/2;
 					break;
 				}
 				totalWidth += ll.get(i).getNode().getLayoutBounds().getWidth();
