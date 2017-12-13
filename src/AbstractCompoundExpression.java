@@ -99,12 +99,6 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
             return this.deepCopy();
         }
 
-        System.out.println("Start");
-        System.out.println("Current Chill'n: ");
-        System.out.println(this.convertToString(0));
-        System.out.println("Parent: ");
-        System.out.println(((AbstractCompoundExpression) this.getParent()).convertToString(0));
-
         AbstractCompoundExpression parent =  ((AbstractCompoundExpression) this.getParent());
 
 //        try {
