@@ -34,6 +34,9 @@ public class ExpressionEditor extends Application {
 		Node currentFocus_;
 		Node previousFocus;
 		Pane currentPane;
+        ArrayList<Integer> distances;
+        ArrayList<Expression> expressions;
+        int closesExpression;
 
 		double _lastX, _lastY;
 		boolean firstClick = true;
@@ -81,8 +84,37 @@ public class ExpressionEditor extends Application {
 				}
 				((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
 				currentFocus_ = rootExpression_.getNode();
+
+                Expression focusedExpression = nodeMap.get(currentFocus_);
+                if(!nodeMap.get(currentFocus_).convertToString(0).equals(rootExpression_.convertToString(0))) {
+                    //if(focusedExpression.getParent()!=null){
+                    distances = new ArrayList<>();
+                    expressions = new ArrayList<>();
+                    for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
+                            ((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
+                            focusedExpression.convertToString(0))) {
+                        LinkedList<Expression> chillin = ((AbstractCompoundExpression)e).getChildren();
+                        int totalWidth = 0;
+                        for(int i = 0; i < chillin.size(); i++){
+                            chillin.get(i).getNode().getLayoutBounds().getWidth();
+                            if(chillin.get(i).getNode().equals(this.currentFocus_)){
+                                break;
+                            }
+                            totalWidth += chillin.get(i).getNode().getLayoutBounds().getWidth();
+                        }
+                        distances.add(totalWidth);
+                        expressions.add(e);
+                    }
+                }
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+			    int maxDistance = -1;
+			    for(int i = 0; i < distances.size(); i++){
+                    if(Math.abs(sceneX-distances.get(i)) > maxDistance){
+                        maxDistance = (int) Math.abs(sceneX-distances.get(i));
+                        closesExpression = i;
+                    }
+                }
 				if(currentFocus_ != rootExpression_.getNode()) {
 					currentFocus_.setTranslateX(currentFocus_.getTranslateX() + (sceneX - _lastX));
 					currentFocus_.setTranslateY(currentFocus_.getTranslateY() + (sceneY - _lastY));
@@ -93,28 +125,8 @@ public class ExpressionEditor extends Application {
 				currentFocus_.setLayoutY(currentFocus_.getLayoutY() + currentFocus_.getTranslateY());
 				currentFocus_.setTranslateX(0);
 				currentFocus_.setTranslateY(0);
+				rootExpression_ = (CompoundExpression) expressions.get(closesExpression);
 				firstClick = !firstClick;
-
-
-				Expression focusedExpression = nodeMap.get(currentFocus_);
-				if(!nodeMap.get(currentFocus_).convertToString(0).equals(rootExpression_.convertToString(0))) {
-				//if(focusedExpression.getParent()!=null){
-					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
-							((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
-							focusedExpression.convertToString(0))) {
-						LinkedList<Expression> chillin = ((AbstractCompoundExpression)e).getChildren();
-						int totalWidth = 0;
-						System.out.println("------------------------------");
-						for(int i = 0; i < chillin.size(); i++){
-							chillin.get(i).getNode().getLayoutBounds().getWidth();
-							if(chillin.get(i).getNode().equals(this.currentFocus_)){
-								break;
-							}
-							totalWidth += chillin.get(i).getNode().getLayoutBounds().getWidth();
-						}
-						System.out.println(totalWidth);
-					}
-				}
 			}
 			_lastX = sceneX;
 			_lastY = sceneY;
