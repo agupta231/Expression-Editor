@@ -118,6 +118,8 @@ public class ExpressionEditor extends Application {
                         }
                     }
                 }
+
+				System.out.println("hbToString: " + hbToString((HBox) currentFocus_));
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED && !currentFocus_.equals(rootExpression_.getNode())) {
 			    int minDistance = Integer.MAX_VALUE;
@@ -245,21 +247,23 @@ public class ExpressionEditor extends Application {
 
 		}
 
+//		private Expression hbToExpression(HBox h) {
+//			String stringRep = hbToString(h);
+//		}
+
 		private String hbToString(HBox h){
 			ObservableList<Node> babies = h.getChildren();
 			String result = "";
 
-			for(int i = 0; i < babies.size(); i++){
-				if(babies.get(i) instanceof Label){
-					result += ((Label) babies.get(i)).getText();
+			for (Node baby : h.getChildren()) {
+				if(baby instanceof Label) {
+					result += ((Label) baby).getText();
 				}
-				Expression e = nodeMap.get(babies.get(i));
-				if(e instanceof AbstractCompoundExpression){
-					result += ((AbstractCompoundExpression) e).convertToStringFlat("");
-				}else if(e instanceof LiteralExpression){
-					result += ((LiteralExpression) e).getLiteral();
+				else {
+					result += hbToString((HBox) baby);
 				}
 			}
+
 			return result;
 		}
 
