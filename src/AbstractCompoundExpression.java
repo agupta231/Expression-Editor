@@ -99,15 +99,20 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         {
             return this.deepCopy();
         }
-        //TODO make this one line
-        System.out.println(this.getParent());
-
         AbstractCompoundExpression parent =  ((AbstractCompoundExpression)this.getParent());
-        AbstractCompoundExpression copy = (AbstractCompoundExpression) parent.trueCopy();
-        for(Expression e:copy.getChildren()){
-            if(e.convertToString(0) == this.convertToString(0));
-            return e;
+        try{
+            AbstractCompoundExpression copy = (AbstractCompoundExpression) parent.trueCopy();
+            for(Expression e:copy.getChildren()){
+                if(e.convertToString(0) == this.convertToString(0))
+                    return e;
+            }
+        }catch (Exception ClassCastException){
+            System.out.println("This:\n" + this.convertToString(0));
+            System.out.println("Parent:\n" + parent.convertToString(0));
+            System.out.println("Parent's parent" + parent.getParent());
+            System.out.println("Parent's true:\n"+ parent.trueCopy());
         }
+
         return null;
 
     }

@@ -107,7 +107,7 @@ public class ExpressionEditor extends Application {
 					System.out.println("Ankur's dick");
 					System.out.println(focusedExpression.getParent());
 					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
-							((AbstractCompoundExpression) focusedExpression.getParent()).trueCopy(),
+							((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
 							focusedExpression.convertToString(0))) {
 
 						System.out.println(e.convertToString(0));
