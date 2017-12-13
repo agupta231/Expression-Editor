@@ -19,6 +19,7 @@ public class LiteralExpression implements Expression, Focusable, CopyAble{
     public String convertToString(int indentLevel){
         StringBuffer sb = new StringBuffer();
         Expression.indent(sb,indentLevel);
+
         return sb.append(literal + "\n").toString();
     }
 
@@ -74,7 +75,7 @@ public class LiteralExpression implements Expression, Focusable, CopyAble{
             final HBox hbox = new HBox();
 
             final Label text = new Label(this.literal);
-            text.setFont(Font.font("Comic Sans MS", 36));
+            text.setFont(ExpressionEditor.FONT);
 
             hbox.getChildren().add(text);
             if (this.getFocused()) {

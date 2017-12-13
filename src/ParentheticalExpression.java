@@ -29,17 +29,19 @@ public class ParentheticalExpression extends AbstractCompoundExpression implemen
             final HBox hbox = new HBox();
 
             Label openParen = new Label("(");
-            openParen.setFont(Font.font("Comic Sans MS", 36));
+            openParen.setFont(ExpressionEditor.FONT);
 
             Label closeParen = new Label(")");
-            closeParen.setFont(Font.font("Comic Sans MS", 36));
+            closeParen.setFont(ExpressionEditor.FONT);
 
             hbox.getChildren().add(openParen);
             hbox.getChildren().add(this.getChildren().get(0).getNode());
             hbox.getChildren().add(closeParen);
+
             if (this.getFocused()) {
                 hbox.setBorder(RED_BORDER);
             }
+
             node = hbox;
             return hbox;
         }

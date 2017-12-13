@@ -1,6 +1,5 @@
 import javafx.application.Application;
 import java.util.*;
-
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
@@ -15,12 +14,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.geometry.Bounds;
 import org.junit.runner.Computer;
 
 public class ExpressionEditor extends Application {
-	public static HashMap<Node, Expression> nodeMap = new HashMap<>();
+	public static Font FONT = javafx.scene.text.Font.font("Comic Sans MS", 36);
+
+	private static HashMap<Node, Expression> nodeMap = new HashMap<>();
 
 	public static void main (String[] args) {
 		launch(args);
