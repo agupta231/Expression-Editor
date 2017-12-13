@@ -49,6 +49,9 @@ public class ExpressionEditor extends Application {
 			this.rootExpression_ = rootExpression_;
 			this.currentFocus_ = this.rootExpression_.getNode();
 			this.currentPane = pane_;
+
+//			copyFocus_ = new HBox();
+//			expressionPane.getChildren().add(copyFocus_);
 		}
 
 		public void handle (MouseEvent event) {
@@ -90,6 +93,7 @@ public class ExpressionEditor extends Application {
 								if(currentFocus_ instanceof Label){
 									break;
 								}
+
 								((HBox) previousFocus).setBorder(Expression.NO_BORDER);
 								((HBox) currentNode).setBorder(Expression.RED_BORDER);
 							}
@@ -100,6 +104,7 @@ public class ExpressionEditor extends Application {
 				if(!found) {
 					((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
 					currentFocus_ = rootExpression_.getNode();
+					return;
 				}
 
                 Expression focusedExpression = nodeMap.get(currentFocus_);
@@ -128,7 +133,7 @@ public class ExpressionEditor extends Application {
                 }
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-
+//
 			    int minDistance = Integer.MAX_VALUE;
 			    for(int i = 0; i < distances.size(); i++){
 					int localX = (int) expressions.get(0).getNode().sceneToLocal(sceneX, sceneY).getX();
@@ -139,14 +144,21 @@ public class ExpressionEditor extends Application {
                 }
 
 				rootExpression_ = (CompoundExpression) expressions.get(closesExpression);
+			    AbstractCompoundExpression.wipeNodeConnections(rootExpression_);
+
 				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
 				HBox hb = new HBox();
-				for(int i = 0; i < chillin.size(); i++){
-					hb.getChildren().add(chillin.get(i).getNode());
-				}
+//
+//				for(int i = 0; i < chillin.size(); i++){
+//					hb.getChildren().add(chillin.get(i).getNode());
+//				}
+//
 				expressionPane.getChildren().clear();
-				expressionPane.getChildren().add(hb);
+//				expressionPane.getChildren().add(hb);
+				expressionPane.getChildren().add(rootExpression_.getNode());
 				expressionPane.getChildren().add(copyFocus_);
+
+				System.out.println("Current root: " + ((AbstractCompoundExpression) rootExpression_).convertToStringFlat());
 
 				hb.setLayoutX(WINDOW_WIDTH / 2);
 				hb.setLayoutY(WINDOW_HEIGHT / 2);
@@ -160,21 +172,30 @@ public class ExpressionEditor extends Application {
 				copyFocus_ = null;
 
 				//On release update the root expression to be the closes expression to the mouse.
+				System.out.println("Expression Chillin count: " + ((HBox) ((AbstractCompoundExpression) expressions.get(closesExpression)).getNode()).getChildren().size());
 				rootExpression_ = (CompoundExpression) expressions.get(closesExpression);
 
-				LinkedList<Expression> chillin = ((AbstractCompoundExpression) rootExpression_).getChildren();
-				HBox hb = new HBox();
+				System.out.println("Root Expression: ");
+				System.out.println(rootExpression_.convertToString(0));
+				System.out.println(((HBox) rootExpression_.getNode()).getChildren());
+				System.out.println(((HBox) ((AbstractCompoundExpression) expressions.get(closesExpression)).getNode()).getChildren());
 
-				for(int i = 0; i < chillin.size(); i++){
-					System.out.println(chillin.get(i).convertToString(0));
-					hb.getChildren().add(chillin.get(i).getNode());
-				}
+//				LinkedList<Expression> chillin = ((AbstractCompoundExpression) rootExpression_).getChildren();
+//				HBox hb = new HBox();
+//
+//				for(int i = 0; i < chillin.size(); i++){
+//					System.out.println(chillin.get(i).convertToString(0));
+//					hb.getChildren().add(chillin.get(i).getNode());
+//				}
 
 				expressionPane.getChildren().clear();
-				expressionPane.getChildren().add(hb);
+//				expressionPane.getChildren().add(hb);
+				expressionPane.getChildren().add(((AbstractCompoundExpression) rootExpression_).getNode());
+				System.out.println("Root Node: ");
+				System.out.println(((HBox) ((AbstractCompoundExpression) rootExpression_).getNode()).getChildren());
 
-				hb.setLayoutX(WINDOW_WIDTH / 2);
-				hb.setLayoutY(WINDOW_HEIGHT / 2);
+//				hb.setLayoutX(WINDOW_WIDTH / 2);
+//				hb.setLayoutY(WINDOW_HEIGHT / 2);
 
                 closesExpression = 0;
 				firstClick = !firstClick;

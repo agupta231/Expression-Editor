@@ -18,22 +18,28 @@ public class ParentheticalExpression extends AbstractCompoundExpression implemen
     }
 
     public Node getNode() {
-        if (node == null) {
-            final HBox hbox = new HBox();
+        final HBox hbox;
 
-            hbox.getChildren().add(ExpressionEditor.newLabel("("));
-            hbox.getChildren().add(this.getChildren().get(0).getNode());
-            hbox.getChildren().add(ExpressionEditor.newLabel(")"));
-
-            if (this.getFocused()) {
-                hbox.setBorder(RED_BORDER);
-            }
-
-            node = hbox;
-            return hbox;
+        if(node == null) {
+            hbox = new HBox();
+        }
+        else if(((HBox)node).getChildren().size() == 0) {
+            hbox = (HBox) node;
+        }
+        else {
+            return node;
         }
 
-        return node;
+        hbox.getChildren().add(ExpressionEditor.newLabel("("));
+        hbox.getChildren().add(this.getChildren().get(0).getNode());
+        hbox.getChildren().add(ExpressionEditor.newLabel(")"));
+
+        if (this.getFocused()) {
+            hbox.setBorder(RED_BORDER);
+        }
+
+        node = hbox;
+        return hbox;
     }
 
     /**

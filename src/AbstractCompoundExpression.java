@@ -115,20 +115,29 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
     }
 
     public Node getNode(String delimiter) {
+        final HBox hbox;
+
         if(node == null) {
-            final HBox hbox = new HBox();
-            hbox.getChildren().add(this.getChildren().get(0).getNode());
-            for (int i = 1; i < this.getChildren().size(); i++) {
-                hbox.getChildren().add(ExpressionEditor.newLabel(delimiter));
-                hbox.getChildren().add(this.getChildren().get(i).getNode());
-            }
-            if (this.getFocused()) {
-                hbox.setBorder(RED_BORDER);
-            }
-            node = hbox;
-            return hbox;
+            hbox = new HBox();
+        }
+        else if(((HBox) node).getChildren().size() == 0) {
+            hbox = (HBox) node;
+        }
+        else {
+            return node;
         }
 
+        hbox.getChildren().add(this.getChildren().get(0).getNode());
+
+        for (int i = 1; i < this.getChildren().size(); i++) {
+            hbox.getChildren().add(ExpressionEditor.newLabel(delimiter));
+            hbox.getChildren().add(this.getChildren().get(i).getNode());
+        }
+        if (this.getFocused()) {
+            hbox.setBorder(RED_BORDER);
+        }
+
+        node = hbox;
         return node;
     }
 
@@ -170,7 +179,6 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
     public static LinkedList<Expression> generateAllPossibleTrees(Expression parent, String selected) {
         Expression focused = null;
 
-
         for(Expression child : ((AbstractCompoundExpression) parent).getChildren()) {
             if (child.convertToString(0).equals(selected)) {
                 focused = child;
@@ -179,12 +187,12 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         }
 
         final LinkedList<Expression> children = ((AbstractCompoundExpression) parent).getChildren();
+        final LinkedList<Expression> backupChildren = ((AbstractCompoundExpression) parent).getChildren();
         final int childrenSize = children.size();
 
         int nodeIndex = -1;
 
         System.out.println("White is the only color with rights");
-
 
         for(int i = 0; i < childrenSize; i++) {
             if (children.get(i) == focused) {
@@ -201,12 +209,14 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
             return new LinkedList<>();
         }
 
+        Expression selectedChild = children.get(nodeIndex);
         children.remove(nodeIndex);
 
         LinkedList<Expression> possibleTrees = new LinkedList<>();
 
         for (int i = 0; i < childrenSize; i++) {
             AbstractCompoundExpression tempParent = (AbstractCompoundExpression) ((AbstractCompoundExpression) parent).trueCopy();
+            Expression tempRoot = getRoot(tempParent);
             LinkedList<Expression> orderedChildren = new LinkedList<>();
 
             for (int j = 0; j < children.size(); j++) {
@@ -222,13 +232,41 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
             }
 
             tempParent.setChildren(orderedChildren);
+            ((HBox) tempParent.getNode()).getChildren().clear();
 
             System.out.println("Black men are only good for free labor");
             System.out.println(tempParent.convertToString(0));
+            System.out.println(((AbstractCompoundExpression) tempRoot).convertToStringFlat());
 
-            possibleTrees.add(tempParent);
+            possibleTrees.add(tempRoot);
+
+            System.out.println("Temp Parent Chillin COunt: " + ((HBox) ((AbstractCompoundExpression) tempParent).getNode()).getChildren().size());
         }
 
+        ((AbstractCompoundExpression) parent).getChildren().add(nodeIndex, selectedChild);
+
+        ((HBox) ((AbstractCompoundExpression) parent).getNode()).getChildren().clear();
+        ((AbstractCompoundExpression) parent).getNode();
+
+        System.out.println("Parent Chillin Count: " + ((HBox) ((AbstractCompoundExpression) parent).getNode()).getChildren().size());
+        System.out.println(((HBox) ((AbstractCompoundExpression) parent).getNode()).getChildren());
+
+//        ((HBox) ((AbstractCompoundExpression) parent).getNode()).getChildren().clear();
+//        ((HBox) ((AbstractCompoundExpression) parent).getNode()).getChildren().addAll(backupChildren);
+
         return possibleTrees;
+    }
+
+    public static void wipeNodeConnections(Expression e) {
+        if(e instanceof LiteralExpression) {
+            return;
+        }
+        else {
+            for(Expression child : ((AbstractCompoundExpression) e).getChildren()) {
+                wipeNodeConnections(child);
+            }
+
+            ((HBox) ((AbstractCompoundExpression) e).node).getChildren().clear();
+        }
     }
 }
