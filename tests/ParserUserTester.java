@@ -124,13 +124,4 @@ public class ParserUserTester {
         assertEquals(deepcopy.convertToString(0),original.convertToString(0));
     }
 
-    @Test
-    public void convertToStringFlatTest() throws ExpressionParseException {
-        String expressionStr = "(420+(32+x))+(911+69+x)";
-        expressionStr = expressionStr.trim();
-
-        Expression parse = _parser.parse(expressionStr, false);
-
-        assertEquals(expressionStr.trim(), ((CopyAble) parse).convertToStringFlat());
-    }
 }

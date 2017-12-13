@@ -5,7 +5,7 @@ import org.junit.runner.Computer;
 import java.awt.*;
 import java.util.LinkedList;
 
-public abstract class AbstractCompoundExpression implements CompoundExpression, CopyAble {
+public abstract class AbstractCompoundExpression implements CompoundExpression {
     private CompoundExpression parent = null;
     private LinkedList<Expression> children = new LinkedList<Expression>();
     protected boolean focused;
@@ -84,18 +84,6 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         return sb.toString();
     }
 
-    public String convertToStringFlat(String delimiter) {
-        String outputString = "";
-
-        for(int i = 0; i < this.getChildren().size() - 1; i++) {
-            outputString += ((CopyAble) this.getChildren().get(i)).convertToStringFlat();
-            outputString += delimiter;
-        }
-
-        outputString += ((CopyAble) this.getChildren().get(this.getChildren().size() - 1)).convertToStringFlat();
-
-        return outputString;
-    }
 
     /**
      * Creates a deep copy of the expression
@@ -104,13 +92,11 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
      */
     public AbstractCompoundExpression deepCopy(AbstractCompoundExpression copy){
         for(Expression c: this.getChildren()) {
-            copy.addSubexpression(c);
+            copy.addSubexpression(c.deepCopy());
         }
         for(Expression c: copy.getChildren()) {
             c.setParent(copy);
         }
-
-        copy.node = node;
         return copy;
     }
 
@@ -140,23 +126,6 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         focused = s;
     }
 
-    @Override
-    public Expression trueCopy() {
-        if(this.getParent() == null) {
-            return this.deepCopy();
-        }
-
-        AbstractCompoundExpression parent =  ((AbstractCompoundExpression) this.getParent());
-        AbstractCompoundExpression copy = (AbstractCompoundExpression) parent.trueCopy();
-
-        for(Expression e:copy.getChildren()) {
-            if(e.convertToString(0).equals(this.convertToString(0))) {
-                return e;
-            }
-        }
-
-        return null;
-    }
 
     public static LinkedList<Expression> generateAllPossibleTrees(Expression parent, String selected) {
         Expression focused = null;
@@ -196,7 +165,7 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         LinkedList<Expression> possibleTrees = new LinkedList<>();
 
         for (int i = 0; i < childrenSize; i++) {
-            AbstractCompoundExpression tempParent = (AbstractCompoundExpression) ((AbstractCompoundExpression) parent).trueCopy();
+            AbstractCompoundExpression tempParent = (AbstractCompoundExpression) parent.deepCopy();
             LinkedList<Expression> orderedChildren = new LinkedList<>();
 
             for (int j = 0; j < children.size(); j++) {

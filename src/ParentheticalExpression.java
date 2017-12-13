@@ -55,8 +55,5 @@ public class ParentheticalExpression extends AbstractCompoundExpression implemen
         flattenChildren();
     }
 
-    @Override
-    public String convertToStringFlat() {
-        return "(" + ((CopyAble) this.getChildren().get(0)).convertToStringFlat() + ")";
-    }
+
 }

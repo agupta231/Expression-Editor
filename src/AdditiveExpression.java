@@ -32,8 +32,4 @@ public class AdditiveExpression extends CollapsibleExpression {
 		return super.convertToString(indentLevel,"+");
 	}
 
-	@Override
-	public String convertToStringFlat() {
-		return super.convertToStringFlat("+");
-	}
 }

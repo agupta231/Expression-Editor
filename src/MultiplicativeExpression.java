@@ -32,8 +32,4 @@ public class MultiplicativeExpression extends CollapsibleExpression {
         return super.convertToString(indentLevel,"*");
     }
 
-    @Override
-    public String convertToStringFlat() {
-        return super.convertToStringFlat("*");
-    }
 }
