@@ -31,9 +31,11 @@ public class ExpressionEditor extends Application {
 	/**
 	 * Mouse event handler for the entire pane that constitutes the ExpressionEditor
 	 */
+	//TODO: Akash look through this
 	private static class MouseEventHandler implements EventHandler<MouseEvent> {
 		CompoundExpression rootExpression_;
 		Node currentFocus_;
+		Node copyFocus_;
 		Node previousFocus;
 		Pane currentPane;
         ArrayList<Integer> distances = new ArrayList<Integer>();
@@ -76,6 +78,15 @@ public class ExpressionEditor extends Application {
 							if(firstClick) {
 								previousFocus = currentFocus_;
 								currentFocus_ = currentNode;
+
+								Point2D currentLocation = currentFocus_.localToScene(currentFocus_.getLayoutX(), currentFocus_.getLayoutY());
+
+								copyFocus_ = newLabel(((CopyAble) nodeMap.get(currentFocus_)).convertToStringFlat());
+								copyFocus_.setLayoutX(currentLocation.getX());
+								copyFocus_.setLayoutY(currentLocation.getY());
+
+								expressionPane.getChildren().add(copyFocus_);
+
 								if(currentFocus_ instanceof Label){
 									break;
 								}
@@ -101,8 +112,11 @@ public class ExpressionEditor extends Application {
                             ((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
                             focusedExpression.convertToString(0))) {
                         LinkedList<Expression> chillin = ((AbstractCompoundExpression)e).getChildren();
+
+						System.out.println(chillin);
                         int totalWidth = 0;
                         for(int i = 0; i < chillin.size(); i++){
+                        	//System.out.println(chillin.get(i));
                             chillin.get(i).getNode().getLayoutBounds().getWidth();
                             if(chillin.get(i).getNode().equals(this.currentFocus_)){
                                 break;
@@ -115,31 +129,50 @@ public class ExpressionEditor extends Application {
                 }
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+
 			    int minDistance = Integer.MAX_VALUE;
 			    for(int i = 0; i < distances.size(); i++){
 					int localX = (int) expressions.get(0).getNode().sceneToLocal(sceneX, sceneY).getX();
-					System.out.println(i + ": " + Math.abs(localX-distances.get(i)));
 					if(Math.abs(localX-distances.get(i)) < minDistance){
 						minDistance = Math.abs(localX-distances.get(i));
                         closesExpression = i;
                     }
                 }
-				if(currentFocus_ != rootExpression_.getNode()) {
-					currentFocus_.setTranslateX(currentFocus_.getTranslateX() + (sceneX - _lastX));
-					currentFocus_.setTranslateY(currentFocus_.getTranslateY() + (sceneY - _lastY));
+
+				rootExpression_ = (CompoundExpression) expressions.get(closesExpression);
+				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
+				HBox hb = new HBox();
+				for(int i = 0; i < chillin.size(); i++){
+					hb.getChildren().add(chillin.get(i).getNode());
+				}
+				expressionPane.getChildren().clear();
+				expressionPane.getChildren().add(hb);
+				expressionPane.getChildren().add(copyFocus_);
+
+				hb.setLayoutX(WINDOW_WIDTH / 2);
+				hb.setLayoutY(WINDOW_HEIGHT / 2);
+
+				if(copyFocus_ != rootExpression_.getNode()) {
+					copyFocus_.setTranslateX(copyFocus_.getTranslateX() + (sceneX - _lastX));
+					copyFocus_.setTranslateY(copyFocus_.getTranslateY() + (sceneY - _lastY));
 				}
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
-				currentFocus_.setLayoutX(currentFocus_.getLayoutX() + currentFocus_.getTranslateX());
-				currentFocus_.setLayoutY(currentFocus_.getLayoutY() + currentFocus_.getTranslateY());
+				copyFocus_ = null;
 
-				currentFocus_.setTranslateX(0);
-				currentFocus_.setTranslateY(0);
-
+				//On release update the root expression to be the closes expression to the mouse.
 				rootExpression_ = (CompoundExpression) expressions.get(closesExpression);
+				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
+				HBox hb = new HBox();
+				for(int i = 0; i < chillin.size(); i++){
+					System.out.println(chillin.get(i).convertToString(0));
+					hb.getChildren().add(chillin.get(i).getNode());
+				}
+				expressionPane.getChildren().clear();
+				expressionPane.getChildren().add(hb);
 
-                expressionPane.getChildren().clear();
-                expressionPane.getChildren().add(rootExpression_.getNode());
+				hb.setLayoutX(WINDOW_WIDTH / 2);
+				hb.setLayoutY(WINDOW_HEIGHT / 2);
 
                 closesExpression = 0;
 				firstClick = !firstClick;
@@ -179,7 +212,7 @@ public class ExpressionEditor extends Application {
 
 		queryPane.getChildren().add(textField);
 
-		// Add the callback to handle when the Parse button is pressed	
+		// Add the callback to handle when the Parse button is pressed
 		button.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle (MouseEvent e) {
 				// Try to parse the expression
