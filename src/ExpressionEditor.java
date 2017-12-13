@@ -100,15 +100,13 @@ public class ExpressionEditor extends Application {
 
                 Expression focusedExpression = nodeMap.get(currentFocus_);
                 if(!nodeMap.get(currentFocus_).convertToString(0).equals(rootExpression_.convertToString(0))) {
-
+					System.out.println(focusedExpression);
                     //if(focusedExpression.getParent()!=null){
                     distances = new ArrayList<>();
                     expressions = new ArrayList<>();
-
 					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
                             ((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
                             focusedExpression.convertToString(0))) {
-
 						getWidthOfNode(e, this.currentFocus_);
                         int minDistance = Integer.MAX_VALUE;
                         for(int i = 0; i < distances.size(); i++){
@@ -194,6 +192,7 @@ public class ExpressionEditor extends Application {
 				copyFocus_ = null;
 				//On release update the root expression to be the closes expression to the mouse.
 				addToRoot(expressions.get(closestExpression), ((AbstractCompoundExpression)expressions.get(closestExpression)).getChildren().get(0));
+				System.out.println(expressions);
 				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
 				HBox hb = new HBox();
 
