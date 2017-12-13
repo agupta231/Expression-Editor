@@ -138,26 +138,33 @@ public class ExpressionEditor extends Application {
 					type = 2;
 				}else if(rootExpression_ instanceof  ParentheticalExpression){
 					type = 3;
+				}else if(rootExpression_ instanceof LiteralExpression){
+					type = 4;
+					hb.getChildren().add(rootExpression_.getNode());
 				}
 
-				for(int i = 0; i < chillin.size(); i++){
-					if(type == 1 && hb.getChildren().size() != 0){
-						hb.getChildren().add(newLabel("+"));
-					}else if(type == 2 && hb.getChildren().size() != 0){
-						hb.getChildren().add(newLabel("*"));
-					}else if(type == 3){
-						hb.getChildren().add(newLabel("("));
-					}
-					boolean containsFocus = checkForFocus(chillin.get(i));
-					if(containsFocus){
-						HBox t = fixFocus(chillin.get(i));
-						System.out.println("_____________");
-						hb.getChildren().add(t);
-					}else {
-						hb.getChildren().add(chillin.get(i).getNode());
-					}
-					if(type == 3){
-						hb.getChildren().add(newLabel(")"));
+				if(type != 4) {
+					for (int i = 0; i < chillin.size(); i++) {
+						if (type == 1 && hb.getChildren().size() != 0) {
+							hb.getChildren().add(newLabel("+"));
+						} else if (type == 2 && hb.getChildren().size() != 0) {
+							hb.getChildren().add(newLabel("*"));
+						} else if (type == 3) {
+							hb.getChildren().add(newLabel("("));
+						}
+						boolean containsFocus = checkForFocus(chillin.get(i));
+						if (containsFocus) {
+							HBox t = fixFocus(chillin.get(i));
+							hb.getChildren().add(t);
+						} else {
+							if (chillin.get(i).getNode().equals(currentFocus_)) {
+								//makeGray(chillin.get(i));
+							}
+							hb.getChildren().add(chillin.get(i).getNode());
+						}
+						if (type == 3) {
+							hb.getChildren().add(newLabel(")"));
+						}
 					}
 				}
 				expressionPane.getChildren().clear();
@@ -190,24 +197,29 @@ public class ExpressionEditor extends Application {
 					type = 2;
 				}else if(rootExpression_ instanceof  ParentheticalExpression){
 					type = 3;
+				}else if(rootExpression_ instanceof LiteralExpression){
+					type = 4;
+					hb.getChildren().add(rootExpression_.getNode());
 				}
-				for(int i = 0; i < chillin.size(); i++){
-					if(type == 1 && hb.getChildren().size() != 0){
-						hb.getChildren().add(newLabel("+"));
-					}else if(type == 2 && hb.getChildren().size() != 0){
-						hb.getChildren().add(newLabel("*"));
-					}else if(type == 3){
-						hb.getChildren().add(newLabel("("));
-					}
-					boolean containsFocus = checkForFocus(chillin.get(i));
-					if(containsFocus){
-						HBox t = fixFocus(chillin.get(i));
-						hb.getChildren().add(t);
-					}else {
-						hb.getChildren().add(chillin.get(i).getNode());
-					}
-					if(type == 3){
-						hb.getChildren().add(newLabel(")"));
+				if(type != 4) {
+					for (int i = 0; i < chillin.size(); i++) {
+						if (type == 1 && hb.getChildren().size() != 0) {
+							hb.getChildren().add(newLabel("+"));
+						} else if (type == 2 && hb.getChildren().size() != 0) {
+							hb.getChildren().add(newLabel("*"));
+						} else if (type == 3) {
+							hb.getChildren().add(newLabel("("));
+						}
+						boolean containsFocus = checkForFocus(chillin.get(i));
+						if (containsFocus) {
+							HBox t = fixFocus(chillin.get(i));
+							hb.getChildren().add(t);
+						} else {
+							hb.getChildren().add(chillin.get(i).getNode());
+						}
+						if (type == 3) {
+							hb.getChildren().add(newLabel(")"));
+						}
 					}
 				}
 				expressionPane.getChildren().clear();
@@ -215,6 +227,8 @@ public class ExpressionEditor extends Application {
 
 				hb.setLayoutX(WINDOW_WIDTH / 2);
 				hb.setLayoutY(WINDOW_HEIGHT / 2);
+
+				System.out.println(rootExpression_.convertToString(0));
 
                 closesExpression = 0;
 			}
@@ -224,7 +238,7 @@ public class ExpressionEditor extends Application {
 		}
 
 		private HBox fixFocus(Expression e){
-
+			System.out.println(e);
 			HBox hb = new HBox();
 
 			int type = 0;
@@ -234,9 +248,6 @@ public class ExpressionEditor extends Application {
 				type = 2;
 			}else if(e instanceof  ParentheticalExpression){
 				type = 3;
-			}else if(e instanceof LiteralExpression){
-				hb.getChildren().add(e.getNode());
-				return hb;
 			}
 
 			LinkedList<Expression> chillin = ((AbstractCompoundExpression)e).getChildren();
@@ -255,6 +266,7 @@ public class ExpressionEditor extends Application {
 						HBox t = fixFocus(chillin.get(i));
 						hb.getChildren().add(t);
 					} else {
+						System.out.println(chillin.get(i));
 						hb.getChildren().add(chillin.get(i).getNode());
 					}
 				}else{
@@ -334,6 +346,21 @@ public class ExpressionEditor extends Application {
 			}
 			distances.add(totalWidth);
 			expressions.add(e);
+		}
+
+		private void makeGray(Expression e){
+
+			if(e instanceof LiteralExpression){
+				((Label) e.getNode()).setTextFill(rootExpression_.GHOST_COLOR);
+			}
+			LinkedList<Expression> ll = ((AbstractCompoundExpression)e).getChildren();
+			for(int i = 0; i < ll.size(); i++){
+				if(ll.get(i).getNode() instanceof Label){
+					((Label)ll.get(i)).setTextFill(rootExpression_.GHOST_COLOR);
+				}else{
+					makeGray(ll.get(i));
+				}
+			}
 		}
 	}
 

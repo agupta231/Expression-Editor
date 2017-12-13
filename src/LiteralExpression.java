@@ -94,10 +94,6 @@ public class LiteralExpression implements Expression, Focusable, CopyAble{
         this.literal = Literal;
     }
 
-    public String getLiteral(){
-        return this.literal;
-    }
-
     /**
      * Flattens the expression
      * Does nothing, but higher functions may call it sometimes
