@@ -99,18 +99,20 @@ public class ExpressionEditor extends Application {
 				Expression focusedExpression = nodeMap.get(currentFocus_);
 				if(!nodeMap.get(currentFocus_).convertToString(0).equals(rootExpression_.convertToString(0))) {
 				//if(focusedExpression.getParent()!=null){
-					int i = 0;
 					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
 							((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
 							focusedExpression.convertToString(0))) {
-					i++;
-						Node nodes = e.getNode();
-						for(Node n : ((HBox)nodes).getChildren()){
-							System.out.println(i);
-							System.out.println(n.toString());
-							System.out.println("Width: " + n.getLayoutBounds().getWidth());
+						LinkedList<Expression> chillin = ((AbstractCompoundExpression)e).getChildren();
+						int totalWidth = 0;
+						System.out.println("------------------------------");
+						for(int i = 0; i < chillin.size(); i++){
+							chillin.get(i).getNode().getLayoutBounds().getWidth();
+							if(chillin.get(i).getNode().equals(this.currentFocus_)){
+								break;
+							}
+							totalWidth += chillin.get(i).getNode().getLayoutBounds().getWidth();
 						}
-
+						System.out.println(totalWidth);
 					}
 				}
 			}
