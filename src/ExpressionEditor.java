@@ -56,11 +56,10 @@ public class ExpressionEditor extends Application {
 
 			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
 				ObservableList<Node> HChildren = ((HBox) currentFocus_).getChildren();
-
+				System.out.println(HChildren);
 				if(HChildren.size() == 1 && event.isDragDetect()){
 					return;
 				}
-
 
 				boolean found = false;
 				//System.out.println("FUCK CS");
@@ -68,14 +67,14 @@ public class ExpressionEditor extends Application {
 				for (int i = 0; i < HChildren.size(); i++) {
 					final Node currentNode = HChildren.get(i);
 					if (currentNode instanceof HBox && !event.isDragDetect()) {
-						//System.out.println("CS IS A PUSSY");
+						System.out.println("Has HBox's");
 						Point2D relativeClick = currentNode.sceneToLocal(sceneX, sceneY);
-						//System.out.println("CS CAN SUCK MY DICK");
 						//System.out.println(currentNode.contains(relativeClick.getX(), relativeClick.getY()));
 						if (currentNode.contains(relativeClick.getX(), relativeClick.getY())) {
+							System.out.println("Click found!");
+
 							previousFocus = currentFocus_;
 							currentFocus_ = currentNode;
-
 							Point2D currentLocation = currentFocus_.localToScene(currentFocus_.getLayoutX(), currentFocus_.getLayoutY());
 
 							copyFocus_ = newLabel(((CopyAble) nodeMap.get(currentFocus_)).convertToStringFlat());
@@ -94,16 +93,17 @@ public class ExpressionEditor extends Application {
 					}
 				}
 				if(!found) {
+					System.out.println("No click found");
 					((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
 					currentFocus_ = rootExpression_.getNode();
+					distances = new ArrayList<>();
+					expressions = new ArrayList<>();
+
 				}
 
                 Expression focusedExpression = nodeMap.get(currentFocus_);
-                if(!nodeMap.get(currentFocus_).convertToString(0).equals(rootExpression_.convertToString(0))) {
+                if(!currentFocus_.equals(rootExpression_.getNode())) {
 					System.out.println(focusedExpression);
-                    //if(focusedExpression.getParent()!=null){
-                    distances = new ArrayList<>();
-                    expressions = new ArrayList<>();
 					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
                             ((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
                             focusedExpression.convertToString(0))) {
@@ -119,7 +119,7 @@ public class ExpressionEditor extends Application {
                     }
                 }
 			}
-			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED && !currentFocus_.equals(rootExpression_.getNode())) {
 			    int minDistance = Integer.MAX_VALUE;
 			    for(int i = 0; i < distances.size(); i++){
 					int localX = (int) expressions.get(0).getNode().sceneToLocal(sceneX, sceneY).getX();
@@ -162,9 +162,6 @@ public class ExpressionEditor extends Application {
 							HBox t = fixFocus(chillin.get(i));
 							hb.getChildren().add(t);
 						} else {
-							if (chillin.get(i).getNode().equals(currentFocus_)) {
-								//makeGray(chillin.get(i));
-							}
 							hb.getChildren().add(chillin.get(i).getNode());
 						}
 						if (type == 3) {
@@ -186,7 +183,7 @@ public class ExpressionEditor extends Application {
 					copyFocus_.setTranslateY(copyFocus_.getTranslateY() + (sceneY - _lastY));
 				}
 			}
-			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
+			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED && !currentFocus_.equals(rootExpression_.getNode())) {
 			    recolor(currentFocus_, Color.BLACK);
 
 				copyFocus_ = new HBox();
@@ -234,7 +231,8 @@ public class ExpressionEditor extends Application {
 				}
 				expressionPane.getChildren().clear();
 				expressionPane.getChildren().add(hb);
-
+				String root = hbToString(hb);
+				System.out.println(root);
 				hb.setLayoutX(WINDOW_WIDTH / 2);
 				hb.setLayoutY(WINDOW_HEIGHT / 2);
 
@@ -245,6 +243,24 @@ public class ExpressionEditor extends Application {
 			_lastX = sceneX;
 			_lastY = sceneY;
 
+		}
+
+		private String hbToString(HBox h){
+			ObservableList<Node> babies = h.getChildren();
+			String result = "";
+
+			for(int i = 0; i < babies.size(); i++){
+				if(babies.get(i) instanceof Label){
+					result += ((Label) babies.get(i)).getText();
+				}
+				Expression e = nodeMap.get(babies.get(i));
+				if(e instanceof AbstractCompoundExpression){
+					result += ((AbstractCompoundExpression) e).convertToStringFlat("");
+				}else if(e instanceof LiteralExpression){
+					result += ((LiteralExpression) e).getLiteral();
+				}
+			}
+			return result;
 		}
 
 		private HBox fixFocus(Expression e){
