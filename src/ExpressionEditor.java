@@ -199,13 +199,18 @@ public class ExpressionEditor extends Application {
 		Stack<Expression> expressionsToVisit = new Stack<>();
 		HashSet<Expression> vistedExpressions = new HashSet<>();
 		HashMap<Node, Expression> map = new HashMap<>();
+
 		map.put(e.getNode(), ((CopyAble)e).trueCopy());
 		vistedExpressions.add(e);
+
 		if (!(e instanceof CompoundExpression)) {
 			return map;
 		}
-		for(Expression exp:((AbstractCompoundExpression)e).getChildren()){
-			expressionsToVisit.add(exp);
+
+		for(Expression exp : ((AbstractCompoundExpression)e).getChildren()){
+			if (!vistedExpressions.contains(exp)) {
+				expressionsToVisit.add(exp);
+			}
 		}
 		while (!expressionsToVisit.empty()) {
 			Expression currentExpression = expressionsToVisit.pop();

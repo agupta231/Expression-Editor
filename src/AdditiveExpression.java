@@ -18,11 +18,10 @@ public class AdditiveExpression extends CollapsibleExpression implements Focusab
 	 */
 	public Expression deepCopy() {
 		AdditiveExpression copy = new AdditiveExpression();
+		copy.node = node;
+
 		return super.deepCopy(copy);
 	}
-
-
-
 
 	public Node getNode() {
 		if(node == null) {

@@ -54,6 +54,7 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
      */
     public void addSubexpression(Expression child){
         child.setParent(this);
+
         this.children.add(child);
     }
 
@@ -67,12 +68,15 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
      */
 
     public String convertToString(int indentLevel, String name){
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer()
+                ;
         Expression.indent(sb,indentLevel);
         sb.append(name + "\n");
+
         for(Expression e: this.getChildren()){
             sb.append(e.convertToString(indentLevel+1));
         }
+
         return sb.toString();
     }
 
@@ -82,14 +86,13 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
      * @return a deep copy of the expression
      */
     public AbstractCompoundExpression deepCopy(AbstractCompoundExpression copy){
-
-        for(Expression c: this.getChildren()){
+        for(Expression c: this.getChildren()) {
             copy.addSubexpression(c);
         }
-        for(Expression c: copy.getChildren())
-        {
+        for(Expression c: copy.getChildren()) {
             c.setParent(copy);
         }
+
         return copy;
     }
 
@@ -100,26 +103,17 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         }
 
         AbstractCompoundExpression parent =  ((AbstractCompoundExpression) this.getParent());
+        AbstractCompoundExpression copy = (AbstractCompoundExpression) parent.trueCopy();
 
-//        try {
-            AbstractCompoundExpression copy = (AbstractCompoundExpression) parent.trueCopy();
-
-            for(Expression e:copy.getChildren()) {
-                if(e.convertToString(0).equals(this.convertToString(0))) {
-                    return e;
-                }
+        for(Expression e:copy.getChildren()) {
+            if(e.convertToString(0).equals(this.convertToString(0))) {
+                return e;
             }
-//        }
-//        catch (Exception ClassCastException){
-//            System.out.println("This:\n" + this.convertToString(0));
-//            System.out.println("Parent:\n" + parent.convertToString(0));
-//            System.out.println("Parent's parent" + parent.getParent());
-//            System.out.println("Parent's true:\n"+ parent.trueCopy());
-//        }
+        }
 
         return null;
-
     }
+
     public static LinkedList<Expression> generateAllPossibleTrees(Expression parent, String selected) {
 
         Expression focused = null;
@@ -136,14 +130,21 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
 
         int nodeIndex = -1;
 
+        System.out.println("White is the only color with rights");
+
+
         for(int i = 0; i < childrenSize; i++) {
             if (children.get(i) == focused) {
+                System.out.println("Akash is for rectal use only");
+
                 nodeIndex = i;
                 break;
             }
         }
 
         if (nodeIndex == -1) {
+            System.out.println("taint");
+
             return new LinkedList<>();
         }
 
@@ -168,6 +169,10 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
             }
 
             tempParent.setChildren(orderedChildren);
+
+            System.out.println("Black men are only good for free labor");
+            System.out.println(tempParent.convertToString(0));
+
             possibleTrees.add(tempParent);
         }
 

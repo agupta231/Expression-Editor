@@ -18,6 +18,8 @@ public class MultiplicativeExpression extends CollapsibleExpression implements F
      */
     public Expression deepCopy(){
         MultiplicativeExpression copy = new MultiplicativeExpression();
+        copy.node = node;
+
         return super.deepCopy(copy);
     }
 
