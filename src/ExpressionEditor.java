@@ -113,10 +113,9 @@ public class ExpressionEditor extends Application {
                             focusedExpression.convertToString(0))) {
                         LinkedList<Expression> chillin = ((AbstractCompoundExpression)e).getChildren();
 
-						System.out.println(chillin);
                         int totalWidth = 0;
+
                         for(int i = 0; i < chillin.size(); i++){
-                        	//System.out.println(chillin.get(i));
                             chillin.get(i).getNode().getLayoutBounds().getWidth();
                             if(chillin.get(i).getNode().equals(this.currentFocus_)){
                                 break;
@@ -162,12 +161,15 @@ public class ExpressionEditor extends Application {
 
 				//On release update the root expression to be the closes expression to the mouse.
 				rootExpression_ = (CompoundExpression) expressions.get(closesExpression);
-				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
+
+				LinkedList<Expression> chillin = ((AbstractCompoundExpression) rootExpression_).getChildren();
 				HBox hb = new HBox();
+
 				for(int i = 0; i < chillin.size(); i++){
 					System.out.println(chillin.get(i).convertToString(0));
 					hb.getChildren().add(chillin.get(i).getNode());
 				}
+
 				expressionPane.getChildren().clear();
 				expressionPane.getChildren().add(hb);
 

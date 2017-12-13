@@ -158,8 +158,18 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         return null;
     }
 
+    private static Expression getRoot(Expression e) {
+        if (e.getParent() == null) {
+            return e;
+        }
+        else {
+            return getRoot(e.getParent());
+        }
+    }
+
     public static LinkedList<Expression> generateAllPossibleTrees(Expression parent, String selected) {
         Expression focused = null;
+
 
         for(Expression child : ((AbstractCompoundExpression) parent).getChildren()) {
             if (child.convertToString(0).equals(selected)) {
