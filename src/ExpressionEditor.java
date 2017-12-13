@@ -109,7 +109,6 @@ public class ExpressionEditor extends Application {
                             }
                             totalWidth += chillin.get(i).getNode().getLayoutBounds().getWidth();
                         }
-                        System.out.println(totalWidth);
                         distances.add(totalWidth);
                         expressions.add(e);
                     }
@@ -121,7 +120,7 @@ public class ExpressionEditor extends Application {
 					int localX = (int) expressions.get(0).getNode().sceneToLocal(sceneX, sceneY).getX();
 					System.out.println(i + ": " + Math.abs(localX-distances.get(i)));
 					if(Math.abs(localX-distances.get(i)) < minDistance){
-						minDistance = (int) Math.abs(localX-distances.get(i));
+						minDistance = Math.abs(localX-distances.get(i));
                         closesExpression = i;
                     }
                 }
@@ -138,14 +137,11 @@ public class ExpressionEditor extends Application {
 				currentFocus_.setTranslateY(0);
 
 				rootExpression_ = (CompoundExpression) expressions.get(closesExpression);
-				System.out.println(rootExpression_.convertToString(0));
-				expressionPane.getChildren().clear();
-				expressionPane.getChildren().add(rootExpression_.getNode());
 
-				rootExpression_.getNode().setLayoutX(WINDOW_WIDTH / 2);
-				rootExpression_.getNode().setLayoutY(WINDOW_HEIGHT / 2);
+                expressionPane.getChildren().clear();
+                expressionPane.getChildren().add(rootExpression_.getNode());
 
-
+                closesExpression = 0;
 				firstClick = !firstClick;
 			}
 			_lastX = sceneX;
