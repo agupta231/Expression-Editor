@@ -113,6 +113,7 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
             for(Expression e:copy.getChildren()) {
                 if(e.convertToString(0).equals(this.convertToString(0)))
                     return e;
+                }
             }
 //        }
 //        catch (Exception ClassCastException){
