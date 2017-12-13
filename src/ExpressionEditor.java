@@ -72,6 +72,7 @@ public class ExpressionEditor extends Application {
 
 				for (int i = 0; i < HChildren.size(); i++) {
 					final Node currentNode = HChildren.get(i);
+
 					if (currentNode instanceof HBox) {
 						Point2D relativeClick = currentNode.sceneToLocal(sceneX, sceneY);
 
@@ -94,24 +95,38 @@ public class ExpressionEditor extends Application {
 								((HBox) previousFocus).setBorder(Expression.NO_BORDER);
 								((HBox) currentNode).setBorder(Expression.RED_BORDER);
 							}
+
 							found = true;
 						}
 					}
 				}
+
 				if(!found) {
 					((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
 					currentFocus_ = rootExpression_.getNode();
 				}
 
                 Expression focusedExpression = nodeMap.get(currentFocus_);
+
+				System.out.println("Focused Expression:");
+				System.out.println(focusedExpression);
+				System.out.println(firstClick);
+				System.out.println("dab on em");
+
                 if(!nodeMap.get(currentFocus_).convertToString(0).equals(rootExpression_.convertToString(0))) {
                     //if(focusedExpression.getParent()!=null){
                     distances = new ArrayList<>();
                     expressions = new ArrayList<>();
 
+//                    System.out.println(AbstractCompoundExpression.generateAllPossibleTrees(
+//							((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
+//							focusedExpression.convertToString(0)).size());
+
 					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
                             ((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
                             focusedExpression.convertToString(0))) {
+
+						System.out.println(e);
 
 						getWidthOfNode(e, this.currentFocus_);
                     }
@@ -127,6 +142,8 @@ public class ExpressionEditor extends Application {
                         closesExpression = i;
                     }
                 }
+
+				System.out.println(expressions);
 
 				rootExpression_ = (CompoundExpression) expressions.get(closesExpression);
 				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
@@ -163,7 +180,7 @@ public class ExpressionEditor extends Application {
 					copyFocus_.setTranslateY(copyFocus_.getTranslateY() + (sceneY - _lastY));
 				}
 			}
-			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
+			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED && copyFocus_!= null) {
 
 				//On release update the root expression to be the closes expression to the mouse.
 				rootExpression_ = (CompoundExpression) expressions.get(closesExpression);
@@ -175,6 +192,7 @@ public class ExpressionEditor extends Application {
 				//2: Multiplative
 				//3: Parenthetical
 				int type = 0;
+
 				if(rootExpression_ instanceof AdditiveExpression){
 					type = 1;
 				}else if(rootExpression_ instanceof MultiplicativeExpression){
@@ -182,6 +200,7 @@ public class ExpressionEditor extends Application {
 				}else if(rootExpression_ instanceof  ParentheticalExpression){
 					type = 3;
 				}
+
 				for(int i = 0; i < chillin.size(); i++){
 					if(type == 1 && hb.getChildren().size() != 0){
 						hb.getChildren().add(newLabel("+"));
@@ -197,6 +216,8 @@ public class ExpressionEditor extends Application {
 				hb.setLayoutY(WINDOW_HEIGHT / 2);
 
                 closesExpression = 0;
+
+                System.out.println("HERE BITCH");
 				firstClick = !firstClick;
 			}
 			_lastX = sceneX;
