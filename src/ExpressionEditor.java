@@ -40,7 +40,7 @@ public class ExpressionEditor extends Application {
 		Pane currentPane;
         ArrayList<Integer> distances = new ArrayList<Integer>();
         ArrayList<Expression> expressions = new ArrayList<Expression>();
-        int closesExpression;
+        int closestExpression;
 
 		double _lastX, _lastY;
 
@@ -115,7 +115,7 @@ public class ExpressionEditor extends Application {
                             int localX = (int) expressions.get(0).getNode().sceneToLocal(sceneX, sceneY).getX();
                             if(Math.abs(localX-distances.get(i)) < minDistance){
                                 minDistance = Math.abs(localX-distances.get(i));
-                                closesExpression = i;
+                                closestExpression = i;
                             }
                         }
                     }
@@ -127,10 +127,10 @@ public class ExpressionEditor extends Application {
 					int localX = (int) expressions.get(0).getNode().sceneToLocal(sceneX, sceneY).getX();
 					if(Math.abs(localX-distances.get(i)) < minDistance){
 						minDistance = Math.abs(localX-distances.get(i));
-                        closesExpression = i;
+                        closestExpression = i;
                     }
                 }
-				addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression)expressions.get(closesExpression)).getChildren().get(0));
+				addToRoot(expressions.get(closestExpression), ((AbstractCompoundExpression)expressions.get(closestExpression)).getChildren().get(0));
 				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
 				HBox hb = new HBox();
 
@@ -188,12 +188,12 @@ public class ExpressionEditor extends Application {
 					copyFocus_.setTranslateY(copyFocus_.getTranslateY() + (sceneY - _lastY));
 				}
 			}
-			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
+			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED ) {
 			    recolor(currentFocus_, Color.BLACK);
 
-				copyFocus_ = new HBox();
+				copyFocus_ = null;
 				//On release update the root expression to be the closes expression to the mouse.
-				addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression)expressions.get(closesExpression)).getChildren().get(0));
+				addToRoot(expressions.get(closestExpression), ((AbstractCompoundExpression)expressions.get(closestExpression)).getChildren().get(0));
 				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
 				HBox hb = new HBox();
 
@@ -202,6 +202,8 @@ public class ExpressionEditor extends Application {
 				//2: Multiplative
 				//3: Parenthetical
 				int type = 0;
+
+				//TODO make this more effecient
 				if(rootExpression_ instanceof AdditiveExpression){
 					type = 1;
 				}else if(rootExpression_ instanceof MultiplicativeExpression){
@@ -241,7 +243,7 @@ public class ExpressionEditor extends Application {
 
 				System.out.println(rootExpression_.convertToString(0));
 
-                closesExpression = 0;
+                closestExpression = 0;
 			}
 			_lastX = sceneX;
 			_lastY = sceneY;

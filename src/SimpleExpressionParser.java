@@ -30,12 +30,10 @@ public class SimpleExpressionParser implements ExpressionParser {
 			// If we couldn't parse the string, then raise an error
 			throw new ExpressionParseException("Cannot parse expression: " + str);
 		}
-
 		// Flatten the expression before returning
 		expression.flatten();
 		return expression;
 	}
-	
 	/**
 	 * Attempts to create an expression from a given String.
 	 * @param str the string to parse
