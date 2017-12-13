@@ -6,42 +6,19 @@ import javafx.scene.text.Font;
 /**
  * Child of expression that represents a multiplicative operator.
  */
-public class MultiplicativeExpression extends CollapsibleExpression implements Focusable{
-
-    private boolean focused;
-    private Node node;
-
+public class MultiplicativeExpression extends CollapsibleExpression {
     /**
      * Will return a copy of the Additive expression to use
      * for the GUI.
      * @return an copy of the {@link MultiplicativeExpression}
      */
     public Expression deepCopy(){
-        MultiplicativeExpression copy = new MultiplicativeExpression();
-        copy.node = node;
-
-        return super.deepCopy(copy);
+        return super.deepCopy(new MultiplicativeExpression());
     }
 
     @Override
     public Node getNode() {
-        if(node == null) {
-            final HBox hbox = new HBox();
-
-            hbox.getChildren().add(this.getChildren().get(0).getNode());
-
-            for (int i = 1; i < this.getChildren().size(); i++) {
-                hbox.getChildren().add(ExpressionEditor.newLabel("*"));
-                hbox.getChildren().add(this.getChildren().get(i).getNode());
-            }
-
-            if (this.getFocused()) {
-                hbox.setBorder(RED_BORDER);
-            }
-            node = hbox;
-            return hbox;
-        }
-        return node;
+        return super.getNode("*");
     }
 
     /**
@@ -53,15 +30,5 @@ public class MultiplicativeExpression extends CollapsibleExpression implements F
      */
     public String convertToString(int indentLevel){
         return super.convertToString(indentLevel,"*");
-    }
-
-    @Override
-    public boolean getFocused() {
-        return this.focused;
-    }
-
-    @Override
-    public void setFocused(boolean s) {
-        this.focused = s;
     }
 }

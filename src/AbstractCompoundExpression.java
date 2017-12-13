@@ -1,3 +1,5 @@
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
 import org.junit.runner.Computer;
 
 import java.awt.*;
@@ -6,6 +8,8 @@ import java.util.LinkedList;
 public abstract class AbstractCompoundExpression implements CompoundExpression, CopyAble{
     private CompoundExpression parent = null;
     private LinkedList<Expression> children = new LinkedList<Expression>();
+    protected boolean focused;
+    protected Node node;
 
     /**
      * Flatten's the expression's children.
@@ -94,7 +98,34 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
             c.setParent(copy);
         }
 
+        copy.node = node;
         return copy;
+    }
+
+    public Node getNode(String delimiter) {
+        if(node == null) {
+            final HBox hbox = new HBox();
+            hbox.getChildren().add(this.getChildren().get(0).getNode());
+            for (int i = 1; i < this.getChildren().size(); i++) {
+                hbox.getChildren().add(ExpressionEditor.newLabel(delimiter));
+                hbox.getChildren().add(this.getChildren().get(i).getNode());
+            }
+            if (this.getFocused()) {
+                hbox.setBorder(RED_BORDER);
+            }
+            node = hbox;
+            return hbox;
+        }
+
+        return node;
+    }
+
+    public boolean getFocused() {
+        return focused;
+    }
+
+    public void setFocused(boolean s) {
+        focused = s;
     }
 
     @Override
@@ -116,7 +147,6 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
     }
 
     public static LinkedList<Expression> generateAllPossibleTrees(Expression parent, String selected) {
-
         Expression focused = null;
 
         for(Expression child : ((AbstractCompoundExpression) parent).getChildren()) {
