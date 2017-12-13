@@ -95,23 +95,32 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
 
     @Override
     public Expression trueCopy() {
-        if(this.getParent() == null)
-        {
+        if(this.getParent() == null) {
             return this.deepCopy();
         }
-        AbstractCompoundExpression parent =  ((AbstractCompoundExpression)this.getParent());
-        try{
+
+        System.out.println("Start");
+        System.out.println("Current Chill'n: ");
+        System.out.println(this.convertToString(0));
+        System.out.println("Parent: ");
+        System.out.println(((AbstractCompoundExpression) this.getParent()).convertToString(0));
+
+        AbstractCompoundExpression parent =  ((AbstractCompoundExpression) this.getParent());
+
+//        try {
             AbstractCompoundExpression copy = (AbstractCompoundExpression) parent.trueCopy();
-            for(Expression e:copy.getChildren()){
-                if(e.convertToString(0) == this.convertToString(0))
+
+            for(Expression e:copy.getChildren()) {
+                if(e.convertToString(0).equals(this.convertToString(0)))
                     return e;
             }
-        }catch (Exception ClassCastException){
-            System.out.println("This:\n" + this.convertToString(0));
-            System.out.println("Parent:\n" + parent.convertToString(0));
-            System.out.println("Parent's parent" + parent.getParent());
-            System.out.println("Parent's true:\n"+ parent.trueCopy());
-        }
+//        }
+//        catch (Exception ClassCastException){
+//            System.out.println("This:\n" + this.convertToString(0));
+//            System.out.println("Parent:\n" + parent.convertToString(0));
+//            System.out.println("Parent's parent" + parent.getParent());
+//            System.out.println("Parent's true:\n"+ parent.trueCopy());
+//        }
 
         return null;
 

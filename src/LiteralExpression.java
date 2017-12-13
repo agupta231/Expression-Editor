@@ -49,11 +49,12 @@ public class LiteralExpression implements Expression, Focusable, CopyAble{
         return copy;
     }
     public Expression trueCopy(){
-        if(this.getParent()!=null){
+        if(this.getParent() != null) {
             AbstractCompoundExpression parent =  ((AbstractCompoundExpression)this.getParent());
             AbstractCompoundExpression copy = (AbstractCompoundExpression) parent.trueCopy();
-            for(Expression e:copy.getChildren()){
-                if(e.convertToString(0) == this.convertToString(0))
+
+            for(Expression e : copy.getChildren()) {
+                if(e.convertToString(0).equals(this.convertToString(0)))
                     return e;
             }
             return null;

@@ -100,7 +100,7 @@ public class ExpressionEditor extends Application {
 //				System.out.println(nodeMap.get(currentFocus_).convertToString(5));
 //				System.out.println("balls");
 //				System.out.println(rootExpression_.convertToString(5));
-				if(nodeMap.get(currentFocus_).convertToString(0) != rootExpression_.convertToString(0)) {
+				if(!nodeMap.get(currentFocus_).convertToString(0).equals(rootExpression_.convertToString(0))) {
 				//if(focusedExpression.getParent()!=null){
 					System.out.println("Possible Combinations: ");
 					System.out.println(focusedExpression.convertToString(0));
