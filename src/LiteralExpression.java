@@ -46,6 +46,8 @@ public class LiteralExpression implements Expression, Focusable, CopyAble{
     public LiteralExpression deepCopy(){
         LiteralExpression copy = new LiteralExpression();
         copy.literal = this.literal;
+        copy.node = node;
+
         return copy;
     }
     public Expression trueCopy(){

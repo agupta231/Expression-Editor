@@ -19,6 +19,8 @@ public class ParentheticalExpression extends AbstractCompoundExpression implemen
      */
     public Expression deepCopy(){
         ParentheticalExpression copy = new ParentheticalExpression();
+        copy.node = node;
+
         return super.deepCopy(copy);
     }
 
