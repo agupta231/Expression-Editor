@@ -97,15 +97,8 @@ public class ExpressionEditor extends Application {
 
 
 				Expression focusedExpression = nodeMap.get(currentFocus_);
-//				System.out.println(nodeMap.get(currentFocus_).convertToString(5));
-//				System.out.println("balls");
-//				System.out.println(rootExpression_.convertToString(5));
 				if(!nodeMap.get(currentFocus_).convertToString(0).equals(rootExpression_.convertToString(0))) {
 				//if(focusedExpression.getParent()!=null){
-					System.out.println("Possible Combinations: ");
-					System.out.println(focusedExpression.convertToString(0));
-					System.out.println("Ankur's dick");
-					System.out.println(focusedExpression.getParent());
 					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
 							((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
 							focusedExpression.convertToString(0))) {
@@ -155,7 +148,6 @@ public class ExpressionEditor extends Application {
 				try {
 					// Success! Add the expression's Node to the expressionPane
 					final Expression expression = expressionParser.parse(textField.getText(), true);
-					System.out.println(expression.convertToString(0));
 
 					expressionPane.getChildren().clear();
 					expressionPane.getChildren().add(expression.getNode());
