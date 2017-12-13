@@ -5,7 +5,7 @@ import org.junit.runner.Computer;
 import java.awt.*;
 import java.util.LinkedList;
 
-public abstract class AbstractCompoundExpression implements CompoundExpression, CopyAble{
+public abstract class AbstractCompoundExpression implements CompoundExpression, CopyAble {
     private CompoundExpression parent = null;
     private LinkedList<Expression> children = new LinkedList<Expression>();
     protected boolean focused;
@@ -73,8 +73,7 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
      */
 
     public String convertToString(int indentLevel, String name){
-        StringBuffer sb = new StringBuffer()
-                ;
+        StringBuffer sb = new StringBuffer();
         Expression.indent(sb,indentLevel);
         sb.append(name + "\n");
 
@@ -83,6 +82,19 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         }
 
         return sb.toString();
+    }
+
+    public String convertToStringFlat(String delimiter) {
+        String outputString = "";
+
+        for(int i = 0; i < this.getChildren().size() - 1; i++) {
+            outputString += ((CopyAble) this.getChildren().get(i)).convertToStringFlat();
+            outputString += delimiter;
+        }
+
+        outputString += ((CopyAble) this.getChildren().get(this.getChildren().size() - 1)).convertToStringFlat();
+
+        return outputString;
     }
 
     /**

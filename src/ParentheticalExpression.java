@@ -7,7 +7,6 @@ import javafx.scene.layout.HBox;
  */
 
 public class ParentheticalExpression extends AbstractCompoundExpression implements Focusable {
-
     /**
      * Will return a copy of the Additive expression to use
      * for the GUI.
@@ -54,5 +53,10 @@ public class ParentheticalExpression extends AbstractCompoundExpression implemen
      */
     public void flatten() {
         flattenChildren();
+    }
+
+    @Override
+    public String convertToStringFlat() {
+        return "(" + ((CopyAble) this.getChildren().get(0)).convertToStringFlat() + ")";
     }
 }

@@ -5,7 +5,6 @@ import javafx.scene.text.Font;
 
 
 public class LiteralExpression implements Expression, Focusable, CopyAble{
-
     private CompoundExpression parent;
     private String literal;
     private boolean focused;
@@ -67,7 +66,10 @@ public class LiteralExpression implements Expression, Focusable, CopyAble{
         }
     }
 
-
+    @Override
+    public String convertToStringFlat() {
+        return this.literal;
+    }
 
     @Override
     public Node getNode() {

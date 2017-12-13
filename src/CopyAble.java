@@ -1,3 +1,4 @@
 public interface CopyAble {
-    public Expression trueCopy();
+    Expression trueCopy();
+    String convertToStringFlat();
 }
