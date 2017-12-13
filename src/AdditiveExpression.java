@@ -28,10 +28,7 @@ public class AdditiveExpression extends CollapsibleExpression implements Focusab
 			final HBox hbox = new HBox();
 			hbox.getChildren().add(this.getChildren().get(0).getNode());
 			for (int i = 1; i < this.getChildren().size(); i++) {
-				Label text = new Label("+");
-				text.setFont(ExpressionEditor.FONT);
-
-				hbox.getChildren().add(text);
+				hbox.getChildren().add(ExpressionEditor.newLabel("+"));
 				hbox.getChildren().add(this.getChildren().get(i).getNode());
 			}
 			if (this.getFocused()) {

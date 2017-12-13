@@ -74,10 +74,7 @@ public class LiteralExpression implements Expression, Focusable, CopyAble{
         if(node == null) {
             final HBox hbox = new HBox();
 
-            final Label text = new Label(this.literal);
-            text.setFont(ExpressionEditor.FONT);
-
-            hbox.getChildren().add(text);
+            hbox.getChildren().add(ExpressionEditor.newLabel(this.literal));
             if (this.getFocused()) {
                 hbox.setBorder(RED_BORDER);
             }

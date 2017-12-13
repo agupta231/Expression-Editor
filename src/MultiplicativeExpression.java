@@ -31,10 +31,7 @@ public class MultiplicativeExpression extends CollapsibleExpression implements F
             hbox.getChildren().add(this.getChildren().get(0).getNode());
 
             for (int i = 1; i < this.getChildren().size(); i++) {
-                Label text = new Label("*");
-                text.setFont(ExpressionEditor.FONT);
-
-                hbox.getChildren().add(text);
+                hbox.getChildren().add(ExpressionEditor.newLabel("*"));
                 hbox.getChildren().add(this.getChildren().get(i).getNode());
             }
 

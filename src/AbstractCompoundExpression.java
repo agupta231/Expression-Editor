@@ -1,5 +1,6 @@
 import org.junit.runner.Computer;
 
+import java.awt.*;
 import java.util.LinkedList;
 
 public abstract class AbstractCompoundExpression implements CompoundExpression, CopyAble{

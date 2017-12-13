@@ -1,7 +1,6 @@
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
 
 /**
  * Child of expression that represents an parenthetical operator.
@@ -28,15 +27,9 @@ public class ParentheticalExpression extends AbstractCompoundExpression implemen
         if(node == null) {
             final HBox hbox = new HBox();
 
-            Label openParen = new Label("(");
-            openParen.setFont(ExpressionEditor.FONT);
-
-            Label closeParen = new Label(")");
-            closeParen.setFont(ExpressionEditor.FONT);
-
-            hbox.getChildren().add(openParen);
+            hbox.getChildren().add(ExpressionEditor.newLabel("("));
             hbox.getChildren().add(this.getChildren().get(0).getNode());
-            hbox.getChildren().add(closeParen);
+            hbox.getChildren().add(ExpressionEditor.newLabel(")"));
 
             if (this.getFocused()) {
                 hbox.setBorder(RED_BORDER);

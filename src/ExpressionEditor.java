@@ -230,4 +230,11 @@ public class ExpressionEditor extends Application {
 		}
 		return map;
 	}
+
+	public static Label newLabel(String modifierText) {
+		Label text = new Label(modifierText);
+		text.setFont(ExpressionEditor.FONT);
+
+		return text;
+	}
 }
