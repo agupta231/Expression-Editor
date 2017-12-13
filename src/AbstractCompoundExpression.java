@@ -94,28 +94,30 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
     }
 
     @Override
-    public Expression trueCopy() {
-        if(this.getParent() == null)
-        {
+    public Expression trueCopy()  {
+        if (this.getParent() == null) {
+            System.out.println("mothercunt");
             return this.deepCopy();
         }
-        AbstractCompoundExpression parent =  ((AbstractCompoundExpression)this.getParent());
+        AbstractCompoundExpression parent = ((AbstractCompoundExpression) this.getParent());
         try{
             AbstractCompoundExpression copy = (AbstractCompoundExpression) parent.trueCopy();
-            for(Expression e:copy.getChildren()){
-                if(e.convertToString(0) == this.convertToString(0))
+            for (Expression e : copy.getChildren()) {
+                if (e.convertToString(0).equals( this.convertToString(0))) {
                     return e;
+                }
             }
         }catch (Exception ClassCastException){
             System.out.println("This:\n" + this.convertToString(0));
             System.out.println("Parent:\n" + parent.convertToString(0));
             System.out.println("Parent's parent" + parent.getParent());
-            System.out.println("Parent's true:\n"+ parent.trueCopy());
-        }
-
+            //System.out.println("Parent's true:\n"+ parent.trueCopy());
+       }
+        System.exit(1);
         return null;
-
     }
+
+
     public static LinkedList<Expression> generateAllPossibleTrees(Expression parent, String selected) {
 
         Expression focused = null;
