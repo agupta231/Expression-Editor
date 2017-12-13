@@ -169,7 +169,7 @@ public class ExpressionEditor extends Application {
 				}
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
-				copyFocus_ = null;
+				copyFocus_ = new HBox();
 
 				//On release update the root expression to be the closes expression to the mouse.
 				System.out.println("Expression Chillin count: " + ((HBox) ((AbstractCompoundExpression) expressions.get(closesExpression)).getNode()).getChildren().size());
