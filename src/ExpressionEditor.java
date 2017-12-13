@@ -103,7 +103,10 @@ public class ExpressionEditor extends Application {
 							((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
 							focusedExpression.convertToString(0))) {
 
-						System.out.println(e.convertToString(0));
+						Node nodes = e.getNode();
+						for(Node n : ((HBox)nodes).getChildren()){
+							System.out.println(n.getLayoutBounds().getWidth());
+						}
 					}
 				}
 			}
