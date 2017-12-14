@@ -1,10 +1,11 @@
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
-import org.junit.runner.Computer;
-
-import java.awt.*;
 import java.util.LinkedList;
 
+/**
+ * Child function of CompoundExpression. Meant to abstract a lot of the code in
+ * Multiplicative and Additive Expression classes
+ */
 public abstract class AbstractCompoundExpression implements CompoundExpression, CopyAble {
     private CompoundExpression parent = null;
     private LinkedList<Expression> children = new LinkedList<Expression>();
@@ -64,15 +65,15 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
     }
 
     /**
-     * Will generate a String representation for the the addition
+     * Will generate a String representation for the the
      * operator, with the appropiate number of tabs to properly
      * represent it's position in the expression.
      * @param indentLevel the indentation level
-     * @param name the name of the expression
+     * @param name what the current operator is
      * @return a String containing this expression and all its children in hierarchic format.
      */
 
-    public String convertToString(int indentLevel, String name){
+    public String convertToString(int indentLevel, String name) {
         StringBuffer sb = new StringBuffer();
         Expression.indent(sb,indentLevel);
         sb.append(name + "\n");
@@ -84,6 +85,12 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         return sb.toString();
     }
 
+    /**
+     * Will generate a String representation for the operator, with no
+     * space though.
+     * @param delimiter the operator
+     * @return a String containing this expresison.
+     */
     public String convertToStringFlat(String delimiter) {
         String outputString = "";
 
@@ -114,6 +121,11 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         return copy;
     }
 
+    /**
+     * Abstracted function for getNode() for Multiplicative and Additive Expressions
+     * @param delimiter the operator
+     * @return a Node represeneting the current Expression
+     */
     public Node getNode(String delimiter) {
         if(node == null) {
             final HBox hbox = new HBox();
@@ -132,14 +144,29 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         return node;
     }
 
+    /**
+     * Getter for if the current expression is focused.
+     * @return true if the expression is focused, false
+     *         otherwise
+     */
     public boolean getFocused() {
         return focused;
     }
 
+    /**
+     * Setter for if the current expression is focused.
+     * @param s A boolean representing if the current
+     *          expression is focused or not
+     */
     public void setFocused(boolean s) {
         focused = s;
     }
 
+    /**
+     * Will create a copy of the current expression, and transfer
+     * the Node pointers as well
+     * @return a copy of Expression with old Node pointers
+     */
     @Override
     public Expression trueCopy() {
         if(this.getParent() == null) {
@@ -158,6 +185,12 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         return null;
     }
 
+    /**
+     * Will generate all possible trees that an expression can take
+     * @param parent Parent of the focused expression
+     * @param selected the focused expression, represented by the .convertToString(0) method
+     * @return a LinkedList of Expressions of all of the permutations of the Expression
+     */
     public static LinkedList<Expression> generateAllPossibleTrees(Expression parent, String selected) {
         Expression focused = null;
 
@@ -173,21 +206,14 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
 
         int nodeIndex = -1;
 
-        //System.out.println("White is the only color with rights");
-
-
         for(int i = 0; i < childrenSize; i++) {
             if (children.get(i) == focused) {
-                //System.out.println("Akash is for rectal use only");
-
                 nodeIndex = i;
                 break;
             }
         }
 
         if (nodeIndex == -1) {
-            //System.out.println("taint");
-
             return new LinkedList<>();
         }
 
@@ -212,10 +238,6 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
             }
 
             tempParent.setChildren(orderedChildren);
-
-            //System.out.println("Black men are only good for free labor");
-            //System.out.println(tempParent.convertToString(0));
-
             possibleTrees.add(tempParent);
         }
 
