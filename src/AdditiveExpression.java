@@ -17,6 +17,10 @@ public class AdditiveExpression extends CollapsibleExpression {
 		return super.deepCopy(new AdditiveExpression());
 	}
 
+	/**
+	 * Gives the Node representation of the current Additive Expression
+	 * @return a Node representing the current AdditiveExpression
+	 */
 	public Node getNode() {
 		return super.getNode("+");
 	}
@@ -32,6 +36,11 @@ public class AdditiveExpression extends CollapsibleExpression {
 		return super.convertToString(indentLevel,"+");
 	}
 
+	/**
+	 * Will generate a String representation for the the addition,
+	 * with no whitespace.
+	 * @return a flattened String representing the addition operator.
+	 */
 	@Override
 	public String convertToStringFlat() {
 		return super.convertToStringFlat("+");
