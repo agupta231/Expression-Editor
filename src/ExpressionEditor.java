@@ -71,7 +71,7 @@ public class ExpressionEditor extends Application {
 
 							copyFocus_ = newLabel(((CopyAble) nodeMap.get(currentFocus_)).convertToStringFlat());
 							copyFocus_.setLayoutX(currentLocation.getX()-currentNode.getLayoutX());
-							copyFocus_.setLayoutY(currentLocation.getY()-currentNode.getLayoutY());
+							copyFocus_.setLayoutY(currentLocation.getY()-((HBox) currentNode).getHeight()/2);
 
 							expressionPane.getChildren().add(copyFocus_);
 
