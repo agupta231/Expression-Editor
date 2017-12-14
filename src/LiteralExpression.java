@@ -85,6 +85,9 @@ public class LiteralExpression implements Expression, Focusable, CopyAble{
         }
         return node;
     }
+    public void setNode(Node n){
+        this.node = n;
+    }
 
     /**
      * Sets the literal of the expression

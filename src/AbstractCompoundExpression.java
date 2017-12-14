@@ -1,3 +1,4 @@
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import org.junit.runner.Computer;
@@ -109,10 +110,9 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         for(Expression c: copy.getChildren()) {
             c.setParent(copy);
         }
-
-        copy.node = node;
         return copy;
     }
+
 
     public Node getNode(String delimiter) {
         if(node == null) {
@@ -143,7 +143,9 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
     @Override
     public Expression trueCopy() {
         if(this.getParent() == null) {
-            return this.deepCopy();
+            Expression copy = this.deepCopy();
+            copyNodes(this,copy);
+            return copy;
         }
 
         AbstractCompoundExpression parent =  ((AbstractCompoundExpression) this.getParent());
@@ -158,6 +160,21 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
         return null;
     }
 
+    public static void copyNodes(Expression e,Expression copy){
+        ((CopyAble) copy).setNode(e.getNode());
+        if(e instanceof AbstractCompoundExpression){
+            LinkedList<Expression> children = ((AbstractCompoundExpression) e).getChildren();
+            LinkedList<Expression> childrenCopy = ((AbstractCompoundExpression) copy).getChildren();
+
+            for(int x = 0; x<children.size();x++){
+                copyNodes(children.get(x),childrenCopy.get(x));
+            }
+        }
+
+    }
+    public void setNode(Node n){
+        this.node = n;
+    }
     public static LinkedList<Expression> generateAllPossibleTrees(Expression parent, String selected) {
         Expression focused = null;
 
