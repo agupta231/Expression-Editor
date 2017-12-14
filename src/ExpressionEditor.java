@@ -327,11 +327,12 @@ public class ExpressionEditor extends Application {
 					if (ll.get(i).getNode().equals(currentFocus_)) {
 						return true;
 					} else if (ll.get(i) instanceof AbstractCompoundExpression) {
-						return checkForFocus(ll.get(i));
+						boolean t = checkForFocus(ll.get(i));
+						if(t){
+						    return t;
+                        }
 					}
 				}
-			}else{
-				//TODO BRYSON
 			}
 			return false;
 		}
