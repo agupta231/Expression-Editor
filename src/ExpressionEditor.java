@@ -476,7 +476,6 @@ public class ExpressionEditor extends Application {
 		}
 		while (!expressionsToVisit.empty()) {
 			Expression currentExpression = expressionsToVisit.pop();
-
 			map.put(currentExpression.getNode(), ((CopyAble)currentExpression).trueCopy());
 			vistedExpressions.add(currentExpression);
 
@@ -494,7 +493,6 @@ public class ExpressionEditor extends Application {
 	public static Label newLabel(String modifierText) {
 		Label text = new Label(modifierText);
 		text.setFont(ExpressionEditor.FONT);
-
 		return text;
 	}
 
