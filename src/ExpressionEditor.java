@@ -57,7 +57,6 @@ public class ExpressionEditor extends Application {
 					return;
 				}
 
-
 				boolean found = false;
 				for (int i = 0; i < HChildren.size(); i++) {
 					final Node currentNode = HChildren.get(i);
@@ -86,21 +85,18 @@ public class ExpressionEditor extends Application {
 				}
 				if(!found) {
 					((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
-					//currentFocus_ = rootExpression_.getNode();
 					restart = true;
 				}
 
                 Expression focusedExpression = nodeMap.get(currentFocus_);
                 if(!currentFocus_.equals(rootExpression_.getNode())) {
 
-                    //if(focusedExpression.getParent()!=null){
                     distances = new ArrayList<>();
                     expressions = new ArrayList<>();
 
 					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
-                            ((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
+                            (focusedExpression.getParent()).deepCopy(),
                             focusedExpression.convertToString(0))) {
-
 						getWidthOfNode(e, this.currentFocus_);
                         int minDistance = Integer.MAX_VALUE;
                         for(int i = 0; i < distances.size(); i++){
@@ -123,7 +119,7 @@ public class ExpressionEditor extends Application {
                     }
                 }
 				addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression)expressions.get(closesExpression)).getChildren().get(0));
-				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
+				LinkedList<Expression> children = ((AbstractCompoundExpression)rootExpression_).getChildren();
 				HBox hb = new HBox();
 
 				//type values
@@ -143,7 +139,7 @@ public class ExpressionEditor extends Application {
 				}
 
 				if(type != 4) {
-					for (int i = 0; i < chillin.size(); i++) {
+					for (int i = 0; i < children.size(); i++) {
 						if (type == 1 && hb.getChildren().size() != 0) {
 							hb.getChildren().add(newLabel("+"));
 						} else if (type == 2 && hb.getChildren().size() != 0) {
@@ -151,15 +147,15 @@ public class ExpressionEditor extends Application {
 						} else if (type == 3) {
 							hb.getChildren().add(newLabel("("));
 						}
-						boolean containsFocus = checkForFocus(chillin.get(i));
+						boolean containsFocus = checkForFocus(children.get(i));
 						if (containsFocus) {
-							HBox t = fixFocus(chillin.get(i));
+							HBox t = fixFocus(children.get(i));
 							hb.getChildren().add(t);
 						} else {
-							if (chillin.get(i).getNode().equals(currentFocus_)) {
+							if (children.get(i).getNode().equals(currentFocus_)) {
 								//makeGray(chillin.get(i));
 							}
-							hb.getChildren().add(chillin.get(i).getNode());
+							hb.getChildren().add(children.get(i).getNode());
 						}
 						if (type == 3) {
 							hb.getChildren().add(newLabel(")"));
