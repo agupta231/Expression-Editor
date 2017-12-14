@@ -65,7 +65,7 @@ public abstract class AbstractCompoundExpression implements CompoundExpression, 
     }
 
     /**
-     * Will generate a String representation for the the
+     * Will generate a String representation for the current
      * operator, with the appropiate number of tabs to properly
      * represent it's position in the expression.
      * @param indentLevel the indentation level
