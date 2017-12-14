@@ -287,9 +287,9 @@ public class ExpressionEditor extends Application {
 				type = 3;
 			}
 
-			LinkedList<Expression> chillin = ((AbstractCompoundExpression)e).getChildren();
+			LinkedList<Expression> children = ((AbstractCompoundExpression)e).getChildren();
 
-			for(int i = 0; i < chillin.size(); i++){
+			for(int i = 0; i < children.size(); i++){
 				if(type == 1 && hb.getChildren().size() != 0){
 					hb.getChildren().add(newLabel("+"));
 				}else if(type == 2 && hb.getChildren().size() != 0){
@@ -297,16 +297,16 @@ public class ExpressionEditor extends Application {
 				}else if(type == 3){
 					hb.getChildren().add(newLabel("("));
 				}
-				if(!(chillin.get(i) instanceof LiteralExpression)) {
-					boolean containsFocus = checkForFocus(chillin.get(i));
+				if(!(children.get(i) instanceof LiteralExpression)) {
+					boolean containsFocus = checkForFocus(children.get(i));
 					if (containsFocus) {
-						HBox t = fixFocus(chillin.get(i));
+						HBox t = fixFocus(children.get(i));
 						hb.getChildren().add(t);
 					} else {
-						hb.getChildren().add(chillin.get(i).getNode());
+						hb.getChildren().add(children.get(i).getNode());
 					}
 				}else{
-					hb.getChildren().add(chillin.get(i).getNode());
+					hb.getChildren().add(children.get(i).getNode());
 				}
 				if(type == 3){
 					hb.getChildren().add(newLabel(")"));
