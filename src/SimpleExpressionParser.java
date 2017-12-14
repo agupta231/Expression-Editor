@@ -1,4 +1,4 @@
- /**
+/**
  * Starter code to implement an ExpressionParser. Your parser methods should use the following grammar:
  * E := A | X
  * A := A+M | M
@@ -7,6 +7,9 @@
  * L := [0-9]+ | [a-z]
  */
 public class SimpleExpressionParser implements ExpressionParser {
+
+	private boolean FX;
+
 	/**
 	 * Attempts to create an expression tree -- flattened as much as possible -- from the specified String.
      * Throws a {@link ExpressionParseException} if the specified string cannot be parsed.
@@ -15,6 +18,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @return the Expression object representing the parsed expression tree
 	 */
 	public Expression parse (String str, boolean withJavaFXControls) throws ExpressionParseException {
+		FX = withJavaFXControls;
 		// Remove spaces -- this simplifies the parsing logic
 		str = str.replaceAll(" ", "");
 
@@ -23,13 +27,14 @@ public class SimpleExpressionParser implements ExpressionParser {
 			// If we couldn't parse the string, then raise an error
 			throw new ExpressionParseException("Cannot parse expression: " + str);
 		}
+
 		// Flatten the expression before returning
 		expression.flatten();
 		return expression;
 	}
 	
 	/**
-	 * Attemps to create an expression from a given String.
+	 * Attempts to create an expression from a given String.
 	 * @param str the string to parse
 	 * @return the Expression representing the parsed expression.
 	 */
@@ -38,26 +43,24 @@ public class SimpleExpressionParser implements ExpressionParser {
 			return null;
 		}
 
-		//TODO in part 2 make this a lambda function (not required for part 1)
-		for(int indexOfPlus = str.indexOf('+'); indexOfPlus >= 0; indexOfPlus = str.indexOf('+', indexOfPlus + 1)) {
-			if (indexOfPlus > 0 && areParenthesisBalanced(str, indexOfPlus)) {
-				AdditiveExpression expression = new AdditiveExpression();
-				return parseCollapsable(str,indexOfPlus,expression);
-			}
+		Expression e = parseCollapsable(str, '+', new AdditiveExpression());
+
+		if(e != null) {
+			return e;
 		}
 
-		for(int indexOfStar = str.indexOf('*'); indexOfStar >= 0; indexOfStar = str.indexOf('*', indexOfStar + 1)) {
-			if (indexOfStar > 0 && areParenthesisBalanced(str, indexOfStar)) {
-				MultiplicativeExpression expression = new MultiplicativeExpression();
-				return parseCollapsable(str,indexOfStar,expression);
-			}
+		e = parseCollapsable(str, '*', new MultiplicativeExpression());
+
+		if(e != null) {
+			return e;
 		}
 
 		if((str.length() == 1 && Character.isLowerCase(str.charAt(0))) || stringIsDigit(str)) {
 			LiteralExpression expression = new LiteralExpression();
 			expression.setLiteral(str);
+
 			return expression;
-		} else if(str.length() == 1) {
+		} else if (str.length() == 1) {
 			return null;
 		}
 
@@ -68,6 +71,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 			if(childExpression != null){
 				expression.addSubexpression(childExpression);
 				childExpression.setParent(expression);
+
 				return expression;
 			}
 			else {
@@ -117,27 +121,29 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return openParen == closedParen;
 	}
 
-	 /**
-	  * Helper function to parse and link the children expressions in a string representing an expression.
-	  * @param str string representing expression
-	  * @param indexOfCollapsibleExpression Index of the string where the operator is
-	  * @param expression parent expression
-	  * @return null if expression can't be parsed, returns the expression otherwise.
-	  */
-	private Expression parseCollapsable (String str, int indexOfCollapsibleExpression, CollapsibleExpression expression) {
-		Expression childExpression1 = parseExpression(str.substring(0, indexOfCollapsibleExpression));
-		Expression childExpression2 = parseExpression(str.substring(indexOfCollapsibleExpression + 1, str.length()));
+	private Expression parseCollapsable (String str,
+										 char delimiter,
+										 CollapsibleExpression expression) {
 
-		if (childExpression1 == null || childExpression2 == null) {
-			return null;
+		for(int index = str.indexOf(delimiter); index >= 0; index = str.indexOf(delimiter, index + 1)) {
+			if (index > 0 && areParenthesisBalanced(str, index)) {
+				Expression childExpression1 = parseExpression(str.substring(0, index));
+				Expression childExpression2 = parseExpression(str.substring(index + 1, str.length()));
+
+				if (childExpression1 == null || childExpression2 == null) {
+					return null;
+				}
+
+				childExpression1.setParent(expression);
+				childExpression2.setParent(expression);
+
+				expression.addSubexpression(childExpression1);
+				expression.addSubexpression(childExpression2);
+
+				return expression;
+			}
 		}
 
-		childExpression1.setParent(expression);
-		childExpression2.setParent(expression);
-
-		expression.addSubexpression(childExpression1);
-		expression.addSubexpression(childExpression2);
-
-		return expression;
+		return null;
 	}
 }
