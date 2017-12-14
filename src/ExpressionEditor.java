@@ -321,13 +321,17 @@ public class ExpressionEditor extends Application {
 		}
 
 		private boolean checkForFocus(Expression child){
-			LinkedList<Expression> ll = ((AbstractCompoundExpression) child).getChildren();
-			for(int i = 0; i < ll.size(); i++){
-				if(ll.get(i).getNode().equals(currentFocus_)){
-					return true;
-				}else if(ll.get(i) instanceof AbstractCompoundExpression){
-					return checkForFocus(ll.get(i));
+			if(!(child instanceof LiteralExpression)) {
+				LinkedList<Expression> ll = ((AbstractCompoundExpression) child).getChildren();
+				for (int i = 0; i < ll.size(); i++) {
+					if (ll.get(i).getNode().equals(currentFocus_)) {
+						return true;
+					} else if (ll.get(i) instanceof AbstractCompoundExpression) {
+						return checkForFocus(ll.get(i));
+					}
 				}
+			}else{
+				//TODO BRYSON
 			}
 			return false;
 		}
