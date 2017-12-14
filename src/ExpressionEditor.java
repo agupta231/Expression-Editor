@@ -36,6 +36,7 @@ public class ExpressionEditor extends Application {
         ArrayList<Integer> distances = new ArrayList<Integer>();
         ArrayList<Expression> expressions = new ArrayList<Expression>();
         int closesExpression;
+        int numberOfClicks;
         boolean restart = false;
 
 		double _lastX, _lastY;
@@ -44,6 +45,7 @@ public class ExpressionEditor extends Application {
 			this.rootExpression_ = rootExpression_;
 			this.currentFocus_ = this.rootExpression_.getNode();
 			this.currentPane = pane_;
+			numberOfClicks = 0;
 		}
 
 		public void handle (MouseEvent event) {
@@ -53,9 +55,13 @@ public class ExpressionEditor extends Application {
 
 			//If the mouse is clicked, look at the clicked location and check each node to see if it was clicked.
 			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-				handleClick(event, sceneX, sceneY);
+				numberOfClicks ++;
+				if(numberOfClicks%2 != 0) {
+					handleClick(event, sceneX, sceneY);
+				}
+
 			}
-			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED && !restart) {
+			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED && !restart && numberOfClicks%2 == 0) {
 				handleDrag(event, sceneX, sceneY);
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
@@ -81,9 +87,10 @@ public class ExpressionEditor extends Application {
 			for (int i = 0; i < HChildren.size(); i++) {
 				final Node currentNode = HChildren.get(i);
 				//If the current node is a HBox (so not a Label) check it
-				if (currentNode instanceof HBox && !event.isDragDetect()) {
+				if (currentNode instanceof HBox) {
 					//Turn the click into terms of the current node
 					Point2D relativeClick = currentNode.sceneToLocal(sceneX, sceneY);
+
 					if (currentNode.contains(relativeClick.getX(), relativeClick.getY())) {
 						//Change the focus
 						previousFocus = currentFocus_;
@@ -101,14 +108,17 @@ public class ExpressionEditor extends Application {
 							break;
 						}
 						//Deselect previous focus
-						((HBox) previousFocus).setBorder(Expression.NO_BORDER);
-						((HBox) currentNode).setBorder(Expression.RED_BORDER);
+						if(numberOfClicks%2 != 0) {
+							((HBox) previousFocus).setBorder(Expression.NO_BORDER);
+							((HBox) currentNode).setBorder(Expression.RED_BORDER);
+						}
 						found = true;
 					}
 				}
 			}
 			//If it wasn't found then the user didn't click on anything so restart focus
 			if(!found) {
+				numberOfClicks = 0;
 				((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
 				restart = true;
 			}
@@ -124,6 +134,7 @@ public class ExpressionEditor extends Application {
 					getWidthOfNode(e, this.currentFocus_);
 					//After gets the current possibility by checking which is the closest
 					calculateClosestPosition(sceneX, sceneY);
+					System.out.println(closesExpression);
 				}
 			}
 		}
@@ -153,7 +164,9 @@ public class ExpressionEditor extends Application {
 
 		private void handleRelease(MouseEvent event, double sceneX, double sceneY) {
 			recolor(currentFocus_, Color.BLACK);
-			copyFocus_ = new HBox();
+			if(numberOfClicks%2 == 0) {
+				copyFocus_ = new HBox();
+			}
 			//On release update the root expression to be the closes expression to the mouse, but only do this if
 			//not de-selecting the focus
 			if(!restart) {
@@ -188,7 +201,7 @@ public class ExpressionEditor extends Application {
 				hb.setLayoutX(WINDOW_WIDTH / 2);
 				hb.setLayoutY(WINDOW_HEIGHT / 2);
 			}
-
+			System.out.println(rootExpression_.convertToString(0));
 			closesExpression = 0;
 		}
 
