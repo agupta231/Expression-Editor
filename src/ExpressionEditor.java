@@ -204,7 +204,7 @@ public class ExpressionEditor extends Application {
 				hb.setLayoutX(WINDOW_WIDTH / 2);
 				hb.setLayoutY(WINDOW_HEIGHT / 2);
 			}
-			//System.out.println(rootExpression_.convertToString(0));
+			System.out.println(rootExpression_.convertToString(0));
 			closesExpression = 0;
 		}
 
