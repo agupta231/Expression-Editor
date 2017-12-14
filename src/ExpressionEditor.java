@@ -272,7 +272,6 @@ public class ExpressionEditor extends Application {
 
 		private HBox fixFocus(Expression e){
 			HBox hb = new HBox();
-
 			int type = 0;
 			if(e instanceof AdditiveExpression){
 				type = 1;
@@ -312,12 +311,12 @@ public class ExpressionEditor extends Application {
 
 		private boolean checkForFocus(Expression child){
 			if(!(child instanceof LiteralExpression)) {
-				LinkedList<Expression> ll = ((AbstractCompoundExpression) child).getChildren();
-				for (int i = 0; i < ll.size(); i++) {
-					if (ll.get(i).getNode().equals(currentFocus_)) {
+				LinkedList<Expression> children = ((AbstractCompoundExpression) child).getChildren();
+				for (int i = 0; i < children.size(); i++) {
+					if (children.get(i).getNode().equals(currentFocus_)) {
 						return true;
-					} else if (ll.get(i) instanceof AbstractCompoundExpression) {
-						boolean t = checkForFocus(ll.get(i));
+					} else if (children.get(i) instanceof AbstractCompoundExpression) {
+						boolean t = checkForFocus(children.get(i));
 						if(t){
 						    return t;
                         }
@@ -331,15 +330,15 @@ public class ExpressionEditor extends Application {
 			addToRootHelper(parentE, e, ((AbstractCompoundExpression) rootExpression_).getChildren(), rootExpression_);
 		}
 
-		private void addToRootHelper(Expression parentE, Expression e, LinkedList<Expression> ll, Expression parent){
-			for(int i = 0; i < ll.size(); i++){
-				if(ll.get(i).equals(e)){
+		private void addToRootHelper(Expression parentE, Expression e, LinkedList<Expression> children, Expression parent){
+			for(int i = 0; i < children.size(); i++){
+				if(children.get(i).equals(e)){
 					((AbstractCompoundExpression)parent).setChildren(((AbstractCompoundExpression)parentE).getChildren());
 				}
 			}
-			for(int i = 0; i < ll.size(); i++){
-				if(!(ll.get(i) instanceof LiteralExpression)) {
-					addToRootHelper(parentE, e, ((AbstractCompoundExpression) ll.get(i)).getChildren(), ll.get(i));
+			for(int i = 0; i < children.size(); i++){
+				if(!(children.get(i) instanceof LiteralExpression)) {
+					addToRootHelper(parentE, e, ((AbstractCompoundExpression) children.get(i)).getChildren(), children.get(i));
 				}
 			}
 		}
