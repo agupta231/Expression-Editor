@@ -169,7 +169,7 @@ public class ExpressionEditor extends Application {
 			}
 			//On release update the root expression to be the closes expression to the mouse, but only do this if
 			//not de-selecting the focus
-			if(!restart && numberOfClicks%2 == 0) {
+			if(!restart && numberOfClicks%2 == 0 && (Math.abs(_lastX-sceneX) != 0)) {
                 calculateClosestPosition(sceneX, sceneY);
 
                 addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression) expressions.get(closesExpression)).getChildren().get(0));
@@ -383,12 +383,6 @@ public class ExpressionEditor extends Application {
 			}
 		}
 		private void getWidthOfTree(Expression e, Node n, LinkedList<Expression> ll){
-			int currentX = -1;
-			for(int i = 0; i < ll.size(); i++){
-				if (ll.get(i).getNode().equals(n)){
-					currentX = (int) ll.get(i).getNode().getLayoutX();
-				}
-			}
 			int totalWidth = 0;
 			for(int i = 0; i < ll.size(); i++){
 				ll.get(i).getNode().getLayoutBounds().getWidth();
