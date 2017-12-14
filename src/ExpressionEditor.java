@@ -41,6 +41,7 @@ public class ExpressionEditor extends Application {
         ArrayList<Integer> distances = new ArrayList<Integer>();
         ArrayList<Expression> expressions = new ArrayList<Expression>();
         int closesExpression;
+        boolean restart = false;
 
 		double _lastX, _lastY;
 
@@ -63,15 +64,10 @@ public class ExpressionEditor extends Application {
 
 
 				boolean found = false;
-				//System.out.println("FUCK CS");
-				//System.out.println(HChildren);
 				for (int i = 0; i < HChildren.size(); i++) {
 					final Node currentNode = HChildren.get(i);
 					if (currentNode instanceof HBox && !event.isDragDetect()) {
-						//System.out.println("CS IS A PUSSY");
 						Point2D relativeClick = currentNode.sceneToLocal(sceneX, sceneY);
-						//System.out.println("CS CAN SUCK MY DICK");
-						//System.out.println(currentNode.contains(relativeClick.getX(), relativeClick.getY()));
 						if (currentNode.contains(relativeClick.getX(), relativeClick.getY())) {
 							previousFocus = currentFocus_;
 							currentFocus_ = currentNode;
@@ -95,11 +91,12 @@ public class ExpressionEditor extends Application {
 				}
 				if(!found) {
 					((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
-					currentFocus_ = rootExpression_.getNode();
+					//currentFocus_ = rootExpression_.getNode();
+					restart = true;
 				}
 
                 Expression focusedExpression = nodeMap.get(currentFocus_);
-                if(!nodeMap.get(currentFocus_).convertToString(0).equals(rootExpression_.convertToString(0))) {
+                if(!currentFocus_.equals(rootExpression_.getNode())) {
 
                     //if(focusedExpression.getParent()!=null){
                     distances = new ArrayList<>();
@@ -121,7 +118,7 @@ public class ExpressionEditor extends Application {
                     }
                 }
 			}
-			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED && !restart) {
 			    int minDistance = Integer.MAX_VALUE;
 			    for(int i = 0; i < distances.size(); i++){
 					int localX = (int) expressions.get(0).getNode().sceneToLocal(sceneX, sceneY).getX();
@@ -190,10 +187,11 @@ public class ExpressionEditor extends Application {
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
 			    recolor(currentFocus_, Color.BLACK);
-
 				copyFocus_ = new HBox();
 				//On release update the root expression to be the closes expression to the mouse.
-				addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression)expressions.get(closesExpression)).getChildren().get(0));
+                if(!restart) {
+                    addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression) expressions.get(closesExpression)).getChildren().get(0));
+                }
 				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
 				HBox hb = new HBox();
 
@@ -233,13 +231,31 @@ public class ExpressionEditor extends Application {
 						}
 					}
 				}
-				expressionPane.getChildren().clear();
-				expressionPane.getChildren().add(hb);
+				if(restart){
+                    try {
+                        // Success! Add the expression's Node to the expressionPane
+                        final Expression expression = expressionParser.parse(hbToString(hb), true);
 
-				hb.setLayoutX(WINDOW_WIDTH / 2);
-				hb.setLayoutY(WINDOW_HEIGHT / 2);
+                        expressionPane.getChildren().clear();
+                        expressionPane.getChildren().add(expression.getNode());
 
-				System.out.println(rootExpression_.convertToString(0));
+                        expression.getNode().setLayoutX(WINDOW_WIDTH / 2);
+                        expression.getNode().setLayoutY(WINDOW_HEIGHT / 2);
+
+                        rootExpression_ = ((CompoundExpression) expression);
+                        currentFocus_ = rootExpression_.getNode();
+                        expression.flatten();
+                        nodeMap = generateMap(expression);
+                        restart = false;
+                    } catch (ExpressionParseException epe) {
+                    }
+                }else {
+                    expressionPane.getChildren().clear();
+                    expressionPane.getChildren().add(hb);
+
+                    hb.setLayoutX(WINDOW_WIDTH / 2);
+                    hb.setLayoutY(WINDOW_HEIGHT / 2);
+                }
 
                 closesExpression = 0;
 			}
@@ -247,6 +263,22 @@ public class ExpressionEditor extends Application {
 			_lastY = sceneY;
 
 		}
+
+        private String hbToString(HBox h){
+            ObservableList<Node> babies = h.getChildren();
+            String result = "";
+
+            for (Node baby : h.getChildren()) {
+                if(baby instanceof Label) {
+                    result += ((Label) baby).getText();
+                }
+                else {
+                    result += hbToString((HBox) baby);
+                }
+            }
+
+            return result;
+        }
 
 		private HBox fixFocus(Expression e){
 			HBox hb = new HBox();
@@ -368,7 +400,7 @@ public class ExpressionEditor extends Application {
 	/**
 	 * Parser used for parsing expressions.
 	 */
-	private final ExpressionParser expressionParser = new SimpleExpressionParser();
+	private static final ExpressionParser expressionParser = new SimpleExpressionParser();
 
 
 	private static final Pane expressionPane = new Pane();
@@ -430,7 +462,7 @@ public class ExpressionEditor extends Application {
 		primaryStage.show();
 	}
 
-	private HashMap<Node, Expression> generateMap (Expression e) {
+	private static HashMap<Node, Expression> generateMap(Expression e) {
 
 		Stack<Expression> expressionsToVisit = new Stack<>();
 		HashSet<Expression> vistedExpressions = new HashSet<>();
