@@ -1,8 +1,5 @@
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-
 
 public class LiteralExpression implements Expression, Focusable, CopyAble{
     private CompoundExpression parent;
@@ -50,6 +47,12 @@ public class LiteralExpression implements Expression, Focusable, CopyAble{
 
         return copy;
     }
+
+    /**
+     * Will create a copy of the current expression, and transfer
+     * the Node pointers as well
+     * @return a copy of Expression with old Node pointers
+     */
     public Expression trueCopy(){
         if(this.getParent() != null) {
             AbstractCompoundExpression parent =  ((AbstractCompoundExpression)this.getParent());
@@ -66,11 +69,20 @@ public class LiteralExpression implements Expression, Focusable, CopyAble{
         }
     }
 
+    /**
+     * Will generate a String representation for the operator, with no
+     * space though.
+     * @return a String containing this expresison.
+     */
     @Override
     public String convertToStringFlat() {
         return this.literal;
     }
 
+    /**
+     * Creates/returns the node representation of the current Expression.
+     * @return a Node represeneting the current Expression
+     */
     @Override
     public Node getNode() {
         if(node == null) {
@@ -101,11 +113,19 @@ public class LiteralExpression implements Expression, Focusable, CopyAble{
     public void flatten(){
     }
 
+    /**
+     * See Focusable
+     * @return boolean
+     */
     @Override
     public boolean getFocused() {
         return this.focused;
     }
 
+    /**
+     * See Focusable
+     * @param s true if Expression is focused, false otherwise
+     */
     @Override
     public void setFocused(boolean s) {
         this.focused = s;

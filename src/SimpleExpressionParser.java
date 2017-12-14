@@ -1,6 +1,3 @@
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-
 /**
  * Starter code to implement an ExpressionParser. Your parser methods should use the following grammar:
  * E := A | X
