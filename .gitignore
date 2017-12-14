@@ -1,2 +1,6 @@
 # Fucking Akash and Bryson
 /.idea
+.DS_Store
+/out
+*.iml
+*.swp
