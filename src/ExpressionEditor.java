@@ -256,7 +256,6 @@ public class ExpressionEditor extends Application {
 		}
 
         private String hbToString(HBox h){
-            ObservableList<Node> babies = h.getChildren();
             String result = "";
 
             for (Node baby : h.getChildren()) {
