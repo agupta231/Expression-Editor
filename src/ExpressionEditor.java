@@ -118,8 +118,6 @@ public class ExpressionEditor extends Application {
                         }
                     }
                 }
-
-				System.out.println("hbToString: " + hbToString((HBox) currentFocus_));
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED && !currentFocus_.equals(rootExpression_.getNode())) {
 			    int minDistance = Integer.MAX_VALUE;
@@ -233,8 +231,14 @@ public class ExpressionEditor extends Application {
 				}
 				expressionPane.getChildren().clear();
 				expressionPane.getChildren().add(hb);
-				String root = hbToString(hb);
-				System.out.println(root);
+
+				System.out.println("hbToExpression: " + ((AbstractCompoundExpression) hbToExpression((HBox) currentFocus_, rootExpression_)).convertToString(0));
+				rootExpression_ = (CompoundExpression) hbToExpression(hb, rootExpression_);
+
+				System.out.println("GROOOOO0OOOOOOOT");
+				System.out.println(rootExpression_.convertToString(0));
+
+//				System.out.println(root);
 				hb.setLayoutX(WINDOW_WIDTH / 2);
 				hb.setLayoutY(WINDOW_HEIGHT / 2);
 
@@ -247,9 +251,28 @@ public class ExpressionEditor extends Application {
 
 		}
 
-//		private Expression hbToExpression(HBox h) {
-//			String stringRep = hbToString(h);
-//		}
+		private Expression hbToExpression(HBox h, Expression root) {
+			String stringRep = hbToString(h);
+			Queue<Expression> expToVisit = new LinkedList<>();
+
+			if (((AbstractCompoundExpression) root).convertToStringFlat().equals(stringRep)) {
+				return root;
+			}
+
+			expToVisit.addAll(((AbstractCompoundExpression) root).getChildren());
+
+			while (!expToVisit.isEmpty()) {
+				Expression currentExpression = expToVisit.poll();
+
+				if (((AbstractCompoundExpression) currentExpression).convertToStringFlat().equals(stringRep)) {
+					return currentExpression;
+				}
+
+				expToVisit.addAll(((AbstractCompoundExpression) currentExpression).getChildren());
+			}
+
+			return null;
+		}
 
 		private String hbToString(HBox h){
 			ObservableList<Node> babies = h.getChildren();
