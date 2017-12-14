@@ -72,7 +72,12 @@ public class ExpressionEditor extends Application {
 
 		}
 
-
+		/**
+		 * What to be done on mouse release
+		 * @param event mouse event
+		 * @param sceneX mouse x
+		 * @param sceneY mouse y
+		 */
 		private void handleClick(MouseEvent event, double sceneX, double sceneY){
 			//Get the children of the current focus to be checked
 			ObservableList<Node> HChildren = ((HBox) currentFocus_).getChildren();
@@ -138,6 +143,12 @@ public class ExpressionEditor extends Application {
             }
 		}
 
+		/**
+		 * What to be done on mouse release
+		 * @param event mouse event
+		 * @param sceneX mouse x
+		 * @param sceneY mouse y
+		 */
 		private void handleDrag(MouseEvent event, double sceneX, double sceneY){
 			//Calculate the closest position
 			calculateClosestPosition(sceneX, sceneY);
@@ -163,6 +174,12 @@ public class ExpressionEditor extends Application {
 			}
 		}
 
+		/**
+		 * What to be done on mouse release
+		 * @param event mouse event
+		 * @param sceneX mouse x
+		 * @param sceneY mouse y
+		 */
 		private void handleRelease(MouseEvent event, double sceneX, double sceneY) {
 			recolor(currentFocus_, Color.BLACK);
 			if(numberOfClicks%2 == 0) {
@@ -208,6 +225,11 @@ public class ExpressionEditor extends Application {
 			closesExpression = 0;
 		}
 
+
+		/**
+		 * Takes the root expression and creates a HBox to display on the pane
+		 * @return an HBox to add to pane
+		 */
 		private HBox generateHBox(){
 			HBox hb = new HBox();
 			//Since rootExpression_.getNode() returns a list of nodes not in order, get the children
@@ -263,6 +285,11 @@ public class ExpressionEditor extends Application {
 			return hb;
 		}
 
+		/**
+		 * Takes the mouse location and finds the closest configuration
+		 * @param sceneX The mouse x
+		 * @param sceneY The mouse y
+		 */
 		private void calculateClosestPosition(double sceneX, double sceneY){
 			int minDistance = Integer.MAX_VALUE;
 			//Goes through each distance and sets closestExperssion to which ever one is the closest
@@ -275,7 +302,12 @@ public class ExpressionEditor extends Application {
 			}
 		}
 
-		//Recusively goes down HBox until reaches Label then appends all the values together
+
+		/**
+		 * Recusively goes down HBox until reaches Label then appends all the values together
+		 * @param h hbox to be turned into string
+		 * @return string of hbox
+		 */
         private String hbToString(HBox h){
             String result = "";
 
@@ -291,7 +323,11 @@ public class ExpressionEditor extends Application {
             return result;
         }
 
-		//Creates a new HBox in the direction of the focus
+		/**
+		 * Creates a new HBox in the direction of the focus
+		 * @param e Expression that contains a focus
+		 * @return HBox to be put on pane
+		 */
 		private HBox fixFocus(Expression e){
 			HBox hb = new HBox();
 			int type = 0;
@@ -331,6 +367,11 @@ public class ExpressionEditor extends Application {
 			return hb;
 		}
 
+		/**
+		 * Does a BTS to see if node tree contains the currentFocus_
+		 * @param child expression to check
+		 * @return if node contains currentFocus_
+		 */
 		private boolean checkForFocus(Expression child){
 			if(!(child instanceof LiteralExpression)) {
 				LinkedList<Expression> children = ((AbstractCompoundExpression) child).getChildren();
@@ -348,11 +389,23 @@ public class ExpressionEditor extends Application {
 			return false;
 		}
 
-		//Function to find node and replace it with the new order
+		/**
+		 * Function to find node and replace it with the new order
+		 * @param parentE parent of element
+		 * @param e element
+		 */
+
 		private void addToRoot(Expression parentE, Expression e){
 			addToRootHelper(parentE, e, ((AbstractCompoundExpression) rootExpression_).getChildren(), rootExpression_);
 		}
 
+		/**
+		 * Reccursive call helper funtion
+		 * @param parentE parent expression
+		 * @param e expression
+		 * @param children Parent expresiion
+		 * @param parent Parent expression's parent
+		 */
 		private void addToRootHelper(Expression parentE, Expression e, LinkedList<Expression> children, Expression parent){
 			for(int i = 0; i < children.size(); i++){
 				if(children.get(i).equals(e)){
@@ -366,10 +419,22 @@ public class ExpressionEditor extends Application {
 			}
 		}
 
+		/**
+		 * Creates a list of expressions and x locations of where the mouse should be
+		 * @param e expression tree
+		 * @param n node's x cord that is wanted
+		 */
+
 		private void getWidthOfNode(Expression e, Node n){
 			getWidthOfNodeHelper(e, n, ((AbstractCompoundExpression) e).getChildren());
 		}
 
+		/**
+		 * Recursive helper call
+		 * @param e expression tree
+		 * @param n	node's x cord that is wanted
+		 * @param ll list of expressions
+		 */
 		private void getWidthOfNodeHelper(Expression e, Node n, LinkedList<Expression> ll){
 			for(int i = 0; i < ll.size(); i++){
 				if (ll.get(i).getNode().equals(n)){
@@ -383,6 +448,16 @@ public class ExpressionEditor extends Application {
 				}
 			}
 		}
+
+
+
+		/**
+		 * 	Gets the width of each element in the tree and sets that to the x position
+		 *  that the mouse has to go to
+		 * @param e expression tree
+		 * @param n	node's x cord that is wanted
+		 * @param ll list of expressions
+		 */
 		private void getWidthOfTree(Expression e, Node n, LinkedList<Expression> ll){
 			int totalWidth = 0;
 			for(int i = 0; i < ll.size(); i++){
