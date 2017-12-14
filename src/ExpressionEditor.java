@@ -56,10 +56,9 @@ public class ExpressionEditor extends Application {
 			//If the mouse is clicked, look at the clicked location and check each node to see if it was clicked.
 			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
 				numberOfClicks ++;
-				if(numberOfClicks%2 != 0) {
+				//if(numberOfClicks%2 != 0) {
 					handleClick(event, sceneX, sceneY);
-				}
-
+				//}
 			}
 			else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED && !restart && numberOfClicks%2 == 0) {
 				handleDrag(event, sceneX, sceneY);
@@ -73,7 +72,7 @@ public class ExpressionEditor extends Application {
 		}
 
 		/**
-		 * What to be done on mouse release
+		 * What to be done on mouse click
 		 * @param event mouse event
 		 * @param sceneX mouse x
 		 * @param sceneY mouse y
@@ -92,31 +91,33 @@ public class ExpressionEditor extends Application {
 			for (int i = 0; i < HChildren.size(); i++) {
 				final Node currentNode = HChildren.get(i);
 				//If the current node is a HBox (so not a Label) check it
-				if (currentNode instanceof HBox) {
+				if (currentNode instanceof HBox || (numberOfClicks%2 == 0 && currentNode instanceof Label)) {
 					//Turn the click into terms of the current node
 					Point2D relativeClick = currentNode.sceneToLocal(sceneX, sceneY);
 
 					if (currentNode.contains(relativeClick.getX(), relativeClick.getY())) {
-						//Change the focus
-						previousFocus = currentFocus_;
-						currentFocus_ = currentNode;
+					    if(numberOfClicks%2 != 0) {
+                            //Change the focus
+                            previousFocus = currentFocus_;
+                            currentFocus_ = currentNode;
 
-						Point2D currentLocation = currentFocus_.localToScene(currentFocus_.getLayoutX(), currentFocus_.getLayoutY());
-						//Make Label to follow around mouse
-						copyFocus_ = newLabel(((CopyAble) nodeMap.get(currentFocus_)).convertToStringFlat());
-						copyFocus_.setLayoutX(currentLocation.getX()-currentNode.getLayoutX());
-						copyFocus_.setLayoutY(currentLocation.getY()-((HBox) currentNode).getHeight()/2);
+                            Point2D currentLocation = currentFocus_.localToScene(currentFocus_.getLayoutX(), currentFocus_.getLayoutY());
+                            //Make Label to follow around mouse
+                            copyFocus_ = newLabel(((CopyAble) nodeMap.get(currentFocus_)).convertToStringFlat());
+                            copyFocus_.setLayoutX(currentLocation.getX() - currentNode.getLayoutX());
+                            copyFocus_.setLayoutY(currentLocation.getY() - ((HBox) currentNode).getHeight() / 2);
 
-						//expressionPane.getChildren().add(copyFocus_);
+                            //expressionPane.getChildren().add(copyFocus_);
 
-						if(currentFocus_ instanceof Label){
-							break;
-						}
-						//Deselect previous focus
-						if(numberOfClicks%2 != 0) {
-							((HBox) previousFocus).setBorder(Expression.NO_BORDER);
-							((HBox) currentNode).setBorder(Expression.RED_BORDER);
-						}
+                            if (currentFocus_ instanceof Label) {
+                                break;
+                            }
+                            //Deselect previous focus
+                            if (numberOfClicks % 2 != 0) {
+                                ((HBox) previousFocus).setBorder(Expression.NO_BORDER);
+                                ((HBox) currentNode).setBorder(Expression.RED_BORDER);
+                            }
+                        }
 						found = true;
 					}
 				}
@@ -127,24 +128,26 @@ public class ExpressionEditor extends Application {
 				((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
 				restart = true;
 			}
-			//As long as something was selected begin the process generating all the possible trees
-			Expression focusedExpression = nodeMap.get(currentFocus_);
-			if(!currentFocus_.equals(rootExpression_.getNode())) {
+			if(numberOfClicks%2 != 0) {
+                //As long as something was selected begin the process generating all the possible trees
+                Expression focusedExpression = nodeMap.get(currentFocus_);
+                if (!currentFocus_.equals(rootExpression_.getNode())) {
 
-				distances.clear();
-				expressions.clear();
+                    distances.clear();
+                    expressions.clear();
 
-				for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees((focusedExpression.getParent()).deepCopy(), focusedExpression.convertToString(0))) {
-					//Calls function that calculates the x position of each possibility
-					getWidthOfNode(e, this.currentFocus_);
-					//After gets the current possibility by checking which is the closest
-				}
-                calculateClosestPosition(sceneX, sceneY);
+                    for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees((focusedExpression.getParent()).deepCopy(), focusedExpression.convertToString(0))) {
+                        //Calls function that calculates the x position of each possibility
+                        getWidthOfNode(e, this.currentFocus_);
+                        //After gets the current possibility by checking which is the closest
+                    }
+                    calculateClosestPosition(sceneX, sceneY);
+                }
             }
 		}
 
 		/**
-		 * What to be done on mouse release
+		 * What to be done on mouse drag
 		 * @param event mouse event
 		 * @param sceneX mouse x
 		 * @param sceneY mouse y
