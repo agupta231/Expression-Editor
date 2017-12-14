@@ -57,7 +57,6 @@ public class ExpressionEditor extends Application {
 					return;
 				}
 
-
 				boolean found = false;
 				for (int i = 0; i < HChildren.size(); i++) {
 					final Node currentNode = HChildren.get(i);
@@ -86,21 +85,18 @@ public class ExpressionEditor extends Application {
 				}
 				if(!found) {
 					((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
-					//currentFocus_ = rootExpression_.getNode();
 					restart = true;
 				}
 
                 Expression focusedExpression = nodeMap.get(currentFocus_);
                 if(!currentFocus_.equals(rootExpression_.getNode())) {
 
-                    //if(focusedExpression.getParent()!=null){
                     distances = new ArrayList<>();
                     expressions = new ArrayList<>();
 
 					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
-                            ((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
+                            (focusedExpression.getParent()).deepCopy(),
                             focusedExpression.convertToString(0))) {
-
 						getWidthOfNode(e, this.currentFocus_);
                         int minDistance = Integer.MAX_VALUE;
                         for(int i = 0; i < distances.size(); i++){
@@ -123,7 +119,7 @@ public class ExpressionEditor extends Application {
                     }
                 }
 				addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression)expressions.get(closesExpression)).getChildren().get(0));
-				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
+				LinkedList<Expression> children = ((AbstractCompoundExpression)rootExpression_).getChildren();
 				HBox hb = new HBox();
 
 				//type values
@@ -143,7 +139,7 @@ public class ExpressionEditor extends Application {
 				}
 
 				if(type != 4) {
-					for (int i = 0; i < chillin.size(); i++) {
+					for (int i = 0; i < children.size(); i++) {
 						if (type == 1 && hb.getChildren().size() != 0) {
 							hb.getChildren().add(newLabel("+"));
 						} else if (type == 2 && hb.getChildren().size() != 0) {
@@ -151,15 +147,15 @@ public class ExpressionEditor extends Application {
 						} else if (type == 3) {
 							hb.getChildren().add(newLabel("("));
 						}
-						boolean containsFocus = checkForFocus(chillin.get(i));
+						boolean containsFocus = checkForFocus(children.get(i));
 						if (containsFocus) {
-							HBox t = fixFocus(chillin.get(i));
+							HBox t = fixFocus(children.get(i));
 							hb.getChildren().add(t);
 						} else {
-							if (chillin.get(i).getNode().equals(currentFocus_)) {
+							if (children.get(i).getNode().equals(currentFocus_)) {
 								//makeGray(chillin.get(i));
 							}
-							hb.getChildren().add(chillin.get(i).getNode());
+							hb.getChildren().add(children.get(i).getNode());
 						}
 						if (type == 3) {
 							hb.getChildren().add(newLabel(")"));
@@ -187,7 +183,7 @@ public class ExpressionEditor extends Application {
                 if(!restart) {
                     addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression) expressions.get(closesExpression)).getChildren().get(0));
                 }
-				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
+				LinkedList<Expression> children = ((AbstractCompoundExpression)rootExpression_).getChildren();
 				HBox hb = new HBox();
 
 				//type values
@@ -206,7 +202,7 @@ public class ExpressionEditor extends Application {
 					hb.getChildren().add(rootExpression_.getNode());
 				}
 				if(type != 4) {
-					for (int i = 0; i < chillin.size(); i++) {
+					for (int i = 0; i < children.size(); i++) {
 						if (type == 1 && hb.getChildren().size() != 0) {
 							hb.getChildren().add(newLabel("+"));
 						} else if (type == 2 && hb.getChildren().size() != 0) {
@@ -214,12 +210,12 @@ public class ExpressionEditor extends Application {
 						} else if (type == 3) {
 							hb.getChildren().add(newLabel("("));
 						}
-						boolean containsFocus = checkForFocus(chillin.get(i));
+						boolean containsFocus = checkForFocus(children.get(i));
 						if (containsFocus) {
-							HBox t = fixFocus(chillin.get(i));
+							HBox t = fixFocus(children.get(i));
 							hb.getChildren().add(t);
 						} else {
-							hb.getChildren().add(chillin.get(i).getNode());
+							hb.getChildren().add(children.get(i).getNode());
 						}
 						if (type == 3) {
 							hb.getChildren().add(newLabel(")"));
@@ -260,7 +256,6 @@ public class ExpressionEditor extends Application {
 		}
 
         private String hbToString(HBox h){
-            ObservableList<Node> babies = h.getChildren();
             String result = "";
 
             for (Node baby : h.getChildren()) {
@@ -277,7 +272,6 @@ public class ExpressionEditor extends Application {
 
 		private HBox fixFocus(Expression e){
 			HBox hb = new HBox();
-
 			int type = 0;
 			if(e instanceof AdditiveExpression){
 				type = 1;
@@ -287,9 +281,9 @@ public class ExpressionEditor extends Application {
 				type = 3;
 			}
 
-			LinkedList<Expression> chillin = ((AbstractCompoundExpression)e).getChildren();
+			LinkedList<Expression> children = ((AbstractCompoundExpression)e).getChildren();
 
-			for(int i = 0; i < chillin.size(); i++){
+			for(int i = 0; i < children.size(); i++){
 				if(type == 1 && hb.getChildren().size() != 0){
 					hb.getChildren().add(newLabel("+"));
 				}else if(type == 2 && hb.getChildren().size() != 0){
@@ -297,16 +291,16 @@ public class ExpressionEditor extends Application {
 				}else if(type == 3){
 					hb.getChildren().add(newLabel("("));
 				}
-				if(!(chillin.get(i) instanceof LiteralExpression)) {
-					boolean containsFocus = checkForFocus(chillin.get(i));
+				if(!(children.get(i) instanceof LiteralExpression)) {
+					boolean containsFocus = checkForFocus(children.get(i));
 					if (containsFocus) {
-						HBox t = fixFocus(chillin.get(i));
+						HBox t = fixFocus(children.get(i));
 						hb.getChildren().add(t);
 					} else {
-						hb.getChildren().add(chillin.get(i).getNode());
+						hb.getChildren().add(children.get(i).getNode());
 					}
 				}else{
-					hb.getChildren().add(chillin.get(i).getNode());
+					hb.getChildren().add(children.get(i).getNode());
 				}
 				if(type == 3){
 					hb.getChildren().add(newLabel(")"));
@@ -317,12 +311,12 @@ public class ExpressionEditor extends Application {
 
 		private boolean checkForFocus(Expression child){
 			if(!(child instanceof LiteralExpression)) {
-				LinkedList<Expression> ll = ((AbstractCompoundExpression) child).getChildren();
-				for (int i = 0; i < ll.size(); i++) {
-					if (ll.get(i).getNode().equals(currentFocus_)) {
+				LinkedList<Expression> children = ((AbstractCompoundExpression) child).getChildren();
+				for (int i = 0; i < children.size(); i++) {
+					if (children.get(i).getNode().equals(currentFocus_)) {
 						return true;
-					} else if (ll.get(i) instanceof AbstractCompoundExpression) {
-						boolean t = checkForFocus(ll.get(i));
+					} else if (children.get(i) instanceof AbstractCompoundExpression) {
+						boolean t = checkForFocus(children.get(i));
 						if(t){
 						    return t;
                         }
@@ -336,15 +330,15 @@ public class ExpressionEditor extends Application {
 			addToRootHelper(parentE, e, ((AbstractCompoundExpression) rootExpression_).getChildren(), rootExpression_);
 		}
 
-		private void addToRootHelper(Expression parentE, Expression e, LinkedList<Expression> ll, Expression parent){
-			for(int i = 0; i < ll.size(); i++){
-				if(ll.get(i).equals(e)){
+		private void addToRootHelper(Expression parentE, Expression e, LinkedList<Expression> children, Expression parent){
+			for(int i = 0; i < children.size(); i++){
+				if(children.get(i).equals(e)){
 					((AbstractCompoundExpression)parent).setChildren(((AbstractCompoundExpression)parentE).getChildren());
 				}
 			}
-			for(int i = 0; i < ll.size(); i++){
-				if(!(ll.get(i) instanceof LiteralExpression)) {
-					addToRootHelper(parentE, e, ((AbstractCompoundExpression) ll.get(i)).getChildren(), ll.get(i));
+			for(int i = 0; i < children.size(); i++){
+				if(!(children.get(i) instanceof LiteralExpression)) {
+					addToRootHelper(parentE, e, ((AbstractCompoundExpression) children.get(i)).getChildren(), children.get(i));
 				}
 			}
 		}
@@ -482,7 +476,6 @@ public class ExpressionEditor extends Application {
 		}
 		while (!expressionsToVisit.empty()) {
 			Expression currentExpression = expressionsToVisit.pop();
-
 			map.put(currentExpression.getNode(), ((CopyAble)currentExpression).trueCopy());
 			vistedExpressions.add(currentExpression);
 
@@ -500,7 +493,6 @@ public class ExpressionEditor extends Application {
 	public static Label newLabel(String modifierText) {
 		Label text = new Label(modifierText);
 		text.setFont(ExpressionEditor.FONT);
-
 		return text;
 	}
 
