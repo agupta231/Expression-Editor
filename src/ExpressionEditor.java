@@ -550,6 +550,11 @@ public class ExpressionEditor extends Application {
 		primaryStage.show();
 	}
 
+	/**
+	 * Creates a hashmap of Nodes to their respective expressions
+	 * @param  e expression to be translated into a hashmap.
+	 * @return A hashmap of the expression and the expression's childrens nodes.
+	 */
 	private static HashMap<Node, Expression> generateMap(Expression e) {
 
 		Stack<Expression> expressionsToVisit = new Stack<>();
@@ -584,12 +589,22 @@ public class ExpressionEditor extends Application {
 		return map;
 	}
 
+	/**
+	 * Makes a new label with the given text
+	 * @param modifierText
+	 * @return a label witht he given text.
+	 */
 	public static Label newLabel(String modifierText) {
 		Label text = new Label(modifierText);
 		text.setFont(ExpressionEditor.FONT);
 		return text;
 	}
 
+	/**
+	 *  Recolors a node
+	 * @param n Node to be recolored
+	 * @param newColor New color
+	 */
     public static void recolor(Node n, Color newColor) {
         if (n instanceof Label) {
             ((Label) n).setTextFill(newColor);
