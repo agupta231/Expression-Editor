@@ -133,17 +133,17 @@ public class ExpressionEditor extends Application {
 					//Calls function that calculates the x position of each possibility
 					getWidthOfNode(e, this.currentFocus_);
 					//After gets the current possibility by checking which is the closest
-					calculateClosestPosition(sceneX, sceneY);
-					System.out.println(closesExpression);
 				}
-			}
+                calculateClosestPosition(sceneX, sceneY);
+            }
 		}
 
 		private void handleDrag(MouseEvent event, double sceneX, double sceneY){
 			//Calculate the closest position
 			calculateClosestPosition(sceneX, sceneY);
 			//Get the closest orientation then append it to the root node in order to create the full tree
-			addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression)expressions.get(closesExpression)).getChildren().get(0));
+
+            addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression)expressions.get(closesExpression)).getChildren().get(0));
 			//Generate the next tree
 			HBox hb = generateHBox();
 			//Display the new tree
@@ -169,8 +169,10 @@ public class ExpressionEditor extends Application {
 			}
 			//On release update the root expression to be the closes expression to the mouse, but only do this if
 			//not de-selecting the focus
-			if(!restart) {
-				addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression) expressions.get(closesExpression)).getChildren().get(0));
+			if(!restart && numberOfClicks%2 == 0) {
+                calculateClosestPosition(sceneX, sceneY);
+
+                addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression) expressions.get(closesExpression)).getChildren().get(0));
 			}
 
 			HBox hb = generateHBox();
@@ -201,7 +203,7 @@ public class ExpressionEditor extends Application {
 				hb.setLayoutX(WINDOW_WIDTH / 2);
 				hb.setLayoutY(WINDOW_HEIGHT / 2);
 			}
-			System.out.println(rootExpression_.convertToString(0));
+			//System.out.println(rootExpression_.convertToString(0));
 			closesExpression = 0;
 		}
 
