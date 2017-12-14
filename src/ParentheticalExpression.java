@@ -17,6 +17,10 @@ public class ParentheticalExpression extends AbstractCompoundExpression implemen
         return super.deepCopy(new ParentheticalExpression());
     }
 
+    /**
+     * Create/return the Node representing this Expression
+     * @return a Node represeneting the current Expression
+     */
     public Node getNode() {
         if (node == null) {
             final HBox hbox = new HBox();
@@ -55,6 +59,11 @@ public class ParentheticalExpression extends AbstractCompoundExpression implemen
         flattenChildren();
     }
 
+    /**
+     * Will generate a String representation for the current Expression,
+     * with no whitespace.
+     * @return a flattened String representing the parenthetical operator
+     */
     @Override
     public String convertToStringFlat() {
         return "(" + ((CopyAble) this.getChildren().get(0)).convertToStringFlat() + ")";
