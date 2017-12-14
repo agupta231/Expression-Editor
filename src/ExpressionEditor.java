@@ -3,21 +3,16 @@ import java.util.*;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.event.EventHandler;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.geometry.Bounds;
-import org.junit.runner.Computer;
 
 public class ExpressionEditor extends Application {
 	public static Font FONT = javafx.scene.text.Font.font("Comic Sans MS", 36);
@@ -75,8 +70,8 @@ public class ExpressionEditor extends Application {
 							Point2D currentLocation = currentFocus_.localToScene(currentFocus_.getLayoutX(), currentFocus_.getLayoutY());
 
 							copyFocus_ = newLabel(((CopyAble) nodeMap.get(currentFocus_)).convertToStringFlat());
-							copyFocus_.setLayoutX(currentLocation.getX());
-							copyFocus_.setLayoutY(currentLocation.getY());
+							copyFocus_.setLayoutX(currentLocation.getX()-currentNode.getLayoutX());
+							copyFocus_.setLayoutY(currentLocation.getY()-currentNode.getLayoutY());
 
 							expressionPane.getChildren().add(copyFocus_);
 
