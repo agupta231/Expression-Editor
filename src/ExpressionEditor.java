@@ -102,7 +102,7 @@ public class ExpressionEditor extends Application {
 						copyFocus_.setLayoutX(currentLocation.getX()-currentNode.getLayoutX());
 						copyFocus_.setLayoutY(currentLocation.getY()-((HBox) currentNode).getHeight()/2);
 
-						expressionPane.getChildren().add(copyFocus_);
+						//expressionPane.getChildren().add(copyFocus_);
 
 						if(currentFocus_ instanceof Label){
 							break;
@@ -150,6 +150,7 @@ public class ExpressionEditor extends Application {
 			expressionPane.getChildren().clear();
 			expressionPane.getChildren().add(hb);
 			expressionPane.getChildren().add(copyFocus_);
+
 
 			recolor(currentFocus_, Expression.GHOST_COLOR);
 
