@@ -34,6 +34,7 @@ public class ExpressionEditor extends Application {
 	//TODO: Akash look through this
 	private static class MouseEventHandler implements EventHandler<MouseEvent> {
 		CompoundExpression rootExpression_;
+		CompoundExpression trueRoot_;
 		Node currentFocus_;
 		Node copyFocus_;
 		Node previousFocus;
@@ -51,19 +52,18 @@ public class ExpressionEditor extends Application {
 		}
 
 		public void handle (MouseEvent event) {
+			//System.out.println(((HBox)this.trueRoot_.getNode()).getChildren());
+
 			final double sceneX = event.getSceneX();
 			final double sceneY = event.getSceneY();
 
 			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
 				ObservableList<Node> HChildren = ((HBox) currentFocus_).getChildren();
-				System.out.println(HChildren);
 				if(HChildren.size() == 1 && event.isDragDetect()){
 					return;
 				}
 
 				boolean found = false;
-				//System.out.println("FUCK CS");
-				//System.out.println(HChildren);
 				for (int i = 0; i < HChildren.size(); i++) {
 					final Node currentNode = HChildren.get(i);
 					if (currentNode instanceof HBox && !event.isDragDetect()) {
@@ -96,14 +96,16 @@ public class ExpressionEditor extends Application {
 					System.out.println("No click found");
 					((HBox) currentFocus_).setBorder(Expression.NO_BORDER);
 					currentFocus_ = rootExpression_.getNode();
-					distances = new ArrayList<>();
-					expressions = new ArrayList<>();
 
 				}
 
                 Expression focusedExpression = nodeMap.get(currentFocus_);
                 if(!currentFocus_.equals(rootExpression_.getNode())) {
-					System.out.println(focusedExpression);
+					distances = new ArrayList<>();
+					expressions = new ArrayList<>();
+					distances = new ArrayList<>();
+					expressions = new ArrayList<>();
+
 					for (Expression e : AbstractCompoundExpression.generateAllPossibleTrees(
                             ((AbstractCompoundExpression) focusedExpression.getParent()).deepCopy(),
                             focusedExpression.convertToString(0))) {
@@ -188,7 +190,7 @@ public class ExpressionEditor extends Application {
 
 				copyFocus_ = new HBox();
 				//On release update the root expression to be the closes expression to the mouse.
-				System.out.println(expressions);
+				//System.out.println(expressions);
 				addToRoot(expressions.get(closesExpression), ((AbstractCompoundExpression)expressions.get(closesExpression)).getChildren().get(0));
 				LinkedList<Expression> chillin = ((AbstractCompoundExpression)rootExpression_).getChildren();
 				HBox hb = new HBox();
@@ -229,21 +231,33 @@ public class ExpressionEditor extends Application {
 						}
 					}
 				}
-				expressionPane.getChildren().clear();
-				expressionPane.getChildren().add(hb);
+				//expressionPane.getChildren().clear();
+				//expressionPane.getChildren().add(hb);
 
-				System.out.println("hbToExpression: " + ((AbstractCompoundExpression) hbToExpression((HBox) currentFocus_, rootExpression_)).convertToString(0));
-				rootExpression_ = (CompoundExpression) hbToExpression(hb, rootExpression_);
+				try {
+					// Success! Add the expression's Node to the expressionPane
+					final Expression expression = expressionParser.parse(hbToString(hb), true);
+					System.out.println(((HBox)expression.getNode()).getChildren());
 
-				System.out.println("GROOOOO0OOOOOOOT");
-				System.out.println(rootExpression_.convertToString(0));
+					expressionPane.getChildren().clear();
+					expressionPane.getChildren().add(expression.getNode());
 
-//				System.out.println(root);
+					expression.getNode().setLayoutX(WINDOW_WIDTH / 2);
+					expression.getNode().setLayoutY(WINDOW_HEIGHT / 2);
+
+					rootExpression_ = ((CompoundExpression) expression);
+
+					expression.flatten();
+					nodeMap = generateMap(expression);
+				} catch (ExpressionParseException epe) {
+				}
+
+				System.out.println(hbToString(hb));
+//				Systm.out.println(root);e
 				hb.setLayoutX(WINDOW_WIDTH / 2);
 				hb.setLayoutY(WINDOW_HEIGHT / 2);
 
 				System.out.println(rootExpression_.convertToString(0));
-
                 closesExpression = 0;
 			}
 			_lastX = sceneX;
@@ -289,6 +303,7 @@ public class ExpressionEditor extends Application {
 
 			return result;
 		}
+
 
 		private HBox fixFocus(Expression e){
 			HBox hb = new HBox();
@@ -410,7 +425,7 @@ public class ExpressionEditor extends Application {
 	/**
 	 * Parser used for parsing expressions.
 	 */
-	private final ExpressionParser expressionParser = new SimpleExpressionParser();
+	private static final ExpressionParser expressionParser = new SimpleExpressionParser();
 
 
 	private static final Pane expressionPane = new Pane();
@@ -472,7 +487,7 @@ public class ExpressionEditor extends Application {
 		primaryStage.show();
 	}
 
-	private HashMap<Node, Expression> generateMap (Expression e) {
+	private static HashMap<Node, Expression> generateMap(Expression e) {
 
 		Stack<Expression> expressionsToVisit = new Stack<>();
 		HashSet<Expression> vistedExpressions = new HashSet<>();
