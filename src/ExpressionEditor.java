@@ -26,7 +26,6 @@ public class ExpressionEditor extends Application {
 	/**
 	 * Mouse event handler for the entire pane that constitutes the ExpressionEditor
 	 */
-	//TODO: Akash look through this
 	private static class MouseEventHandler implements EventHandler<MouseEvent> {
 		CompoundExpression rootExpression_;
 		Node currentFocus_;
@@ -479,7 +478,7 @@ public class ExpressionEditor extends Application {
 	/**
 	 * Size of the GUI
 	 */
-	private static final int WINDOW_WIDTH = 500, WINDOW_HEIGHT = 250;
+	private static final int WINDOW_WIDTH = 800, WINDOW_HEIGHT = 500;
 
 	/**
 	 * Initial expression shown in the textbox
