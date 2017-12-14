@@ -16,6 +16,10 @@ public class MultiplicativeExpression extends CollapsibleExpression {
         return super.deepCopy(new MultiplicativeExpression());
     }
 
+    /**
+     * Gives the Node representation of the current Multiplicative Expression
+     * @return a Node representing the current AdditiveExpression
+     */
     @Override
     public Node getNode() {
         return super.getNode("*");
@@ -32,6 +36,11 @@ public class MultiplicativeExpression extends CollapsibleExpression {
         return super.convertToString(indentLevel,"*");
     }
 
+    /**
+     * Will generate a String representation for the the multiplication,
+     * with no whitespace.
+     * @return a flattened String representing the addition operator.
+     */
     @Override
     public String convertToStringFlat() {
         return super.convertToStringFlat("*");
